@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
       // const ScanButton(),
       Column(
         children: [
-          SuccessLogo(),
+          SuccessLogo(),SuccessLogo(),SuccessLogo(),
           Gap(h: 12,),
           Text("Check-In Success", style: TextStyle(color: lightGrey, fontWeight: FontWeight.w600, fontSize: 16.sp),),
           Text("welcome to the gym!", style: TextStyle(color: grey, fontWeight: FontWeight.w500, fontSize: 14.sp),),
