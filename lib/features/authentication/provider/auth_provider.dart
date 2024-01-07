@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/authentication/models/user_model.dart';
+import 'package:gym/features/authentication/models/user_model.dart';
 import 'package:gym/main.dart';
 import 'package:gym/utils/helpers/Cache.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';

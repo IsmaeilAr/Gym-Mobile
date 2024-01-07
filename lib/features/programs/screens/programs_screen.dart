@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/coaches/screens/all_coaches_screen.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/programs/model/programs_model.dart';
+import 'package:gym/features/coaches/screens/all_coaches_screen.dart';
+import 'package:gym/features/programs/model/programs_model.dart';
 
 List<ProgramsModel> recommended = [
   ProgramsModel(title: 'Training', imgUrl: "assets/images/Rectangle 61.png"),
