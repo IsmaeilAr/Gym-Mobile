@@ -14,6 +14,7 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
+  int _selectedIndex = 0;
   final pageIconList = <IconData>[
     Icons.home_filled,
     Icons.paste_outlined,
@@ -23,10 +24,11 @@ class _MainLayoutState extends State<MainLayout> {
 
   List<Widget> screens = [
     const HomePage(),
-    const CategoriesPage(),
-    const CartPage(),
-    const FavoritesPage(),
+    // const ProgramsPage(),
+    // const ProgressPage(),
+    // const ProfilePage(),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,36 +48,31 @@ class _MainLayoutState extends State<MainLayout> {
         duration: const Duration(milliseconds: 400),
         tabs: [
           GButton(
-            icon: Icons.home_filled,
+            icon: pageIconList[0],
             iconSize: 25.h,
             iconColor: grey,
           ),
           GButton(
-            icon: ModaLife.cate_filled,
+            icon: pageIconList[1],
             iconSize: 20.h,
             iconColor: grey,
           ),
           GButton(
-            icon: ModaLife.bag_big_white,
+            icon: pageIconList[2],
             iconSize: 30.h,
             iconColor: grey,
           ),
           GButton(
-            icon: ModaLife.fav_outlined,
+            icon: pageIconList[3],
             iconSize: 25.h,
             icon: Icons.favorite_outline,
-          ),
-          GButton(
-            icon: ModaLife.profile,
-            iconSize: 20.h,
           ),
         ],
         selectedIndex: _selectedIndex,
         onTabChange: (index) {
-          context.read<BottomNavBarProvider>().currentIndex = index;
-          // setState(() {
-          //   _selectedIndex = index;
-          // });
+          setState(() {
+            _selectedIndex = index;
+          });
         },
       ),
       body: Container(
