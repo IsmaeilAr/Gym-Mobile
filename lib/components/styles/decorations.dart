@@ -54,7 +54,7 @@ class MyDecorations {
   }
 
   static InputDecoration myInputDecoration2({required String hint, Widget? icon, String? prefix, Widget? suffix,}) {
-    double borderRadius = 8.sp;
+    double borderRadius = 8.r;
     double fontSize = 15.sp;
     return InputDecoration(
       contentPadding: EdgeInsets.symmetric(
@@ -69,28 +69,28 @@ class MyDecorations {
         borderSide: const BorderSide(
           color: red,
         ),
-        borderRadius: BorderRadius.circular(borderRadius.sp),
+        borderRadius: BorderRadius.circular(borderRadius.r),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           color: lightGrey,
         ),
-        borderRadius: BorderRadius.circular(borderRadius.sp),
+        borderRadius: BorderRadius.circular(borderRadius.r),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           color: grey,
         ),
-        borderRadius: BorderRadius.circular(borderRadius.sp),
+        borderRadius: BorderRadius.circular(borderRadius.r),
       ),
       errorBorder: OutlineInputBorder(
         borderSide: const BorderSide(
           color: red,
         ),
-        borderRadius: BorderRadius.circular(borderRadius.sp),
+        borderRadius: BorderRadius.circular(borderRadius.r),
       ),
 
-      labelStyle:  TextStyle(color: black, fontSize: fontSize.sp),
+      labelStyle:  TextStyle(color: black, fontSize: fontSize.r),
       hintStyle:  TextStyle(color: grey, fontSize: fontSize.sp),
       errorStyle:  TextStyle(color: red, fontSize: fontSize.sp),
 
@@ -127,6 +127,20 @@ class MyDecorations {
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     height: 1.0
+  );
+
+  static TextStyle programsTextStyle=TextStyle(
+    color: grey,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
+  static TextStyle coachesTextStyle=TextStyle(
+    color: lightGrey,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
   );
 
 }
