@@ -6,10 +6,11 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/drop_down.dart';
 import 'package:gym/components/widgets/gap.dart';
-import 'package:gym/profile/provider/profile_provider.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../provider/profile_provider.dart';
 
 class AddInfoScreen extends StatelessWidget {
   const AddInfoScreen({super.key});

@@ -2,103 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/features/coaches/screens/all_coaches_screen.dart';
-import 'package:gym/features/programs/model/programs_model.dart';
+import '../../coaches/screens/all_coaches_screen.dart';
+import '../model/programs_model.dart';
 
-List<ProgramsModel> recommended = [
+List<ProgramsModel> recommended=[
   ProgramsModel(title: 'Training', imgUrl: "assets/images/Rectangle 61.png"),
   ProgramsModel(title: 'Nutrition', imgUrl: "assets/images/Rectangle 61.png"),
 ];
-List<ProgramsModel> training = [
+List<ProgramsModel> training=[
   ProgramsModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
-  ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
-  ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+   ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+   ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
 ];
 
-List<ProgramsModel> coaches = [
+List<ProgramsModel> coaches=[
   ProgramsModel(title: 'Eias', imgUrl: "assets/images/img1.png"),
   ProgramsModel(title: 'Maya', imgUrl: "assets/images/img1.png"),
   ProgramsModel(title: 'Lana', imgUrl: "assets/images/img1.png"),
 ];
 
-class ProgramScreen extends StatelessWidget {
-  const ProgramScreen({super.key});
 
+class ProgramScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: black,
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all( 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Recommended",
-                style: TextStyle(
-                    color: lightGrey,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600),
-              ),
-              ProgramsList(
-                  heightList: 191,
-                  widthList: 328,
-                  imgHeight: 168,
-                  imgWidth: 162,
-                  programModel: recommended),
-              Text(
-                "Training",
-                style: TextStyle(
-                    color: lightGrey,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600),
-              ),
-              ProgramsList(
-                  heightList: 180,
-                  widthList: 333,
-                  imgHeight: 156,
-                  imgWidth: 243,
-                  programModel: training),
-              Text(
-                "Nutrition",
-                style: TextStyle(
-                    color: lightGrey,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600),
-              ),
-              ProgramsList(
-                  heightList: 180,
-                  widthList: 333,
-                  imgHeight: 156,
-                  imgWidth: 243,
-                  programModel: training),
+              Text("Recommended",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600 ),),
+              ListPrograms(ListHight:191,Listwidth:328,imgHight:168,imgWidth:162,programModel: recommended),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "Coaches",
-                    style: TextStyle(
-                        color: lightGrey,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => AllCoachesScreen()));
-                    },
-                    child: Text(
-                      "See All",
-                      style: TextStyle(
-                          color: lightGrey,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )
+                  Text("Training",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600),),
+                  SizedBox(width: 10.w,),
+                  Expanded(child: Image.asset("assets/images/Line.png"))
                 ],
               ),
-              CoachesList(heightList: 80, widthList: 198, programModel: coaches),
+              ListPrograms(ListHight:180,Listwidth:333,imgHight:156,imgWidth:243,programModel: training),
+              Row(
+                children: [
+                  Text("Nutrition",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600),),
+                  SizedBox(width: 10.w,),
+                  Expanded(child: Image.asset("assets/images/Line.png"))
+                ],
+              ),
+              ListPrograms(ListHight:180,Listwidth:333,imgHight:156,imgWidth:243,programModel: training),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Text("Coaches",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600),),
+                   TextButton(
+                     onPressed: (){
+                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AllCoachesScreen()));
+                     },
+                     child:Text("See All",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600),) ,
+                   )
+                 ],
+               ),
+              ListCoaches(ListHight:80,Listwidth:198,programModel: coaches),
             ],
           ),
         ),
@@ -107,21 +72,18 @@ class ProgramScreen extends StatelessWidget {
   }
 }
 
-class ProgramsList extends StatelessWidget {
-  double heightList, widthList, imgHeight, imgWidth;
+
+
+class ListPrograms extends StatelessWidget {
+  double ListHight,Listwidth,imgHight,imgWidth;
   List<ProgramsModel> programModel;
-  ProgramsList(
-      {super.key, required this.heightList,
-      required this.widthList,
-      required this.imgHeight,
-      required this.imgWidth,
-      required this.programModel});
+  ListPrograms({required this.ListHight,required this.Listwidth,required this.imgHight,required this.imgWidth,required this.programModel});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: heightList.h,
-      width: widthList.w,
+      height: ListHight.h,
+      width: Listwidth.w,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: programModel.length,
@@ -130,7 +92,7 @@ class ProgramsList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: imgHeight.h,
+                  height: imgHight.h,
                   width: imgWidth.w,
                   child: GestureDetector(
                     child: Card(
@@ -138,61 +100,52 @@ class ProgramsList extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12.r),
                       ),
-                      child: Image.asset(
-                        programModel[index].imgUrl,
-                        fit: BoxFit.fill,
-                      ),
+                      child: Image.asset(programModel[index].imgUrl,fit: BoxFit.fill,),
                     ),
                   ),
                 ),
-                Text(programModel[index].title,
-                    style: MyDecorations.programsTextStyle),
+                Text(programModel[index].title,style:MyDecorations.programsTextStyle,),
               ],
             );
-          }),
+          }
+      ),
     );
   }
 }
 
-class CoachesList extends StatelessWidget {
-  double heightList, widthList;
+class ListCoaches extends StatelessWidget {
+
+  double ListHight,Listwidth;
   List<ProgramsModel> programModel;
-  CoachesList(
-      {super.key, required this.heightList,
-      required this.widthList,
-      required this.programModel});
+  ListCoaches({required this.ListHight,required this.Listwidth,required this.programModel});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: heightList.h,
-      width: widthList.w,
+      height: ListHight.h,
+      width: Listwidth.w,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: programModel.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (context,index){
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () {},
+                  onTap: (){},
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CircleAvatar(
-                      child: Image.asset(
-                        programModel[index].imgUrl,
-                        fit: BoxFit.fill,
-                        height: 48.h,
-                        width: 48.w,
-                      ),
-                    ),
+                      child :Image.asset( programModel[index].imgUrl,fit: BoxFit.fill,height: 48.h,width: 48.w,), ),
                   ),
                 ),
-                Text(programModel[index].title,
-                    style: MyDecorations.programsTextStyle),
+                Text(programModel[index].title,style: MyDecorations.programsTextStyle),
               ],
             );
-          }),
+          }
+      ),
     );
   }
 }
+
+

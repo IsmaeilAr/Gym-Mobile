@@ -2,8 +2,9 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:gym/components/styles/colors.dart';
-import 'package:gym/profile/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../features/profile/provider/profile_provider.dart';
 
 const List<String> _listGender = [
   'Male',

@@ -13,3 +13,4 @@ class TrainingModel{
   TrainingModel({required this.imageUrl,required this.description,required this.isSelected});
 
 }
+

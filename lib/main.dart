@@ -8,6 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:gym/test.dart';
 
+import 'features/programs/screens/programs_screen.dart';
+
 late SharedPreferences prefs;
 
 void main() async {
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Saira',
           useMaterial3: true,
         ),
-        home: const MainLayout(),
+        home:  ProgramScreen(),
       ),
     );
   }

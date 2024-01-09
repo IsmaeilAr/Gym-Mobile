@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/coaches/model/coaches_model.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
+
+import '../model/coaches_model.dart';
 
 List<CoachesModel> coaches = [
   CoachesModel(

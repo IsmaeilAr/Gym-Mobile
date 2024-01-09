@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/gym_traffic.dart';
@@ -65,7 +66,6 @@ class _MainLayoutState extends State<MainLayout> {
           GButton(
             icon: pageIconList[3],
             iconSize: 25.h,
-            icon: Icons.favorite_outline,
           ),
         ],
         selectedIndex: _selectedIndex,
@@ -82,11 +82,12 @@ class _MainLayoutState extends State<MainLayout> {
   }
 }
 
-class MainAppBar extends StatelessWidget {
+class MainAppBar extends StatelessWidget  implements PreferredSizeWidget {
   const MainAppBar({
     super.key,
   });
-
+  @override
+  Size get preferredSize => const Size.fromHeight(100);
   @override
   Widget build(BuildContext context) {
     return AppBar(
