@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:gym/features/home/screens/main_layout.dart';
+import 'package:gym/features/profile/screens/add_info_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:gym/test.dart';
 
+import 'components/widgets/countdown-page.dart';
 import 'features/programs/screens/programs_screen.dart';
 
 late SharedPreferences prefs;
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Saira',
           useMaterial3: true,
         ),
-        home:  ProgramScreen(),
+        home:  AddInfoScreen(),
       ),
     );
   }

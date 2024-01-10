@@ -7,6 +7,9 @@ import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/gym_traffic.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 
+import '../../../components/widgets/countdown-page.dart';
+import '../../../components/widgets/weekly_progress.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -17,6 +20,7 @@ class HomePage extends StatelessWidget {
       // const ScanButton(),
       Column(
         children: [
+          CountdownWidget(),
           SuccessLogo(),
           Gap(h: 12,),
           Text("Check-In Success", style: TextStyle(color: lightGrey, fontWeight: FontWeight.w600, fontSize: 16.sp),),
@@ -37,11 +41,7 @@ class HomePage extends StatelessWidget {
       const NoDailyPrograms(),
 
       // weekly progress
-     Container(
-       height: 70.h,
-       width: 400.w,
-       child: null,
-     )
+      WeeklyProgressWidget(),
     ]);
   }
 }

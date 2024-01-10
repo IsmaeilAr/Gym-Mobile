@@ -11,4 +11,5 @@ class Cache {
   static String appLanguage = "langKey";
   static String city = "userCity";
   static String cityID = "userCityID";
+
 }

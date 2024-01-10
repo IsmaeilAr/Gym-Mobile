@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -81,7 +82,7 @@ class TopText extends StatelessWidget {
           Text(
             'Insert',
             textAlign: TextAlign.center,
-            style: TextStyle(color: lightGrey, fontSize: 30.sp),
+            style: TextStyle(color: lightGrey, fontSize: 30.sp, fontWeight: FontWeight.w500, fontFamily: 'Saira'),
           ).sizer(h: 47, w: 128),
           const Gap(
             h: 12,
@@ -89,7 +90,7 @@ class TopText extends StatelessWidget {
           Text(
             'Your Personal Info',
             textAlign: TextAlign.center,
-            style: TextStyle(color: grey, fontSize: 16.sp),
+            style: TextStyle(color: grey, fontSize: 16.sp, fontWeight: FontWeight.w500, fontFamily: 'Saira'),
           ).sizer(
             w: 252,
             h: 31,
@@ -109,6 +110,7 @@ class RegInfoForm extends StatefulWidget {
 
 class _RegInfoFormState extends State<RegInfoForm> {
   final _formKey = GlobalKey<FormState>();
+  // final TextEditingController _GenderController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _waistController = TextEditingController();
@@ -138,6 +140,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
           children: <Widget>[
             // const CustomDropdownMenu(),
             const GenderDropdown(),
+
             TextFormField(
               controller: _heightController,
               keyboardType: TextInputType.number,
@@ -151,7 +154,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
                 }
                 return null;
               },
-            ),              // .sizer(h: 42, w: 332),
+            ),
             const Gap(h: 10),
             TextFormField(
               controller: _weightController,
@@ -166,7 +169,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
                 }
                 return null;
               },
-            ),              // .sizer(h: 42, w: 332),
+            ),
             const Gap(h: 10),
             TextFormField(
               controller: _waistController,
@@ -246,3 +249,4 @@ class _RegInfoFormState extends State<RegInfoForm> {
     });
   }
 }
+

@@ -4,7 +4,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 
 import '../../../components/widgets/programs_app_bar.dart';
-import '../model/programs_model.dart';
+import '../model/program_model.dart';
 
 
 

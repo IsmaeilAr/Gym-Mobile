@@ -1,16 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
+import 'package:gym/components/widgets/gap.dart';
 import '../widgets/round-button.dart';
 
-class CountdownPage extends StatefulWidget {
-  const CountdownPage({super.key});
+class CountdownWidget extends StatefulWidget {
+  const CountdownWidget({super.key});
 
   @override
-  State<CountdownPage> createState() => _CountdownPageState();
+  State<CountdownWidget> createState() => _CountdownWidgetState();
 }
 
-class _CountdownPageState extends State<CountdownPage>
+class _CountdownWidgetState extends State<CountdownWidget>
     with TickerProviderStateMixin {
   late AnimationController controller;
 
@@ -28,7 +30,7 @@ class _CountdownPageState extends State<CountdownPage>
   void notify() {
     if (countText == '0:00:00') {
     // tell the server
-      // should be used shen stop button on end of time
+      // should be used when stop button on end of time
     }
   }
 
@@ -37,7 +39,7 @@ class _CountdownPageState extends State<CountdownPage>
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 60),
+      duration: const Duration(minutes: 45),
     );
 
     controller.addListener(() {
@@ -63,96 +65,107 @@ class _CountdownPageState extends State<CountdownPage>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                width: 300,
-                height: 300,
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.grey.shade300,
-                  value: progress,
-                  strokeWidth: 6,
+    return Center(
+      child: SizedBox(
+        width: double.infinity,
+        height: 180.h,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 180.r,
+                  height: 180.r,
+                  child: CircularProgressIndicator(
+                    backgroundColor: dark,
+                    value: progress,
+                    color: lightGrey,
+                    strokeWidth: 15.r,
+                    strokeCap: StrokeCap.round,
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (controller.isDismissed) {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => SizedBox(
-                        height: 300,
-                        child: CupertinoTimerPicker(
-                          initialTimerDuration: controller.duration!,
-                          onTimerDurationChanged: (time) {
-                            setState(() {
-                              controller.duration = time;
-                            });
-                          },
+                GestureDetector(
+                  onTap: () {
+                    if (controller.isDismissed) {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SizedBox(
+                          height: 300,
+                          child: CupertinoTimerPicker(
+                            initialTimerDuration: controller.duration!,
+                            onTimerDurationChanged: (time) {
+                              setState(() {
+                                controller.duration = time;
+                              });
+                            },
+                          ),
                         ),
+                      );
+                    }
+                  },
+                  child: AnimatedBuilder(
+                    animation: controller,
+                    builder: (context, child) => Text(
+                      countText,
+                      style: TextStyle(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Saira',
+                        color: lightGrey,
+
                       ),
-                    );
-                  }
-                },
-                child: AnimatedBuilder(
-                  animation: controller,
-                  builder: (context, child) => Text(
-                    countText,
-                    style: const TextStyle(
-                      fontSize: 60,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  if (controller.isAnimating) {
-                    controller.stop();
+              ],
+            ),
+            const Gap(w: 44,),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    controller.reset();
                     setState(() {
                       isCounting = false;
                     });
-                  } else {
-                    controller.reverse(
-                        from: controller.value == 0 ? 1.0 : controller.value);
-                    setState(() {
-                      isCounting = true;
-                    });
-                  }
-                },
-                child: RoundButton(
-                  icon: isCounting == true ? Icons.pause : Icons.play_arrow,
-                  bgColor: dark,
+                    notify();
+                  },
+                  child: const RoundButton(
+                    icon: Icons.stop,
+                    bgColor: red,
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  controller.reset();
-                  setState(() {
-                    isCounting = false;
-                  });
-                  notify();
-                },
-                child: const RoundButton(
-                  icon: Icons.stop,
-                  bgColor: red,
+                const Gap(h: 24,),
+                GestureDetector(
+                  onTap: () {
+                    if (controller.isAnimating) {
+                      controller.stop();
+                      setState(() {
+                        isCounting = false;
+                      });
+                    } else {
+                      controller.reverse(
+                          from: controller.value == 0 ? 1.0 : controller.value);
+                      setState(() {
+                        isCounting = true;
+                      });
+                    }
+                  },
+                  child: RoundButton(
+                    icon: isCounting == true ? Icons.pause : Icons.play_arrow,
+                    bgColor: dark,
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

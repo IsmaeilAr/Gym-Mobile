@@ -1,8 +1,8 @@
-class ProgramsModel{
+class ProgramModel{
   String title;
   String imgUrl;
 
-  ProgramsModel({required this.title,required this.imgUrl});
+  ProgramModel({required this.title,required this.imgUrl});
 }
 
 class TrainingModel{

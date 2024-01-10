@@ -5,7 +5,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 
 import '../../../components/widgets/programs_app_bar.dart';
-import '../model/programs_model.dart';
+import '../model/program_model.dart';
 
 
 List<TrainingModel> trainingModel = [
@@ -29,6 +29,8 @@ List<TrainingModel> trainingModel = [
 class TrainingWithCoachesScreen extends StatefulWidget {
 
   final String title="Bulking";
+
+  const TrainingWithCoachesScreen({super.key});
   //const TrainingScreen({super.key, required this.title});
 
   @override

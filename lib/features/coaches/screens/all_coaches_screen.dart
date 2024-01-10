@@ -5,23 +5,23 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 
-import '../model/coaches_model.dart';
+import '../model/coach_model.dart';
 
-List<CoachesModel> coaches = [
-  CoachesModel(
+List<CoachModel> coaches = [
+  CoachModel(
       name: "Eias Saleh",
       description: 'Champion Of The Republic',
       imgUrl: "assets/images/img1.png",
       rate: 5,
       isSelected: true),
-  CoachesModel(
+  CoachModel(
     name: "Eias Saleh",
     description: 'Champion Of The Republic',
     imgUrl: "assets/images/img1.png",
     rate: 3.5,
     isSelected: false,
   ),
-  CoachesModel(
+  CoachModel(
     name: "Eias Saleh",
     description: 'Champion Of The Republic',
     imgUrl: "assets/images/img1.png",

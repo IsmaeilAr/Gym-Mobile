@@ -5,18 +5,18 @@ import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
 
 import '../../../components/widgets/programs_app_bar.dart';
-import '../model/programs_model.dart';
+import '../model/program_model.dart';
 
 
-List<ProgramsModel> training=[
+List<ProgramModel> training=[
   // ProgramsModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
   // ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
   // ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
 ];
-List<ProgramsModel> nutrition=[
-  ProgramsModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
-  ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
-  ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+List<ProgramModel> nutrition=[
+  ProgramModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
+  ProgramModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+  ProgramModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
 ];
 
 class PremiumScreen extends StatelessWidget {
@@ -59,7 +59,7 @@ class PremiumScreen extends StatelessWidget {
 }
 
 class ListPrograms extends StatelessWidget {
-  List<ProgramsModel> programModel;
+  List<ProgramModel> programModel;
   ListPrograms({required this.programModel});
 
   @override

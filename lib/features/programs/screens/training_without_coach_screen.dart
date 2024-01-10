@@ -3,13 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/drop_down_selected.dart';
-import 'package:gym/features/programs/screens/training_with_coache_screen.dart';
+import 'package:gym/features/programs/screens/training_with_coach_screen.dart';
 
 import '../../../components/widgets/programs_app_bar.dart';
 
 
 class TrainingWithoutCoachesScreen extends StatefulWidget {
   final String title = "Bulking";
+
+  const TrainingWithoutCoachesScreen({super.key});
 
   //const TrainingScreen({super.key, required this.title});
   @override

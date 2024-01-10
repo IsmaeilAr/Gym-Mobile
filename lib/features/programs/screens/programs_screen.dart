@@ -3,26 +3,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import '../../coaches/screens/all_coaches_screen.dart';
-import '../model/programs_model.dart';
+import '../model/program_model.dart';
 
-List<ProgramsModel> recommended=[
-  ProgramsModel(title: 'Training', imgUrl: "assets/images/Rectangle 61.png"),
-  ProgramsModel(title: 'Nutrition', imgUrl: "assets/images/Rectangle 61.png"),
+List<ProgramModel> recommended=[
+  ProgramModel(title: 'Training', imgUrl: "assets/images/Rectangle 61.png"),
+  ProgramModel(title: 'Nutrition', imgUrl: "assets/images/Rectangle 61.png"),
 ];
-List<ProgramsModel> training=[
-  ProgramsModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
-   ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
-   ProgramsModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+List<ProgramModel> training=[
+  ProgramModel(title: 'Bulking', imgUrl: "assets/images/img.png"),
+   ProgramModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
+   ProgramModel(title: 'Cutting', imgUrl: "assets/images/img.png"),
 ];
 
-List<ProgramsModel> coaches=[
-  ProgramsModel(title: 'Eias', imgUrl: "assets/images/img1.png"),
-  ProgramsModel(title: 'Maya', imgUrl: "assets/images/img1.png"),
-  ProgramsModel(title: 'Lana', imgUrl: "assets/images/img1.png"),
+List<ProgramModel> coaches=[
+  ProgramModel(title: 'Eias', imgUrl: "assets/images/img1.png"),
+  ProgramModel(title: 'Maya', imgUrl: "assets/images/img1.png"),
+  ProgramModel(title: 'Lana', imgUrl: "assets/images/img1.png"),
 ];
 
 
 class ProgramScreen extends StatelessWidget {
+  const ProgramScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,7 +78,7 @@ class ProgramScreen extends StatelessWidget {
 
 class ListPrograms extends StatelessWidget {
   double ListHight,Listwidth,imgHight,imgWidth;
-  List<ProgramsModel> programModel;
+  List<ProgramModel> programModel;
   ListPrograms({required this.ListHight,required this.Listwidth,required this.imgHight,required this.imgWidth,required this.programModel});
 
   @override
@@ -116,7 +118,7 @@ class ListPrograms extends StatelessWidget {
 class ListCoaches extends StatelessWidget {
 
   double ListHight,Listwidth;
-  List<ProgramsModel> programModel;
+  List<ProgramModel> programModel;
   ListCoaches({required this.ListHight,required this.Listwidth,required this.programModel});
 
   @override
