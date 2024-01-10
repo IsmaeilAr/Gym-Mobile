@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import '../../coaches/screens/all_coaches_screen.dart';
+import '../../home/screens/main_layout.dart';
 import '../model/programs_model.dart';
 
 List<ProgramsModel> recommended=[
@@ -28,7 +29,10 @@ class ProgramScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: black,
       body: Padding(
-        padding: const EdgeInsets.all( 16),
+        padding:  EdgeInsets.symmetric(
+          vertical: 16.h,
+          horizontal: 16.w,
+        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,6 +99,7 @@ class ListPrograms extends StatelessWidget {
                   height: imgHight.h,
                   width: imgWidth.w,
                   child: GestureDetector(
+                    onTap: (){},
                     child: Card(
                       elevation: 0,
                       shape: RoundedRectangleBorder(

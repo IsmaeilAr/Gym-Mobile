@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 
+import '../../../components/widgets/drop_down_selected.dart';
 import '../../../components/widgets/programs_app_bar.dart';
 import '../model/programs_model.dart';
 
@@ -22,16 +23,16 @@ List<TrainingModel> nutritionModel = [
       description: "5 days a week",
       isSelected: false),
 ];
-class NutritionScreen extends StatefulWidget {
+class NutritionWithCoachScreen extends StatefulWidget {
 
   final String title="Bulking";
   //const TrainingScreen({super.key, required this.title});
 
   @override
-  State<NutritionScreen> createState() => _NutritionScreenState();
+  State<NutritionWithCoachScreen> createState() => _NutritionWithCoachScreenState();
 }
 
-class _NutritionScreenState extends State<NutritionScreen>
+class _NutritionWithCoachScreenState extends State<NutritionWithCoachScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
@@ -115,16 +116,20 @@ class _MyCoachesListState extends State<MyCoachesList> {
                           ),
                         ),
                         Positioned(
-                          right: 0.w,
-                          top: 0.h,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.more_horiz_sharp,
-                              color: Colors.white,
-                              size: 20.sp,
-                            ),
-                            onPressed: () {},
-                          ),
+                            right: 0.w,
+                            top: 0.h,
+                            child: PopupMenuButton<MenuItem>(
+                                itemBuilder: (context) => [
+                                  ...MenuItems.getMenuItems
+                                      .map(buildItem)
+                                      .toList(),
+                                ],
+                                onSelected: (item) =>
+                                    onSelected(context, item),
+                                color: dark,
+                                iconColor: Colors.white,
+                                icon:Icon(Icons.more_horiz_sharp)
+                            )
                         ),
                       ],
                     ),

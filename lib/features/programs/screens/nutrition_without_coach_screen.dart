@@ -4,25 +4,24 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/drop_down_selected.dart';
 import 'package:gym/features/programs/screens/training_with_coache_screen.dart';
-
 import '../../../components/widgets/programs_app_bar.dart';
 
 
-class TrainingWithoutCoachesScreen extends StatefulWidget {
+class NutritionWithoutCoachesScreen extends StatefulWidget {
   final String title = "Bulking";
 
   //const TrainingScreen({super.key, required this.title});
   @override
-  State<TrainingWithoutCoachesScreen> createState() =>
+  State<NutritionWithoutCoachesScreen> createState() =>
       _TrainingWithoutCoachesState();
 }
 
-class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
+class _TrainingWithoutCoachesState extends State<NutritionWithoutCoachesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: programsAppBar(
-            title: "Training/${widget.title}", context: context, search: false),
+            title: "Nutrition/${widget.title}", context: context, search: false),
         body: Padding(
           padding: EdgeInsets.symmetric(
             vertical: 6.h,
@@ -60,8 +59,9 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
                                       onSelected(context, item),
                                   color: dark,
                                   iconColor: Colors.white,
+                                  icon:Icon(Icons.more_horiz_sharp)
                                 )
-                                ),
+                            ),
                           ],
                         ),
                         Row(
@@ -75,10 +75,10 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
                             ),
                             trainingModel[index].isSelected
                                 ? Icon(
-                                    Icons.check_box,
-                                    color: grey,
-                                    size: 12.sp,
-                                  )
+                              Icons.check_box,
+                              color: grey,
+                              size: 12.sp,
+                            )
                                 : SizedBox.shrink(),
                           ],
                         ),

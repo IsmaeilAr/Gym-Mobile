@@ -21,6 +21,7 @@ class MenuItems{
 }
 
 PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem<MenuItem>(
+
   value: item,
   child: Row(
     children: [
@@ -50,14 +51,15 @@ void onSelected(BuildContext context, MenuItem item) {
 
  AlertDialogSelect() {
   return AlertDialog(
-    backgroundColor: dark,
+    backgroundColor: black,
+    surfaceTintColor: black,
     elevation: 24.0,
     actions: [
       MaterialButton(
           onPressed: (){},
         child: Text("Cancel",
           style:MyDecorations.programsTextStyle,),
-        color: dark,
+        color: black,
       ),
       SizedBox(width: 5.w),
       MaterialButton(
@@ -74,14 +76,15 @@ void onSelected(BuildContext context, MenuItem item) {
 
 AlertDialogDesSelect() {
   return AlertDialog(
-    backgroundColor: dark,
+    backgroundColor: black,
+    surfaceTintColor: black,
     elevation: 24.0,
     actions: [
       MaterialButton(
         onPressed: (){},
         child: Text("Cancel",
           style:MyDecorations.programsTextStyle,),
-        color: dark,
+        color: black,
       ),
       SizedBox(width: 5.w),
       MaterialButton(

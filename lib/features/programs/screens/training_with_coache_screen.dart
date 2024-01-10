@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 
+import '../../../components/widgets/drop_down_selected.dart';
 import '../../../components/widgets/programs_app_bar.dart';
 import '../model/programs_model.dart';
 
@@ -117,17 +118,20 @@ class _MyCoachesListState extends State<MyCoachesList> {
                           ),
                         ),
                         Positioned(
-                          right: 0.w,
-                          top: 0.h,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.more_horiz_sharp,
-                              color: Colors.white,
-                              size: 20.sp,
-                            ),
-                            onPressed: () {
-                            },
-                          ),
+                            right: 0.w,
+                            top: 0.h,
+                            child: PopupMenuButton<MenuItem>(
+                                itemBuilder: (context) => [
+                                  ...MenuItems.getMenuItems
+                                      .map(buildItem)
+                                      .toList(),
+                                ],
+                                onSelected: (item) =>
+                                    onSelected(context, item),
+                                color: dark,
+                                iconColor: Colors.white,
+                                icon:Icon(Icons.more_horiz_sharp)
+                            )
                         ),
                       ],
                     ),

@@ -7,6 +7,8 @@ import 'package:gym/components/widgets/gym_traffic.dart';
 import 'package:gym/components/widgets/icon_button.dart';
 import 'package:gym/features/home/screens/home.dart';
 
+import '../../programs/screens/programs_screen.dart';
+
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
 
@@ -25,7 +27,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   List<Widget> screens = [
     const HomePage(),
-    // const ProgramsPage(),
+    // const ProgramScreen(),
     // const ProgressPage(),
     // const ProfilePage(),
   ];
@@ -33,7 +35,16 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(),
+      appBar:
+      _selectedIndex == 0
+          ? MainAppBar(title: "Home")
+          : _selectedIndex == 1
+          ? MainAppBar(title: "Programs")
+          // : _selectedIndex == 2
+          // ? MainAppBar(title: "Progress")
+          // : _selectedIndex == 3
+          // ? MainAppBar(title: "Profile")
+          : null,
       bottomNavigationBar: GNav(
         gap: 20.w,
         // tabMargin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 30.w),
@@ -75,25 +86,28 @@ class _MainLayoutState extends State<MainLayout> {
           });
         },
       ),
-      body: Container(
-          padding: EdgeInsets.all(14.w),
-          child: HomePage()),
+      body: <Widget>[
+        HomePage(),
+        ProgramScreen(),
+      ][_selectedIndex]
+
     );
   }
 }
 
 class MainAppBar extends StatelessWidget  implements PreferredSizeWidget {
-  const MainAppBar({
-    super.key,
-  });
+
+  final String title;
+  MainAppBar({required this.title});
+
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize =>  Size.fromHeight(52.h);
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: black,
       leading: BarIconButton(icon: Icons.menu, onPressed: (){},),
-      title: Text("Home", style: TextStyle(color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),),
+      title: Text(title, style: TextStyle(color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),),
       actions: [
         BarIconButton(icon: Icons.notifications_none_outlined, onPressed: (){},),
         BarIconButton(icon: Icons.article_outlined, onPressed: (){},),

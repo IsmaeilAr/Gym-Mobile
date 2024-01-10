@@ -8,6 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:gym/test.dart';
 
+import 'features/coaches/screens/all_coaches_screen.dart';
+import 'features/programs/screens/nutrition_with_coach_screen.dart';
+import 'features/programs/screens/nutrition_without_coach_screen.dart';
+import 'features/programs/screens/premium_sareen.dart';
 import 'features/programs/screens/programs_screen.dart';
 
 late SharedPreferences prefs;
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Saira',
           useMaterial3: true,
         ),
-        home:  ProgramScreen(),
+        home:  AllCoachesScreen(),
       ),
     );
   }

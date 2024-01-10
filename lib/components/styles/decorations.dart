@@ -143,6 +143,13 @@ class MyDecorations {
     fontFamily: myFont,
   );
 
+  static TextStyle premiumTextStyle=TextStyle(
+    color: primaryColor,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
 }
 
 
