@@ -1,30 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:gym/components/styles/colors.dart';
 
-AppBar programsAppBar({required String title, required BuildContext context, required bool search}) {
-  return AppBar(
-    backgroundColor: black,
-    leading: IconButton(
-      color: Colors.white,
-      icon: Icon(Icons.arrow_back_ios_new),
-      onPressed: () => Navigator.pop(context),
-    ),
+class ProgramsAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final BuildContext context;
+  final bool search;
 
-    title: Text(
-      title,
-      style: TextStyle(
-        color:  Colors.white,
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
+  const ProgramsAppBar({super.key,
+    required this.title,
+    required this.context,
+    required this.search,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: black,
+      leading: IconButton(
+        color: Colors.white,
+        icon: const Icon(Icons.arrow_back_ios_new),
+        onPressed: () => Navigator.pop(context),
       ),
-    ),
-    actions: search
-        ? [
-      IconButton(
-        color:  Colors.white,
-        onPressed: () {},
-        icon: Icon(Icons.search),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
       ),
-    ] : null,
-  );
+      actions: search
+          ? [
+        IconButton(
+          color: Colors.white,
+          onPressed: () {},
+          icon: const Icon(Icons.search),
+        ),
+      ]
+          : null,
+    );
+  }
 }

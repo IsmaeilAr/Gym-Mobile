@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
-import '../widgets/round-button.dart';
+import 'package:gym/features/home/provider/home_provider.dart';
+import 'package:provider/provider.dart';
+import '../widgets/round_button.dart';
 
 class CountdownWidget extends StatefulWidget {
   const CountdownWidget({super.key});
@@ -27,11 +29,9 @@ class _CountdownWidgetState extends State<CountdownWidget>
 
   double progress = 1.0;
 
-  void notify() {
-    if (countText == '0:00:00') {
-    // tell the server
-      // should be used when stop button on end of time
-    }
+  void _checkout() {
+    context.read<HomeProvider>().callCheckOutApi(context);
+    context.read<HomeProvider>().isCheckIn = false;
   }
 
   @override
@@ -43,15 +43,17 @@ class _CountdownWidgetState extends State<CountdownWidget>
     );
 
     controller.addListener(() {
-      notify();
       if (controller.isAnimating) {
         setState(() {
           progress = controller.value;
+          debugPrint(controller.value.toString());
         });
       } else {
         setState(() {
           progress = 1.0;
           isCounting = false;
+          debugPrint("isCounting = false");
+          _checkout();
         });
       }
     });
@@ -133,7 +135,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
                     setState(() {
                       isCounting = false;
                     });
-                    notify();
+                    _checkout();
                   },
                   child: const RoundButton(
                     icon: Icons.stop,

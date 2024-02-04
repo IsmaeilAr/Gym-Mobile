@@ -105,9 +105,19 @@ class MyDecorations {
     return ElevatedButton.styleFrom(
       backgroundColor: color,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.sp),
+        borderRadius: BorderRadius.circular(8.r),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 50.h, vertical: 10.w),
+      padding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 10.h),
+    );
+  }
+
+  static ButtonStyle profileButtonStyle(Color color){
+    return ElevatedButton.styleFrom(
+      backgroundColor: color,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      //padding: EdgeInsets.symmetric(horizontal: 100.w, vertical: 10.h),
     );
   }
 
@@ -140,6 +150,48 @@ class MyDecorations {
     color: lightGrey,
     fontSize: 12.sp,
     fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
+  static TextStyle premiumTextStyle=TextStyle(
+    color: primaryColor,
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
+  static TextStyle calendarTextStyle=TextStyle(
+    color: lightGrey,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+    fontFamily: myFont,
+  );
+
+  static TextStyle profileLight400TextStyle=TextStyle(
+    color: lightGrey,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+    fontFamily: myFont,
+  );
+
+  static TextStyle profileLight500TextStyle=TextStyle(
+    color: lightGrey,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
+  static TextStyle profileGreyTextStyle=TextStyle(
+    color: grey,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    fontFamily: myFont,
+  );
+
+  static TextStyle profileGrey400TextStyle=TextStyle(
+    color: grey,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
     fontFamily: myFont,
   );
 

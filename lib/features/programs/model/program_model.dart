@@ -1,16 +1,40 @@
-class ProgramModel{
-  String title;
-  String imgUrl;
+import 'category_model.dart';
 
-  ProgramModel({required this.title,required this.imgUrl});
-}
+class ProgramModel {
+  final int id;
+  final String name;
+  final String file;
+  final String imageUrl;
+  final String type;
+  final TrainingCategoryModel category;
+  final int coachId;
 
-class TrainingModel{
-  String imageUrl;
-  String description;
-  bool isSelected;
+  ProgramModel({
+    required this.id,
+    required this.name,
+    required this.file,
+    required this.imageUrl,
+    required this.type,
+    required this.category,
+    required this.coachId,
+  });
 
-  TrainingModel({required this.imageUrl,required this.description,required this.isSelected});
+  factory ProgramModel.fromJson(Map<String, dynamic> json) {
+    return ProgramModel(
+      id: json['id'] ?? 0,
+      name: json['name'] ?? '',
+      file: json['file'] ?? '',
+      imageUrl: json['imageUrl'] ?? '',
+      type: json['type'] ?? '',
+      coachId: json['coachId'] ?? 0,
+      category: TrainingCategoryModel.fromJson(json['category']),
+    );
+  }
 
+  static List<ProgramModel> listFromJson(List<dynamic> jsonList) {
+    return jsonList
+        .map((json) => ProgramModel.fromJson(json))
+        .toList();
+  }
 }
 

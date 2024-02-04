@@ -1,95 +1,16 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
-import 'package:gym/components/widgets/gym_traffic.dart';
-import 'package:gym/components/widgets/icon_button.dart';
-import 'package:gym/features/home/screens/home.dart';
-import '../../programs/screens/programs_screen.dart';
-
-class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
-
-  @override
-  State<MainLayout> createState() => _MainLayoutState();
-}
-
-class _MainLayoutState extends State<MainLayout> {
-  int _selectedIndex = 0;
-
-  final pageIconList = <IconData>[
-    Icons.home_filled,
-    Icons.paste_outlined,
-    Icons.query_stats_outlined,
-    Icons.person,
-  ];
-
-  final screens = <Widget>[
-    const HomePage(),
-    const ProgramScreen(),
-    // const ProgressPage(),
-    // const ProfilePage(),
-  ];
-
-  List<String> screenNames = [
-    "Home",
-    "Programs",
-    "Progress",
-    "Profile",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MainAppBar(
-        title: screenNames[_selectedIndex],
-      ),
-
-      body: Container(
-          padding: EdgeInsets.all(14.w), child: screens[_selectedIndex]),
-      drawer: const MyDrawer(),
-
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 47.w,
-        ),
-        child: GNav(
-          backgroundColor: black,
-          hoverColor: red,
-          activeColor: red,
-          iconSize: 24.dm,
-          padding: EdgeInsets.symmetric(vertical: 14.h),
-          duration: const Duration(milliseconds: 400),
-          tabs: [
-            GButton(
-              icon: pageIconList[0],
-              iconColor: grey,
-            ),
-            GButton(
-              icon: pageIconList[1],
-              iconColor: grey,
-            ),
-            GButton(
-              icon: pageIconList[2],
-              iconColor: grey,
-            ),
-            GButton(
-              icon: pageIconList[3],
-              iconColor: grey,
-            ),
-          ],
-          selectedIndex: _selectedIndex,
-          onTabChange: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
-      ),
-    );
-  }
-}
+import 'package:gym/features/authentication/provider/auth_provider.dart';
+import 'package:gym/features/authentication/screens/login_screen.dart';
+import 'package:gym/features/report/screens/report_screen.dart';
+import 'package:gym/main.dart';
+import 'package:gym/utils/helpers/cache.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -98,6 +19,10 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String userName = prefs.getString(Cache.userName) ?? "";
+    String userPhone = prefs.getString(Cache.userPhone) ?? "";
+    String userImage = prefs.getString(Cache.userImage) ?? "";
+
     return Drawer(
       backgroundColor: black,
       child: ListView(
@@ -109,7 +34,7 @@ class MyDrawer extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 24.r,
-                  backgroundImage: AssetImage("assets/images/profile.png"),
+                  backgroundImage: NetworkImage(userImage),
                 ),
                 Gap(w: 12.w,),
                 Column(
@@ -117,12 +42,12 @@ class MyDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Ismaeil",
+                      userName,
                       style: TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 14.sp, color: lightGrey,),
                     ),
                     Text(
-                      "0988853928",
+                      userPhone,
                       style: TextStyle(
                         fontWeight: FontWeight.w400, fontSize: 12.sp, color: lightGrey,),
                     ),
@@ -144,6 +69,14 @@ class MyDrawer extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: lightGrey),
             ),
+            onTap: (){
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade,
+                      child: ReportScreen(
+                      )));
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -157,6 +90,9 @@ class MyDrawer extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: lightGrey),
             ),
+            onTap: (){
+              doLogout(context);
+            },
           ),
         ],
       ),
@@ -164,46 +100,16 @@ class MyDrawer extends StatelessWidget {
   }
 }
 
-class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MainAppBar({
-    super.key,
-    required this.title,
-  });
-  @override
-  Size get preferredSize => Size.fromHeight(52.h);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: black,
-      leading: BarIconButton(
-        icon: Icons.menu,
-        onPressed: () => Scaffold.of(context).openDrawer(),
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-            color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),
-      ),
-      actions: [
-        BarIconButton(
-          icon: Icons.notifications_none_outlined,
-          onPressed: () {},
-        ),
-        BarIconButton(
-          icon: Icons.article_outlined,
-          onPressed: () {},
-        ),
-        BarIconButton(
-          icon: Icons.chat_outlined,
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
+doLogout(BuildContext context) {
+  context.read<AuthProvider>().callLogoutApi(context).then((value) => (value) ?
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (Route<dynamic> route) => false,)
+      : null
+  );
 }
+
 
 
 class LanguageList extends StatefulWidget {
@@ -261,7 +167,9 @@ class _LanguageListState extends State<LanguageList> {
           Visibility(
             visible: _showLanguage,
             child: ListTile(
-              onTap: () {},
+              onTap: () {
+                // todo language change
+              },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
                 child: Icon(Icons.radio_button_checked_outlined, color: lightGrey,),
@@ -272,7 +180,9 @@ class _LanguageListState extends State<LanguageList> {
           Visibility(
             visible: _showLanguage,
             child: ListTile(
-              onTap: () {},
+              onTap: () {
+
+              },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
                 child: Icon(Icons.radio_button_off_outlined, color: lightGrey,),

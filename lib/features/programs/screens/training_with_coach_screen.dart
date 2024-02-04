@@ -1,38 +1,21 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
+import 'package:gym/components/widgets/pop_menu_selected.dart';
+import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/features/profile/provider/profile_provider.dart';
+import 'package:gym/features/programs/model/category_model.dart';
+import 'package:gym/features/programs/model/program_model.dart';
+import 'package:gym/features/programs/provider/program_provider.dart';
+import 'package:provider/provider.dart';
 
-import '../../../components/widgets/programs_app_bar.dart';
-import '../model/program_model.dart';
 
 
-List<TrainingModel> trainingModel = [
-  TrainingModel(
-      imageUrl: "assets/images/training.png",
-      description: "PPL-4 days a week",
-      isSelected: true),
-  TrainingModel(
-      imageUrl: "assets/images/training.png",
-      description: "PPL-4 days a week",
-      isSelected: false),
-  TrainingModel(
-      imageUrl: "assets/images/training.png",
-      description: "5 days a week",
-      isSelected: false),
-  TrainingModel(
-      imageUrl: "assets/images/training.png",
-      description: "PPL-4 days a week",
-      isSelected: false),
-];
 class TrainingWithCoachesScreen extends StatefulWidget {
+  const TrainingWithCoachesScreen(this.category, {super.key});
 
-  final String title="Bulking";
-
-  const TrainingWithCoachesScreen({super.key});
-  //const TrainingScreen({super.key, required this.title});
-
+  final TrainingCategoryModel category;
   @override
   State<TrainingWithCoachesScreen> createState() => _TrainingWithCoachesScreenState();
 }
@@ -41,11 +24,16 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
-
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      context.read<ProgramProvider>().getProgramsList(context, widget.category.type, widget.category.id);
+      context.read<ProgramProvider>().getMyCoachPrograms(context, widget.category.type,
+        context.watch<ProfileProvider>().status.coachId,
+      );
+    });
     _tabController = TabController(length: 2, vsync: this);
+    super.initState();
   }
 
   @override
@@ -56,14 +44,16 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
 
   @override
   Widget build(BuildContext context) {
+
+    String title = "${widget.category.type}⮞${widget.category.name}";
     return Scaffold(
-      appBar: programsAppBar(title: "Training/${widget.title}", context: context, search: false),
+      appBar: ProgramsAppBar(title: title, context: context, search: true),
       body: Column(
         children: <Widget>[
           TabBar.secondary(
             controller: _tabController,
             unselectedLabelColor: grey,
-            labelStyle: TextStyle(color: primaryColor),
+            labelStyle: const TextStyle(color: primaryColor),
             indicatorColor: primaryColor,
             dividerColor: black,
             tabs: const <Widget>[
@@ -75,8 +65,8 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
             child: TabBarView(
               controller: _tabController,
               children: <Widget>[
-                MyCoachesList(),
-                MyCoachesList(),
+                ProgramsList(category: widget.category,),
+                ProgramsList(category: widget.category,),
               ],
             ),
           ),
@@ -85,70 +75,79 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
     );
   }
 }
-class MyCoachesList extends StatefulWidget {
-  const MyCoachesList({Key? key}) : super(key: key);
 
-  @override
-  State<MyCoachesList> createState() => _MyCoachesListState();
-}
-class _MyCoachesListState extends State<MyCoachesList> {
+class ProgramsList extends StatelessWidget {
+  const ProgramsList({super.key, required this.category});
+  final TrainingCategoryModel category;
+  // final bool isCoach;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 6.h,
-        horizontal: 9.w,
+        horizontal: 14.w,
       ),
       child: Column(
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: trainingModel.length,
+              itemCount: category.type == "Sport" ?
+              context.watch<ProgramProvider>().sportProgramList.length :
+              context.watch<ProgramProvider>().nutritionProgramList.length,
               itemBuilder: (context, index) {
+                ProgramModel program;
+                category.type == "Sport" ?
+                program = context.watch<ProgramProvider>().sportProgramList[index] :
+                program = context.watch<ProgramProvider>().nutritionProgramList[index];
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(
                       children: [
-                        Container(
+                        SizedBox(
                           height: 156.h,
                           width: 332.w,
                           child: Image.asset(
-                            trainingModel[index].imageUrl,
+                            program.imageUrl,
                             fit: BoxFit.fill,
                           ),
                         ),
                         Positioned(
-                          right: 0.w,
-                          top: 0.h,
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.more_horiz_sharp,
-                              color: Colors.white,
-                              size: 20.sp,
-                            ),
-                            onPressed: () {
-                            },
-                          ),
+                            right: 0.w,
+                            top: 0.h,
+                            child: PopupMenuButton<MenuItemModel>(
+                                itemBuilder: (context) => [
+                                  ...MenuItems.getMenuItems
+                                      .map(buildItem)
+                                      ,
+                                ],
+                                onSelected: (item) =>
+                                    onSelected(context, item, (){
+                                      _selectProgram(context, program.id);
+                                    }),
+                                color: dark,
+                                iconColor: Colors.white,
+                                icon:Icon(Icons.more_horiz_sharp,size: 20.sp,)
+                            )
                         ),
                       ],
                     ),
                     Row(
                       children: [
                         Text(
-                          trainingModel[index].description,
+                          program.name,
                           style: MyDecorations.programsTextStyle,
                         ),
                         SizedBox(
                           width: 5.h,
                         ),
-                        trainingModel[index].isSelected
+                        program.id ==  program.id
                             ? Icon(
                           Icons.check_box,
                           color: grey,
                           size: 12.sp,
                         )
-                            : SizedBox.shrink(),
+                            : const SizedBox.shrink(),
                       ],
                     ),
                     SizedBox(
@@ -162,6 +161,10 @@ class _MyCoachesListState extends State<MyCoachesList> {
         ],
       ),
     );
+  }
+  void _selectProgram(BuildContext context, int programId){
+    context.read<ProgramProvider>().callSetProgram(context, programId);
+    // todo onRefresh
   }
 }
 

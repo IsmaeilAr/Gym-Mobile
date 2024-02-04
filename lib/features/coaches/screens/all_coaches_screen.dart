@@ -4,44 +4,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/features/profile/models/user_model.dart';
 
-import '../model/coach_model.dart';
 
-List<CoachModel> coaches = [
-  CoachModel(
-      name: "Eias Saleh",
-      description: 'Champion Of The Republic',
-      imgUrl: "assets/images/img1.png",
-      rate: 5,
-      isSelected: true),
-  CoachModel(
+List<UserModel> coaches = [
+  UserModel(
     name: "Eias Saleh",
-    description: 'Champion Of The Republic',
-    imgUrl: "assets/images/img1.png",
-    rate: 3.5,
-    isSelected: false,
-  ),
-  CoachModel(
-    name: "Eias Saleh",
-    description: 'Champion Of The Republic',
-    imgUrl: "assets/images/img1.png",
-    rate: 1.5,
-    isSelected: false,
+    rate: 5,
+    phoneNumber: '0987654321',
+    birthDate: DateTime(2023),
+    role: 'coach',
+    description: "Republic Champ",
+    expiration: DateTime(2023),
+    finance: 0,
+    isPaid: false,
+    images: [ImageModel(id: 1, image: "image")], id: 1,
   ),
 ];
+final int myCoachId = 1; // todo cache the selected coach ID after get all coaches
 
 class AllCoachesScreen extends StatefulWidget {
   const AllCoachesScreen({super.key});
-
   @override
-  State<AllCoachesScreen> createState() => _CoachesModelState();
+  State<AllCoachesScreen> createState() => _AllCoachesScreenState();
 }
 
-class _CoachesModelState extends State<AllCoachesScreen> {
+class _AllCoachesScreenState extends State<AllCoachesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: programsAppBar(title: "Coaches", context: context, search: true),
+      appBar: ProgramsAppBar(title: "Coaches", context: context, search: true),
       body: Column(
         children: [
           Expanded(
@@ -49,23 +41,31 @@ class _CoachesModelState extends State<AllCoachesScreen> {
               scrollDirection: Axis.vertical,
               itemCount: coaches.length,
               itemBuilder: (context, index) {
+                UserModel coach = coaches[index];
                 return Container(
-                    height: 90.h, //81.h,
+                    height: 90.h,
                     width: 332.w,
-                    margin: EdgeInsets.all(8),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       color: dark,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          AllCoachesWidget(coachesIndexes: index),
-                          IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
-                        ],
-                      ),
+                    child: Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16.h, horizontal: 16.w),
+                          child: AllCoachesWidget(coach: coach),
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.more_horiz,
+                              size: 19.sp,
+                            )),
+                      ],
                     ));
               },
             ),
@@ -76,10 +76,9 @@ class _CoachesModelState extends State<AllCoachesScreen> {
   }
 }
 
-
 class AllCoachesWidget extends StatelessWidget {
-  int coachesIndexes;
-  AllCoachesWidget({super.key, required this.coachesIndexes});
+  final UserModel coach;
+  const AllCoachesWidget({super.key, required this.coach});
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +87,11 @@ class AllCoachesWidget extends StatelessWidget {
         Row(
           children: [
             CircleAvatar(
+              radius: 28.r,
               child: Image.asset(
-                coaches[coachesIndexes].imgUrl,
+                coach.images[0].image,
                 fit: BoxFit.fill,
               ),
-              radius: 28.r,
             ),
             SizedBox(
               width: 10.w,
@@ -102,22 +101,27 @@ class AllCoachesWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(coaches[coachesIndexes].name,
+                    Text(coach.name,
                         style: MyDecorations.coachesTextStyle),
                     SizedBox(
-                      width:5.w,
+                      width: 5.w,
                     ),
-                    coaches[coachesIndexes].isSelected?
-                    Icon(Icons.check_box,color: Colors.white,size: 12.sp,):const SizedBox.shrink(),
+                    coach.id == myCoachId
+                        ? Icon(
+                            Icons.check_box,
+                            color: Colors.white,
+                            size: 12.sp,
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
-                Text(coaches[coachesIndexes].description,
+                Text(coach.description,
                     style: MyDecorations.programsTextStyle),
                 RatingBarIndicator(
-                  rating: coaches[coachesIndexes].rate,
-                  itemBuilder: (context, index) => Icon(
+                  rating: coach.rate.toDouble(),
+                  itemBuilder: (context, index) => const Icon(
                     Icons.star,
-                    color:red,
+                    color: red,
                   ),
                   itemCount: 5,
                   itemSize: 10.sp,

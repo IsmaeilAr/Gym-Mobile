@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/gap.dart';
-
+import 'package:gym/features/home/provider/home_provider.dart';
+import 'package:gym/features/progress/provider/progress_provider.dart';
+import 'package:provider/provider.dart';
 import '../styles/colors.dart';
+import 'gap.dart';
 
 class WeeklyProgressWidget extends StatelessWidget {
+
   const WeeklyProgressWidget({super.key});
 
   @override
@@ -12,24 +15,51 @@ class WeeklyProgressWidget extends StatelessWidget {
     return SizedBox(
       height: 51.h,
       width: 316.w,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          DoneDay(),
-          UnDoneDay(),
-          CurrentDay(),
-        ],
+      child: ListView.separated(
+        itemCount: 7,
+        scrollDirection: Axis.horizontal,
+        separatorBuilder: (BuildContext context, int index) {
+          return Gap(w: 20.w);
+        },
+        itemBuilder: (BuildContext context, int index) {
+           List<int> doneDaysList =context.watch<ProgressProvider>().doneDaysList;
+          return MyDayWidget(index: index, dayType: doneDaysList[index],);
+        },
       ),
     );
+  }
+
+}
+
+
+class MyDayWidget extends StatelessWidget {
+  final int dayType;
+  final int index;
+  final List<String> weekDays = [ "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
+
+  MyDayWidget({super.key, required this.index, required this.dayType});
+
+  @override
+  Widget build(BuildContext context) {
+    String dayName = weekDays[index];
+
+    switch (dayType) {
+      case 0:
+        return UnDoneDay(dayName: dayName);
+      case 1:
+        return DoneDay(dayName: dayName);
+      case 2:
+        return CurrentDay(dayName: dayName);
+      default:
+        return UnDoneDay(dayName: dayName);
+    }
   }
 }
 
 class CurrentDay extends StatelessWidget {
-  const CurrentDay({
-    super.key,
-  });
+  final String dayName;
+
+  const CurrentDay({super.key, required this.dayName});
 
   @override
   Widget build(BuildContext context) {
@@ -51,21 +81,22 @@ class CurrentDay extends StatelessWidget {
           h: 4,
         ),
         Text(
-          "Mon",
+          dayName,
           style: TextStyle(
-              color: grey,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400),
-        )
+            color: lightGrey,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ],
     );
   }
 }
 
 class UnDoneDay extends StatelessWidget {
-  const UnDoneDay({
-    super.key,
-  });
+  final String dayName;
+
+  const UnDoneDay({super.key, required this.dayName});
 
   @override
   Widget build(BuildContext context) {
@@ -83,21 +114,22 @@ class UnDoneDay extends StatelessWidget {
           h: 4,
         ),
         Text(
-          "Sun",
+          dayName,
           style: TextStyle(
-              color: grey,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400),
-        )
+            color: grey,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ],
     );
   }
 }
 
 class DoneDay extends StatelessWidget {
-  const DoneDay({
-    super.key,
-  });
+  final String dayName;
+
+  const DoneDay({super.key, required this.dayName});
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +143,13 @@ class DoneDay extends StatelessWidget {
           h: 4,
         ),
         Text(
-          "Sat",
+          dayName,
           style: TextStyle(
-              color: lightGrey,
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w400),
-        )
+            color: lightGrey,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
       ],
     );
   }

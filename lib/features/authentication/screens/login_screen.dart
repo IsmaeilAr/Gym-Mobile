@@ -118,11 +118,12 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool obscured = true;
+
   @override
   void dispose() {
+    super.dispose();
     _phoneController.dispose();
     _passwordController.dispose();
-    super.dispose();
   }
 
   @override
@@ -182,6 +183,7 @@ class _LoginFormState extends State<LoginForm> {
                 return null;
               },
             ),
+            const Gap(h: 30),
             SizedBox(
               width: 242.w,
               height: 45.h,
@@ -220,9 +222,6 @@ class _LoginFormState extends State<LoginForm> {
             PageTransition(
                 type: PageTransitionType.rightToLeftWithFade,
                 child: const AddInfoScreen()));
-        // _phoneController.clear();
-        // _passwordController.clear();
-        dispose();
       }
     });
   }

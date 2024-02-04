@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/icon_button.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:provider/provider.dart';
+
+import '../../home/provider/home_provider.dart';
 
 class QRView extends StatefulWidget {
   const QRView({super.key});
@@ -36,6 +41,16 @@ class _QRViewState extends State<QRView> {
           for (final barcode in barcodes) {
             debugPrint('Barcode found! ${barcode.rawValue}');
           }
+          context.read<HomeProvider>().callCheckInApi(context).then((result) {
+           if (result) {
+              context.read<HomeProvider>().isCheckIn = true;
+              context.read<HomeProvider>().showCheckInSuccess = true;
+              Timer(const Duration(seconds: 3), () {
+                context.read<HomeProvider>().showCheckInSuccess = false;
+
+              });
+            }
+          });
           Navigator.pop(context);
         },
       ),
