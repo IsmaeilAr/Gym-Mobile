@@ -2,14 +2,13 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:gym/components/widgets/snackBar.dart';
-import 'package:gym/main.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/helpers/api/dio_exceptions.dart';
 
 
-class ApiHelper{
-  static String serverUrl = "http://91.144.20.117:6002/";
-  // static String serverUrl = "http://192.168.2.138:808/";
+class ApiHelper {
+  // static String serverUrl = "http://91.144.20.117:6002/";
+  static String serverUrl = "http://192.168.2.138:808/";
   static String baseUrl = "${serverUrl}api/";
   static String imageUrl = "${serverUrl}uploads/images/";
 
@@ -71,11 +70,9 @@ class ApiHelper{
   }
 
   static String premiumProgramsUrl(
-      String type, int categoryID,
-      ) {
-    String url = "${baseUrl}Premum?type=$type" ;
-    if (categoryID != 0) url = "${baseUrl}show?type=$type/$categoryID";
-    return  url ;
+    String type,
+  ) {
+    return "${baseUrl}Premum?type=$type";
   }
 
 
@@ -133,23 +130,22 @@ class ApiHelper{
   }
 
   static String getCoachArticlesUrl(
-      int coachId,
-      ) {
+      int coachId,) {
     return "${baseUrl}coachArticle/$coachId";
   }
 
-  static String deleteRateUrl(
-      int rateId,
-      ) {
+  static String deleteRateUrl(int rateId,) {
     return "${baseUrl}deleteRate?id=/$rateId";
   }
+
+  SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
   //###################################################################################################//
 
   BaseOptions options = BaseOptions(
-      receiveDataWhenStatusError: true,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
+    receiveDataWhenStatusError: true,
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 30),
   );
 
   final Dio _clientDio = Dio();
@@ -198,7 +194,7 @@ class ApiHelper{
     late Either<String, Response> result;
 
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
           .post(
             logoutUrl,
@@ -226,17 +222,15 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
-          .get(
-          initStatusUrl,
-          options: Options(
-            headers: {
-              'Accept': 'application/json',
-              'Authorization': token,
-            },
-          )
-      )
+          .get(initStatusUrl,
+              options: Options(
+                headers: {
+                  'Accept': 'application/json',
+                  'Authorization': token,
+                },
+              ))
           .timeout(const Duration(seconds: 25));
       log("## $Response init status (API handler) : Good");
       result = Right(response);
@@ -254,17 +248,15 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
-          .get(
-          activePlayersUrl,
-          options: Options(
-            headers: {
-              'Accept': 'application/json',
-              'Authorization': token,
-            },
-          )
-      )
+          .get(activePlayersUrl,
+              options: Options(
+                headers: {
+                  'Accept': 'application/json',
+                  'Authorization': token,
+                },
+              ))
           .timeout(const Duration(seconds: 25));
       log("## $Response active player (API handler) : Good");
       result = Right(response);
@@ -284,19 +276,19 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
-       int playerId = prefs.getInt(Cache.userId) ?? 0;
+      String token = prefsService.getValue(Cache.token) ?? "";
+      int playerId = prefsService.getValue(Cache.userId) ?? 0;
       log(playerId.toString());
       log(getProfileInfoUrl(playerId));
       var response = await _clientDio
           .get(
-        getProfileInfoUrl(playerId),
-        options: Options(
-          headers: {
-            'accept': 'application/json',
-            'Authorization': token,
-          },
-        ),
+            getProfileInfoUrl(playerId),
+            options: Options(
+              headers: {
+                'accept': 'application/json',
+                'Authorization': token,
+              },
+            ),
       )
           .timeout(const Duration(seconds: 50));
       log("## Response Profile Info : $response");
@@ -316,19 +308,19 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
-       int playerId = prefs.getInt(Cache.userId) ?? 0;
+      String token = prefsService.getValue(Cache.token) ?? "";
+      int playerId = prefsService.getValue(Cache.userId) ?? 0;
       log(playerId.toString());
       log(getPersonMetricsUrl(playerId));
       var response = await _clientDio
           .get(
-        getPersonMetricsUrl(playerId),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
+            getPersonMetricsUrl(playerId),
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
       )
           .timeout(const Duration(seconds: 50));
       log("## Response Profile Info : $response");
@@ -354,7 +346,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         addInfoUrl,
         options: Options(
@@ -396,7 +388,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         editMetricsUrl,
         options: Options(
@@ -434,7 +426,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         editInfoUrl,
         options: Options(
@@ -467,7 +459,7 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
@@ -491,17 +483,21 @@ class ApiHelper{
     }
   }
 
-  Future<Either<String, Response>> getPremiumProgramsApi(String type, int categoryID) async {
+  Future<Either<String, Response>> getPremiumProgramsApi(
+    String type,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-            ApiHelper.premiumProgramsUrl(type, categoryID),
+            ApiHelper.premiumProgramsUrl(
+              type,
+            ),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -527,7 +523,7 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
@@ -557,7 +553,7 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
@@ -591,7 +587,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         addProgramUrl,
         options: Options(
@@ -627,7 +623,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         setProgramUrl,
         options: Options(
@@ -638,7 +634,6 @@ class ApiHelper{
         ),
         data: {
           "programId": programId,
-
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response set Program (API handler) : Good ");
@@ -660,7 +655,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         requestProgramUrl,
         options: Options(
@@ -671,7 +666,6 @@ class ApiHelper{
         ),
         data: {
           "coachId": coachId,
-
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response set Program (API handler) : Good ");
@@ -697,7 +691,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.put(
         editProgramUrl,
         options: Options(
@@ -734,7 +728,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         deleteMessageUrl(programID),
         options: Options(
@@ -769,7 +763,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         assignProgramUrl,
         options: Options(
@@ -806,7 +800,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         checkInUrl,
         options: Options(
@@ -838,7 +832,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         checkOutUrl,
         options: Options(
@@ -869,18 +863,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        weeklyUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            weeklyUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get weekly list : $response");
       result = Right(response);
@@ -899,18 +893,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        monthlyUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            monthlyUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get monthly progress : $response");
       result = Right(response);
@@ -931,18 +925,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        getUserListUrl(type),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            getUserListUrl(type),
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get ${type}s list : $response");
       result = Right(response);
@@ -961,18 +955,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        ApiHelper.showCoachInfoUrl(coachId),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            ApiHelper.showCoachInfoUrl(coachId),
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get Coach Info : $response");
       result = Right(response);
@@ -991,18 +985,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        ApiHelper.showCoachTimeUrl(coachId),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            ApiHelper.showCoachTimeUrl(coachId),
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get Coach Time list : $response");
       result = Right(response);
@@ -1022,7 +1016,7 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
@@ -1052,7 +1046,7 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
@@ -1084,7 +1078,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         sendMessageUrl,
         options: Options(
@@ -1117,7 +1111,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         deleteMessageUrl(messageID),
         options: Options(
@@ -1151,7 +1145,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         orderProgramUrl,
         options: Options(
@@ -1183,18 +1177,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        getMyOrderUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            getMyOrderUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get order : $response");
       result = Right(response);
@@ -1216,7 +1210,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         setRateUrl,
         options: Options(
@@ -1250,7 +1244,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         submitReportUrl,
         options: Options(
@@ -1282,18 +1276,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        getArticlesUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            getArticlesUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get Articles list : $response");
       result = Right(response);
@@ -1312,18 +1306,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        getArticlesUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            getArticlesUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get Coach Articles list : $response");
       result = Right(response);
@@ -1344,7 +1338,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         addArticleUrl,
         options: Options(
@@ -1377,7 +1371,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         deleteArticleUrl(articleID),
         options: Options(
@@ -1410,7 +1404,7 @@ class ApiHelper{
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
         favArticleUrl(articleId),
         options: Options(
@@ -1444,10 +1438,9 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
-      var response = await _clientDio
-          .post(
+      var response = await _clientDio.post(
         programSearchUrl,
         options: Options(
           headers: {
@@ -1479,10 +1472,9 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
-      var response = await _clientDio
-          .post(
+      var response = await _clientDio.post(
         userSearchUrl,
         options: Options(
           headers: {
@@ -1513,18 +1505,18 @@ class ApiHelper{
 
     late Either<String, Response> result;
     try {
-      String token = prefs.getString(Cache.token) ?? "";
+      String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-        getNotificationsUrl,
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
-          },
-        ),
-      )
+            getNotificationsUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
           .timeout(const Duration(seconds: 50));
       log("## Response get Notifications list : $response");
       result = Right(response);

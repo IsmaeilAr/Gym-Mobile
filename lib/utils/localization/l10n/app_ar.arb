@@ -1,0 +1,187 @@
+{
+  "@@locale": "ar",
+  "loginWelcomeKey": "مرحباً",
+  "loginEnterNumberAndPasswordKey": "أدخل رقمك وكلمة المرور",
+  "loginMobileNumberKey": "رقم الجوال",
+  "loginPasswordKey": "كلمة المرور",
+  "loginEnterMobileNumberKey": "الرجاء إدخال رقم الجوال",
+  "loginEnterPasswordKey": "الرجاء إدخال كلمة المرور",
+  "loginButtonKey": "تسجيل الدخول",
+
+
+    "addInfoSkipKey": "تخطى",
+    "addInfoInsertKey": "أدخل",
+    "addInfoYourPersonalInfoKey": "معلوماتك الشخصية",
+    "addInfoSelectGenderKey": "اختر الجنس",
+      "addInfogenderFemale": "أنثى",
+      "addInfogenderMale": "ذكر",
+    "addInfoBirthdateKey": "تاريخ الميلاد",
+    "addInfoHeightKey": "الطول",
+    "addInfoWeightKey": "الوزن",
+    "addInfoWaistKey": "الخصر",
+    "addInfoNeckKey": "العنق",
+    "addInfoContinueButtonKey": "متابعة",
+
+
+     "drawerReportKey": "تقرير",
+     "drawerLogoutKey": "تسجيل الخروج",
+     "drawerLanguageKey": "اللغة",
+     "drawerEnglishKey": "الإنجليزية",
+     "drawerArabicKey": "العربية",
+
+  "mainLayoutAppBarHomeScreenName": "الرئيسية",
+  "mainLayoutAppBarProgramsScreenName": "البرامج",
+  "mainLayoutAppBarProgressScreenName": "التقدم",
+  "mainLayoutAppBarProfileScreenName": "الملف الشخصي",
+
+   "homeDailyProgramCardTitle": "برنامج التدريب اليومي",
+     "homeNoDailyProgramsTitle": "لا توجد برامج يومية",
+     "homeNoDailyProgramsSubtitle": "لم تقم بتحديد برنامج يومي بعد. قم بتعيين برامج التدريب والتغذية في قسم 'البرامج'.",
+     "homeNoDailyProgramsButton": "تعيين برنامج يومي",
+
+   "homeDailyNutritionCardTitle": "برنامج التغذية اليومي",
+   "homeNoDailyNutritionButton": "تعيين برنامج التغذية",
+
+         "homeWeeklyProgress": "التقدم الأسبوعي",
+ "homeWeeklyProgressDays": "{days}",
+  "@homeWeeklyProgressDays": {
+    "placeholders": {
+      "days": {
+        "type": "array",
+        "content": ["سبت", "أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة"]
+      }
+    }
+  },
+        "homeCheckInSuccessTitle": "تم الحضور بنجاح",
+        "homeWelcomeMessage": "مرحبًا في النادي الرياضي",
+
+  "homeGymTrafficPeopleInGym": "حوالي $peopleCount شخص في النادي الرياضي الآن",
+  "homeGymTrafficBusyGymMessage": "النادي حيوي الآن. قد تكون الانتظار هو الخيار الأفضل لجلسة أكثر استرخاء!",
+  "homeGymTrafficNotFullGymMessage": "النادي ليس مكتملًا. الوقت المثالي للانضمام والاستحواذ على مكانك!",
+
+   "homeScanQR": "امسح الرمز ",
+
+     "reportScreenTitle": "التقرير",
+     "reportScreenWriteHere": "اكتب هنا...",
+
+  "myProfileEditButton": "تعديل",
+  "myProfilePhoneNumber": "رقم الهاتف",
+  "myProfileMonthlyFee": "الرسوم الشهرية",
+
+    "myProfilePaymentStatusPaid": "مدفوع",
+    "myProfilePaymentStatusUnpaid": "غير مدفوع",
+    "myProfilePayCashButton": "من فضلك، قم بدفع رسوم العضوية الخاصة بك",
+    "myProfilePayCashButtonText": "الدفع نقدا",
+
+  "myProfileFinance": "%{finance} ل.س",
+  "myProfileDaysLeft": "%{daysLeft} أيام متبقية",
+  "myProfilePaymentStatusPaid": "مدفوع",
+  "myProfilePaymentStatusUnpaid": "غير مدفوع",
+  "myProfilePayCashButton": "من فضلك، قم بدفع رسوم العضوية الخاصة بك",
+  "myProfilePayCashButtonText": "الدفع نقدا",
+  "myProfileSnackBarMessage": "هذه الخدمة غير متاحة حاليًا",
+
+  "myProfileDividerPersonalMetrics": "المقاييس الشخصية",
+    "myProfileDividerPersonalCoach": "المدرب الشخصي",
+
+      "myProfileBodyFat": "الدهون في الجسم: ",
+      "myProfileShowLess": "اظهر أقل",
+      "myProfileShowDetails": "اظهر التفاصيل",
+      "myProfileGender": "الجنس:  ",
+      "myProfileAge": "العمر: ",
+      "myProfileHeight": "الطول: ",
+      "myProfileWeight": "الوزن: ",
+      "myProfileWaist": "الخصر: ",
+      "myProfileNeck": "العنق: ",
+      "myProfileCm": "سم ",
+      "myProfileKg": "كج ",
+      "myProfileNotSet": "غير محدد",
+
+        "myProfileAddInfoAddPersonalMetrics": "أضف مقاييسك الشخصية للحصول على نسبة الدهون في الجسم وتتبع تقدمك",
+        "myProfileAddInfoTapToAdd": "اضغط للإضافة +",
+          "myProfileNoCoachMessage": "لم تقم بتحديد مدربك الشخصي بعد.",
+          "myProfileFindCoachButton": "البحث عن مدرب",
+
+                "editProfile": "تعديل",
+                  "editProfileHeightLabel": "الطول (سم):",
+                  "editProfileWeightLabel": "الوزن (كج):",
+                  "editProfileWaistLabel": "الخصر (سم):",
+                  "editProfileNeckLabel": "العنق (سم):",
+
+                  "chats": "الدردشات",
+                  "coaches": "المدربون",
+                   "notifications": "الإشعارات",
+
+                     "programsRecommended": "موصى به",
+                     "programsTraining": "تدريب",
+                     "programsNutrition": "تغذية",
+                     "programsSeeAll": "اظهر الكل",
+                      "programsMyCoach": "مدربي",
+                      "programsAll": "الكل",
+
+
+ "premiumAskForNewProgram": "اطلب برنامجًا جديدًا",
+  "premiumNoTrainingPrograms": "لا توجد برامج تدريبية",
+  "premiumNoSelectedTrainingProgram": "لم تحدد برنامج تدريب بعد. اطلب برنامج التدريب الخاص بك.",
+  "premiumNoNutritionPrograms": "لا توجد برامج تغذية",
+  "premiumnoSelectedNutritionProgram": "لم تحدد برنامج تغذية بعد. اطلب برنامج التغذية الخاص بك.",
+  "premium": "مدفوع",
+  "premiumNeedPersonalCoachForPremium": "تحتاج إلى مدرب شخصي لطلب برنامج بريميوم.",
+  "premiumFindCoachButton": "العثور على مدرب",
+  "premiumProgramRequestProcessing": "طلب برنامجك قيد المعالجة حاليًا",
+  "premiumRevokeRequestButton": "إلغاء الطلب",
+
+"monthlyProgress": "التقدم الشهري",
+"weeklyProgress": "التقدم الأسبوعي",
+"trainingProgramProgress": "تقدمك في برنامج التدريب",
+
+  "coachProfileInfo": "المعلومات",
+  "coachProfileArticles": "المقالات",
+  "coachProfilePhone": "رقم الهاتف",
+  "coachProfileBio": "نبذة",
+  "coachProfileAvailability": "التوفر",
+  "coachProfileCancel": "إلغاء",
+  "coachProfileChange": "تغيير",
+  "coachProfileChangeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي إلى {name} كمدرب جديد؟",
+  "coachProfileCoaches": "المدربون",
+  "coachProfileSelected": "تم اختياره",
+  "coachProfileSetCoach": "تعيين مدرب",
+  "coachProfileChat": "الدردشة",
+
+    "articles": "المقالات",
+    "articlesAll": "الكل",
+    "articlesFavorite": "المفضلة",
+
+
+
+               "remove": "إزالة",
+               "select": "تحديد",
+               "deselect": "إلغاء التحديد",
+                 "coachProfilePopMenueChangeCoach": "تغيير المدرب",
+                 "coachProfilePopMenueUnassign": "إلغاء التعيين",
+                 "coachProfilePopMenueRate": "تقييم",
+                 "coachProfilePopMenueSetCoach": "تعيين المدرب",
+                 "coachProfilePopMenueRevokeRequest": "سحب الطلب",
+
+
+  "stopTimerConfirmation": "هل أنت متأكد أنك تريد إيقاف المؤقت وإنهاء الجلسة؟ ستحتاج إلى مسح الرمز الاستجابة السريعة مرة أخرى للاستئناف. يسمح التوقف المؤقت بالاستمرار دون إعادة التشغيل.",
+  "changeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي إلى مايا كمدرب جديد؟",
+  "unassignCoachConfirmation": "هل أنت متأكد أنك تريد إلغاء تعيين مدربك الحالي؟",
+  "sendReportConfirmation": "هل أنت متأكد أنك تريد إرسال هذا التقرير إلى الإدارة؟",
+  "setProgramConfirmation": "هل أنت متأكد أنك تريد تعيين هذا البرنامج كيومي؟",
+  "deselectProgramConfirmation": "هل أنت متأكد أنك تريد إلغاء اختيار هذا البرنامج؟ لن يكون برنامجك اليومي بعد إلغاء اختياره.",
+  "requestProgramType": "حدد نوع البرنامج الذي ترغب في طلبه من مدربك:",
+  "trainingProgram": "برنامج تدريب",
+  "nutritionProgram": "برنامج تغذية",
+  "revokeRequestConfirmation": "هل أنت متأكد أنك تريد سحب طلبك للحصول على برنامج تدريب (أو تغذية، أو كليهما) الرئيسي؟",
+
+  "cancel": "إلغاء",
+  "stop": "إيقاف",
+  "change": "تغيير",
+  "unassign": "إلغاء التعيين",
+  "done": "تم",
+  "deselect": "إلغاء التحديد",
+  "set": "تعيين",
+  "send": "إرسال",
+  "revoke": "سحب"
+}

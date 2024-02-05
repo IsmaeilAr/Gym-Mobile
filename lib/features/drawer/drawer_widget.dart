@@ -9,6 +9,7 @@ import 'package:gym/features/authentication/screens/login_screen.dart';
 import 'package:gym/features/report/screens/report_screen.dart';
 import 'package:gym/main.dart';
 import 'package:gym/utils/helpers/cache.dart';
+import 'package:gym/utils/localization/language_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +20,10 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String userName = prefs.getString(Cache.userName) ?? "";
-    String userPhone = prefs.getString(Cache.userPhone) ?? "";
-    String userImage = prefs.getString(Cache.userImage) ?? "";
+    SharedPreferencesService prefsService = SharedPreferencesService.instance;
+    String userName = prefsService.getValue(Cache.userName) ?? "";
+    String userPhone = prefsService.getValue(Cache.userPhone) ?? "";
+    String userImage = prefsService.getValue(Cache.userImage) ?? "";
 
     return Drawer(
       backgroundColor: black,
@@ -124,6 +126,7 @@ class _LanguageListState extends State<LanguageList> {
   bool _showLanguage = false;
   @override
   Widget build(BuildContext context) {
+    bool isEnglish = LanguageProvider().appLocale.languageCode == 'en';
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,11 +171,15 @@ class _LanguageListState extends State<LanguageList> {
             visible: _showLanguage,
             child: ListTile(
               onTap: () {
-                // todo language change
+                context
+                    .read<LanguageProvider>()
+                    .changeLanguage(const Locale('en', ''));
               },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
-                child: Icon(Icons.radio_button_checked_outlined, color: lightGrey,),
+                child: isEnglish
+                    ? const SelectedLangIcon()
+                    : const UnSelectedLangIcon(),
               ),
               title: Text('English', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w400, color: grey),),
             ),
@@ -181,17 +188,55 @@ class _LanguageListState extends State<LanguageList> {
             visible: _showLanguage,
             child: ListTile(
               onTap: () {
-
+                context
+                    .read<LanguageProvider>()
+                    .changeLanguage(const Locale('ar', ''));
               },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
-                child: Icon(Icons.radio_button_off_outlined, color: lightGrey,),
+                child: !isEnglish
+                    ? const SelectedLangIcon()
+                    : const UnSelectedLangIcon(),
               ),
-              title: Text('Arabic', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w400, color: lightGrey),),
+              title: Text(
+                'Arabic',
+                style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w400,
+                    color: lightGrey),
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class UnSelectedLangIcon extends StatelessWidget {
+  const UnSelectedLangIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.radio_button_off_outlined,
+      color: lightGrey,
+    );
+  }
+}
+
+class SelectedLangIcon extends StatelessWidget {
+  const SelectedLangIcon({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.radio_button_checked_outlined,
+      color: lightGrey,
     );
   }
 }

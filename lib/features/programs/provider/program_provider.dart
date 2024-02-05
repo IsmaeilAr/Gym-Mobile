@@ -163,18 +163,23 @@ class ProgramProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getPremiumProgramsList(BuildContext context, String type, int categoryID) async {
+  Future<void> getPremiumProgramsList(
+    BuildContext context,
+    String type,
+  ) async {
     isLoadingPrograms = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
-            await ApiHelper().getAllProgramsApi(type, categoryID);
+            await ApiHelper().getPremiumProgramsApi(
+          type,
+        );
         isLoadingPrograms = false;
         results.fold((l) {
           isLoadingPrograms = false;
-           showMessage(l, false);
+          showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {

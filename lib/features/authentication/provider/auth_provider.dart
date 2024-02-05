@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snackBar.dart';
-import 'package:gym/main.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../../utils/helpers/cache.dart';
@@ -22,12 +21,13 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
-   Future<bool> callLoginApi(
-      BuildContext context,
-      String phone,
-      String password,
-      ) async {
+  Future<bool> callLoginApi(
+    BuildContext context,
+    String phone,
+    String password,
+  ) async {
     isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
@@ -52,14 +52,15 @@ class AuthProvider extends ChangeNotifier {
             String uToken = "Bearer ${data["data"]['token']}";
             // UserModel userModel = UserModel.fromJson(userData);
             UserModel playerModel = UserModel.fromJson(userData);
-            await prefs.setString(Cache.token, uToken);
-            await prefs.setBool(Cache.isAuth, true);
-            await prefs.setInt(Cache.userId, playerModel.id);
-            await prefs.setString(Cache.userName, playerModel.name);
-            await prefs.setString(Cache.userPhone, phone);
-            await prefs.setString(Cache.userPassword, password);
-            await prefs.setString(Cache.userImage, "${ApiHelper.imageUrl}${playerModel.images[0].image}");
-            await prefs.setString(Cache.user, user);
+            await prefsService.setValue(Cache.token, uToken);
+            await prefsService.setValue(Cache.isAuth, true);
+            await prefsService.setValue(Cache.userId, playerModel.id);
+            await prefsService.setValue(Cache.userName, playerModel.name);
+            await prefsService.setValue(Cache.userPhone, phone);
+            await prefsService.setValue(Cache.userPassword, password);
+            await prefsService.setValue(Cache.userImage,
+                "${ApiHelper.imageUrl}${playerModel.images[0].image}");
+            await prefsService.setValue(Cache.user, user);
             // await prefs.setBool(Constants.firstOpen, true);
             // await prefs.setBool(Constants.isIphone, true);
             isLoading = false;
@@ -107,13 +108,13 @@ class AuthProvider extends ChangeNotifier {
               isLoading = false;
               repoStatus = true;
               debugPrint("logged out");
-              await prefs.setString(Cache.token, '');
-              await prefs.setString(Cache.userPassword, '');
-              await prefs.setString(Cache.userPhone, '');
-              await prefs.setString(Cache.user, '');
-              await prefs.setString(Cache.userName, '');
-              await prefs.setInt(Cache.userId, 0);
-              await prefs.setBool(Cache.isAuth, false);
+              await prefsService.setValue(Cache.token, '');
+              await prefsService.setValue(Cache.userPassword, '');
+              await prefsService.setValue(Cache.userPhone, '');
+              await prefsService.setValue(Cache.user, '');
+              await prefsService.setValue(Cache.userName, '');
+              await prefsService.setValue(Cache.userId, 0);
+              await prefsService.setValue(Cache.isAuth, false);
               debugPrint("cleared cache");
             } else {
               isLoading = false;

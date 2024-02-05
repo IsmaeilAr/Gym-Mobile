@@ -17,7 +17,7 @@
 //
 //   void initData() async {
 //     late bool isLogged;
-//     String token = prefs.getString(Cache.token) ?? "";
+//     String token = prefsService.getValue(Cache.token) ?? "";
 //     bool isAuth = prefs.getBool(Cache.isAuth) ?? false;
 //     if (isAuth) {
 //       // if isAuth is true
@@ -57,7 +57,7 @@
 //       final currentLocale  = Localizations.localeOf(context);
 //       final String currentLanguage = currentLocale.languageCode;
 //       appLanguage = currentLanguage;
-//       // await prefs.setString(Cache.appLanguage, currentLanguage);
+//       // await prefsService.setValue(Cache.appLanguage, currentLanguage);
 //       initData();
 //     });
 //   }

@@ -35,23 +35,35 @@ class _ProgressScreenState extends State<ProgressScreen> {
   Widget build(BuildContext context) {
     MonthlyProgressModel multiDateValue = context.watch<ProgressProvider>().monthProgress;
     return Scaffold(
-      body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 14.w,vertical: 8.h),
-        child: RefreshIndicator(
-          color: red,
-          backgroundColor: dark,
-          onRefresh: _refresh,
+      body: RefreshIndicator(
+        color: red,
+        backgroundColor: dark,
+        onRefresh: _refresh,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-             Padding(
-               padding: EdgeInsets.only(left: 8.w, bottom: 5.h),
-               child: Text("Monthly Progress",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600 ),),
-             ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.w, bottom: 5.h),
+                child: Text(
+                  "Monthly Progress",
+                  style: TextStyle(
+                      color: lightGrey,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
               _buildDefaultMultiDatePickerWithValue(multiDateValue),
-              SizedBox(height:30.h),
-              Text("Weekly Progress",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600 ),),
-               SizedBox(height:7.h),
+              SizedBox(height: 30.h),
+              Text(
+                "Weekly Progress",
+                style: TextStyle(
+                    color: lightGrey,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height:7.h),
               const WeeklyProgressWidget(),
               Expanded(child: Divider(color: dark, thickness: 1.h,)),
               Align(

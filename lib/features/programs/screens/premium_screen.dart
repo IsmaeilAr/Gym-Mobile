@@ -20,79 +20,108 @@ class PremiumScreen extends StatefulWidget {
 class _PremiumScreenState extends State<PremiumScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ProgramProvider>().getProgramsList(context, "", 0);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ProgramProvider>().getPremiumProgramsList(
+            context,
+            "Food",
+          );
+      context.read<ProgramProvider>().getPremiumProgramsList(
+            context,
+            "Sport",
+          );
     });
     super.initState();
   }
-  Future<void> _refresh() async {
-    context.read<ProgramProvider>().getProgramsList(context, "", 0);
-  }
- @override
-  Widget build(BuildContext context) {
-   ProgramModel dummyProgram = ProgramModel(id: 1, name: "name", file: "file", imageUrl: "imageUrl", type: "type", category: TrainingCategoryModel(id: 1, name: "name", imageUrl: "imageUrl", type: "type"), coachId: 1);
-   List<ProgramModel> progList = [dummyProgram];
 
-   return Scaffold(
+  Future<void> _refresh() async {
+    context.read<ProgramProvider>().getPremiumProgramsList(
+          context,
+          "Food",
+        );
+    context.read<ProgramProvider>().getPremiumProgramsList(
+          context,
+          "Sport",
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<ProgramModel> sportList =
+        context.watch<ProgramProvider>().sportProgramList;
+    List<ProgramModel> nutList =
+        context.watch<ProgramProvider>().nutritionProgramList;
+
+    return Scaffold(
       appBar: ProgramsAppBar(title: "Premium", context: context, search: false),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Training",
-                    style: TextStyle(
-                        color: lightGrey,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(child: Divider(color: dark, thickness: 1.h,)),
-                ],
-              ),
-              progList.isEmpty
-                  ? const NoPrograms(
-                text1: "No Training Programs",
-                text2:
-                " You haven't selected a training program yet. Ask for your training program.",
-              )
-                  : ListPrograms(programModel: progList),
-              SizedBox(
-                height: 10.h,
-              ),
-              Row(
-                children: [
-                  Text(
-                    "Nutrition",
-                    style: TextStyle(
-                        color: lightGrey,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(child: Divider(color: dark, thickness: 1.h,)),
-                ],
-              ),
-              progList.isEmpty
-                  ? const NoPrograms(
-                text1: "No Nutrition Programs",
-                text2:
-                "You haven't selected a nutrition program yet. Ask for your nutrition program.",
-              )
-                  : ListPrograms(programModel: progList),
-            ],
-          ),
-          Expanded(child: Container()),
-          const ButtonStatus(),
-        ]),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Training",
+                      style: TextStyle(
+                          color: lightGrey,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Expanded(
+                        child: Divider(
+                      color: dark,
+                      thickness: 1.h,
+                    )),
+                  ],
+                ),
+                sportList.isEmpty
+                    ? const NoPrograms(
+                        text1: "No Training Programs",
+                        text2:
+                            " You haven't selected a training program yet. Ask for your training program.",
+                      )
+                    : ListPrograms(programModel: sportList),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Nutrition",
+                      style: TextStyle(
+                          color: lightGrey,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Expanded(
+                        child: Divider(
+                      color: dark,
+                      thickness: 1.h,
+                    )),
+                  ],
+                ),
+                nutList.isEmpty
+                    ? const NoPrograms(
+                        text1: "No Nutrition Programs",
+                        text2:
+                            "You haven't selected a nutrition program yet. Ask for your nutrition program.",
+                      )
+                    : ListPrograms(programModel: nutList),
+              ],
+            ),
+            Expanded(child: Container()),
+            const ButtonStatus(),
+          ]),
+        ),
       ),
     );
   }
@@ -131,6 +160,7 @@ class ListPrograms extends StatelessWidget {
                         fit: BoxFit.fill,
                       ),
                     ),
+                    onTap: () {},
                   ),
                 ),
                 Text(

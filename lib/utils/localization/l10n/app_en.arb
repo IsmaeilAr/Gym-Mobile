@@ -1,0 +1,193 @@
+{
+  "@@locale": "en",
+  "loginWelcomeKey": "Welcome",
+  "loginEnterNumberAndPasswordKey": "Enter your number and password",
+  "loginMobileNumberKey": "Mobile Number",
+  "loginPasswordKey": "Password",
+  "loginEnterMobileNumberKey": "Please enter your mobile number",
+  "loginEnterPasswordKey": "Please enter your password",
+  "loginButtonKey": "Login",
+
+
+   "addInfoSkipKey": "Skip",
+    "addInfoInsertKey": "Insert",
+    "addInfoYourPersonalInfoKey": "Your Personal Info",
+    "addInfoSelectGenderKey": "Select Gender",
+      "addInfogenderFemale": "Female",
+      "addInfogenderMale": "Male",
+    "addInfoBirthdateKey": "Birthdate",
+    "addInfoHeightKey": "Height",
+    "addInfoWeightKey": "Weight",
+    "addInfoWaistKey": "Waist",
+    "addInfoNeckKey": "Neck",
+    "addInfoContinueButtonKey": "Continue",
+
+
+     "drawerReportKey": "Report",
+     "drawerLogoutKey": "Logout",
+     "drawerLanguageKey": "Language",
+     "drawerEnglishKey": "English",
+     "drawerArabicKey": "Arabic",
+
+
+  "mainLayoutAppBarHomeScreenName": "Home",
+  "mainLayoutAppBarProgramsScreenName": "Programs",
+  "mainLayoutAppBarProgressScreenName": "Progress",
+  "mainLayoutAppBarProfileScreenName": "Profile",
+
+   "homeDailyProgramCardTitle": "Daily Training Program",
+
+   "homeNoDailyProgramsTitle": "No Daily Programs",
+   "homeNoDailyProgramsSubtitle": "You haven't selected a daily program yet. Set your training and nutrition programs in the 'Programs' section.",
+   "homeNoDailyProgramsButton": "Set daily program",
+
+   "homeDailyNutritionCardTitle": "Daily Nutrition Program",
+   "homeNoDailyNutritionButton": "Set nutrition program",
+
+
+   "homeWeeklyProgress": "Weekly Progress",
+ "homeWeeklyProgressDays": "{days}",
+  "@homeWeeklyProgressDays": {
+    "placeholders": {
+      "days": {
+        "type": "array",
+        "content": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+      }
+    }
+  },
+    "homeCheckInSuccessTitle": "Check-In Success",
+    "homeWelcomeMessage": "Welcome to the gym!",
+
+    "homeGymTrafficPeopleInGym": "About $peopleCount people in the gym right now",
+    "homeGymTrafficBusyGymMessage": "Gym's buzzing right now. Consider waiting for a more relaxing session!",
+    "homeGymTrafficNotFullGymMessage": "Gym's not full. Perfect time to jump in and claim your spot!",
+
+    "homeScanQR": "Scan QR",
+
+    "reportScreenTitle": "Report",
+    "reportScreenWriteHere": "write here...",
+
+      "myProfileEditButton": "Edit",
+      "myProfilePhoneNumber": "Phone number",
+      "myProfileMonthlyFee": "Monthly fee",
+
+       "myProfilePaymentStatusPaid": "paid",
+        "myProfilePaymentStatusUnpaid": "unpaid",
+        "myProfilePayCashButton": "please, pay your membership fee",
+        "myProfilePayCashButtonText": "Pay cash",
+
+          "myProfileFinance": "%{finance} s.p",
+          "myProfileDaysLeft": "%{daysLeft} days left",
+          "myProfilePaymentStatusPaid": "paid",
+          "myProfilePaymentStatusUnpaid": "unpaid",
+          "myProfilePayCashButton": "please, pay your membership fee",
+          "myProfilePayCashButtonText": "Pay cash",
+          "myProfileSnackBarMessage": "This service is currently not available",
+
+          "myProfileDividerPersonalMetrics": "Personal Metrics",
+            "myProfileDividerPersonalCoach": "Personal Coach",
+
+  "myProfileBodyFat": "Body fat: ",
+  "myProfileShowLess": "show less",
+  "myProfileShowDetails": "show details",
+  "myProfileGender": "Gender: ",
+  "myProfileAge": "Age: ",
+  "myProfileHeight": "Height: ",
+  "myProfileWeight": "Weight: ",
+  "myProfileWaist": "Waist: ",
+  "myProfileNeck": "Neck: ",
+  "myProfileCm": "cm ",
+  "myProfileKg": "kg ",
+  "myProfileNotSet": "Not Set",
+    "myProfileAddInfoAddPersonalMetrics": "Add your personal metrics to get your body fat and watch your progress",
+    "myProfileAddInfoTapToAdd": "Tap to add +",
+      "myProfileNoCoachMessage": "You haven't set your personal coach yet.",
+      "myProfileFindCoachButton": "Find coach",
+
+      "editProfile": "Edit",
+        "editProfileHeightLabel": "Height (cm):",
+        "editProfileWeightLabel": "Weight (kg):",
+        "editProfileWaistLabel": "Waist (cm):",
+        "editProfileNeckLabel": "Neck (cm):",
+
+    "chats": "Chats",
+    "coaches": "Coaches",
+    "notifications": "Notifications",
+
+      "programsRecommended": "Recommended",
+      "programsTraining": "Training",
+      "programsNutrition": "Nutrition",
+      "programsSeeAll": "See All",
+    "programsMyCoach": "My coach",
+    "programsAll": "All",
+
+    "premiumAskForNewProgram": "Ask For A New Program",
+    "premiumNoTrainingPrograms": "No Training Programs",
+    "premiumNoSelectedTrainingProgram": "You haven't selected a training program yet. Ask for your training program.",
+    "premiumNoNutritionPrograms": "No Nutrition Programs",
+    "premiumnoSelectedNutritionProgram": "You haven't selected a nutrition program yet. Ask for your nutrition program.",
+    "premium": "Premium",
+    "premiumNeedPersonalCoachForPremium": "You need to have a personal coach to request a premium program.",
+    "premiumFindCoachButton": "Find coach",
+    "premiumProgramRequestProcessing": "Your program request is currently being processed",
+    "premiumRevokeRequestButton": "Revoke request",
+
+
+
+    "monthlyProgress": "Monthly Progress",
+    "weeklyProgress": "Weekly Progress",
+     "trainingProgramProgress": "Your progress in the training program",
+
+       "coachProfileInfo": "Info",
+       "coachProfileArticles": "Articles",
+       "coachProfilePhone": "Phone number",
+       "coachProfileBio": "Bio",
+       "coachProfileAvailability": "Availability",
+       "coachProfileCancel": "Cancel",
+       "coachProfileChange": "Change",
+       "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach to {name} as your new coach?",
+       "coachProfileCoaches": "Coaches",
+       "coachProfileSelected": "Selected",
+       "coachProfileSetCoach": "Set coach",
+       "coachProfileChat": "Chat",
+
+       "articles": "Articles",
+       "articlesAll": "All",
+       "articlesFavorite": "Favorite",
+
+
+
+
+
+      "remove": "Remove",
+      "select": "Select",
+      "deselect": "Deselect",
+  "coachProfilePopMenueChangeCoach": "Change coach",
+  "coachProfilePopMenueUnassign": "Unassign",
+  "coachProfilePopMenueRate": "Rate",
+  "coachProfilePopMenueSetCoach": "Set coach",
+  "coachProfilePopMenueRevokeRequest": "Revoke request",
+
+  "stopTimerConfirmation":"Are you sure you want to stop the timer and end the session? You'll need to scan the QR again to resume. Pausing allows you to continue without restarting.",
+  "changeCoachConfirmation": "Are you sure you want to change your current coach to Maya as your new coach?",
+  "unassignCoachConfirmation": "Are you sure you want to unassign your current coach?",
+"sendReportConfirmation": "Are you sure you want to send this report to the admin?",
+"setProgramConfirmation": "Are you sure you want to set this program as your daily one?",
+"deselectProgramConfirmation": "Are you sure you want to deselect this program? It will not be your daily program once you deselect it.",
+"requestProgramType": "Select the type of program you'd like to request from your coach:",
+"trainingProgram": "Training program",
+"nutritionProgram": "Nutrition program",
+"revokeRequestConfirmation":"Are you sure you want to revoke your request for a premium training (or nutrition, or both) program(s)?",
+
+
+  "cancel": "Cancel",
+  "stop": "Stop",
+  "change": "Change",
+  "unassign": "Unassign",
+  "done": "Done",
+  "deselect": "Deselect",
+  "set": "Set",
+  "send": "Send",
+  "revoke": "Revoke"
+
+}
