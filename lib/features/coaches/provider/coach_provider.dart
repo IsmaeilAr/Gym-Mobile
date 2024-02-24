@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/features/coaches/model/coach_time_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
@@ -114,6 +114,24 @@ class CoachProvider extends ChangeNotifier {
 
   set coachTimesList(List<CoachTimeModel> value) {
     _coachTimesList = value;
+    notifyListeners();
+  }
+
+  bool _isLoadingSearchCoach = false;
+
+  bool get isLoadingSearchCoach => _isLoadingSearchCoach;
+
+  set isLoadingSearchCoach(bool value) {
+    _isLoadingSearchCoach = value;
+    notifyListeners();
+  }
+
+  List<UserModel> _searchCoachList = [];
+
+  List<UserModel> get searchCoachList => _searchCoachList;
+
+  set searchCoachList(List<UserModel> value) {
+    _searchCoachList = value;
     notifyListeners();
   }
 
@@ -232,7 +250,7 @@ class CoachProvider extends ChangeNotifier {
         });
       } on Exception catch (e) {
         log("Exception get $type programs : $e");
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoadingGetUsers = false;
       }
     } else {
@@ -242,6 +260,86 @@ class CoachProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> searchUsers(BuildContext context, String userName) async {
+    isLoadingSearchCoach = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results =
+            await ApiHelper().searchUsersApi(userName);
+        isLoadingSearchCoach = false;
+        results.fold((l) {
+          isLoadingSearchCoach = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"][0];
+            log("data $data");
+            List<dynamic> list = data;
+            searchCoachList = list.map((e) => UserModel.fromJson(e)).toList();
+            isLoadingSearchCoach = false;
+          } else {
+            isLoadingSearchCoach = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception get user search : $e");
+        showMessage("$e", false);
+        isLoadingSearchCoach = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingSearchCoach = false;
+    }
+    notifyListeners();
+  }
+
+  Future<List<UserModel>> getCoachesList(
+      BuildContext context, String type) async {
+    isLoadingGetUsers = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results =
+            await ApiHelper().getUserListApi(type);
+        isLoadingGetUsers = false;
+        return results.fold<List<UserModel>>(
+          (l) {
+            isLoadingGetUsers = false;
+            showMessage(l, false);
+            return []; // Return an empty list in case of failure
+          },
+          (r) {
+            Response response = r;
+            if (response.statusCode == 200) {
+              var data = response.data["data"];
+              log("data $data");
+              List<dynamic> list = data;
+              isLoadingGetUsers = false;
+              return list.map((e) => UserModel.fromJson(e)).toList();
+            } else {
+              isLoadingGetUsers = false;
+              log("## ${response.data}");
+              return []; // Return an empty list in case of failure
+            }
+          },
+        );
+      } catch (e) {
+        log("Exception get $type programs : $e");
+        showMessage("$e", false);
+        isLoadingGetUsers = false;
+        return []; // Return an empty list in case of exception
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingGetUsers = false;
+      return []; // Return an empty list when there's no internet connection
+    }
+  }
 
   Future<void> getCoachInfo(BuildContext context, int coachId) async {
     isLoadingCoachInfo = true;
@@ -250,7 +348,7 @@ class CoachProvider extends ChangeNotifier {
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
-        await ApiHelper().getCoachInfoApi(coachId);
+            await ApiHelper().getCoachInfoApi(coachId);
         isLoadingCoachInfo = false;
         results.fold((l) {
           isLoadingCoachInfo = false;

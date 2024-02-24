@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/notifications/models/notification_model.dart';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';

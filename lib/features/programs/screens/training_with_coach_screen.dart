@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/components/widgets/menuItem_model.dart';
+import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/category_model.dart';
@@ -50,7 +50,7 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
   Widget build(BuildContext context) {
     String title = "${widget.category.type}⮞${widget.category.name}";
     return Scaffold(
-      appBar: ProgramsAppBar(title: title, context: context, search: true),
+      appBar: CustomAppBar(title: title, context: context, search: true),
       body: Column(
         children: <Widget>[
           TabBar.secondary(

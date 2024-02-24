@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/components/widgets/menuItem_model.dart';
+import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
@@ -23,12 +23,6 @@ class TrainingWithoutCoachesScreen extends StatefulWidget {
 class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
   @override
   void initState() {
-    // todo try put 2 lines below into postFrameCallBack
-    searching = false;
-    customIcon = const Icon(
-      Icons.search,
-      color: lightGrey,
-    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context
           .read<ProgramProvider>()
@@ -43,14 +37,11 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
         .getProgramsList(context, widget.category.type, widget.category.id);
   }
 
-  late bool searching;
-  late Icon customIcon;
-
   @override
   Widget build(BuildContext context) {
     String title = "${widget.category.type}/${widget.category.name}";
     return Scaffold(
-        appBar: ProgramsAppBar(title: title, context: context, search: true),
+        appBar: CustomAppBar(title: title, context: context, search: true),
         body: RefreshIndicator(
           color: red,
           backgroundColor: dark,

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
-import 'package:gym/components/widgets/search_bar.dart';
+import 'package:gym/features/coaches/screens/search_coaches_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import '../../features/programs/screens/search_programs_screen.dart';
 
-import '../../features/programs/screens/search_programs.dart';
-
-class ProgramsAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final BuildContext context;
   final bool search;
 
-  const ProgramsAppBar({
+  const CustomAppBar({
     super.key,
     required this.title,
     required this.context,
@@ -57,10 +56,57 @@ class ProgramsAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
+class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final BuildContext context;
+
+  const UsersAppBar({
+    super.key,
+    required this.title,
+    required this.context,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: black,
+      leading: IconButton(
+        color: Colors.white,
+        icon: const Icon(Icons.arrow_back_ios_new),
+        onPressed: () => Navigator.pop(context),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      actions: [
+        IconButton(
+          color: Colors.white,
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const SearchCoachesScreen()));
+          },
+          icon: const Icon(Icons.search),
+        ),
+      ],
+    );
+  }
+}
+
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String hint;
   final Function runFilter;
-  Icon customIcon = const Icon(Icons.cancel, color: lightGrey, size: 18);
+  final Icon customIcon = const Icon(Icons.cancel, color: lightGrey, size: 18);
   final TextEditingController searchController = TextEditingController();
 
   SearchAppBar({

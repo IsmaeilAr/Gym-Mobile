@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
@@ -17,16 +15,24 @@ class QRView extends StatefulWidget {
 }
 
 class _QRViewState extends State<QRView> {
-  bool _torch = false;
+  final bool _torch = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan your Gym QR', style: TextStyle(color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),),
+        title: Text(
+          'Scan your Gym QR',
+          style: TextStyle(
+              color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),
+        ),
         backgroundColor: black,
-        leading: BarIconButton(icon: Icons.arrow_back_ios_outlined, onPressed: (){
-          Navigator.pop(context);
-        },),
+        leading: BarIconButton(
+          icon: Icons.arrow_back_ios_outlined,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: MobileScanner(
         // fit: BoxFit.contain,

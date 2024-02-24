@@ -9,8 +9,13 @@ import 'package:provider/provider.dart';
 
 
 class ArticlesList extends StatefulWidget {
-  ArticlesList({super.key, required this.isFavourite, });
-  bool isFavourite;
+  const ArticlesList({
+    super.key,
+    required this.isFavourite,
+  });
+
+  final bool isFavourite;
+
   @override
   State<ArticlesList> createState() => _ArticlesListState();
 }

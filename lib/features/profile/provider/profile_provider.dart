@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/authentication/models/init_status_model.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';

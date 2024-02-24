@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/features/coaches/model/coach_time_model.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
-import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart';
 import 'gap.dart';

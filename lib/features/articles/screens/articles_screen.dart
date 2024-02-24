@@ -27,7 +27,7 @@ class _ArticlesScreensState extends State<ArticlesScreens>
     searching = false;
     customIcon = const Icon(Icons.search,color: lightGrey,);
     WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ArticleProvider>().callGetArticles(context);
+      _refresh();
     });
     super.initState();
   }
@@ -38,9 +38,13 @@ class _ArticlesScreensState extends State<ArticlesScreens>
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    context.read<ArticleProvider>().callGetArticles(context);
+  }
 
   late bool searching;
   late Icon customIcon;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,39 +70,53 @@ class _ArticlesScreensState extends State<ArticlesScreens>
           IconButton(
             onPressed: () {
               setState(() {
-                searching ?
-                  customIcon =  Icon(Icons.cancel,color: lightGrey,size: 18.sp,)
-                : customIcon = const Icon(Icons.search,color: lightGrey,);
-                  searching = !searching;
+                searching
+                    ? customIcon = Icon(
+                        Icons.cancel,
+                        color: lightGrey,
+                        size: 18.sp,
+                      )
+                    : customIcon = const Icon(
+                        Icons.search,
+                        color: lightGrey,
+                      );
+                searching = !searching;
               });
             },
             icon: customIcon,
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          TabBar.secondary(
-            controller: _tabController,
-            unselectedLabelColor: grey,
-            labelStyle: const TextStyle(color: primaryColor),
-            indicatorColor: primaryColor,
-            dividerColor: black,
-            tabs: <Widget>[
-              Tab(text: AppLocalizations.of(context)!.articlesAll),
-              Tab(text: AppLocalizations.of(context)!.articlesFavorite),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Column(
+          children: <Widget>[
+            TabBar.secondary(
               controller: _tabController,
-              children: <Widget>[
-                ArticlesList(isFavourite: false,),
-                ArticlesList(isFavourite: true,),
+              unselectedLabelColor: grey,
+              labelStyle: const TextStyle(color: primaryColor),
+              indicatorColor: primaryColor,
+              dividerColor: black,
+              tabs: <Widget>[
+                Tab(text: AppLocalizations.of(context)!.articlesAll),
+                Tab(text: AppLocalizations.of(context)!.articlesFavorite),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const <Widget>[
+                  ArticlesList(
+                    isFavourite: false,
+                  ),
+                  ArticlesList(
+                    isFavourite: true,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

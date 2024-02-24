@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/utils/helpers/api/session_expired_interceptor.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/helpers/api/dio_exceptions.dart';
 
 
 class ApiHelper {
-  // static String serverUrl = "http://91.144.20.117:6002/";
-  static String serverUrl = "http://192.168.2.138:808/";
+  static String serverUrl = "http://91.144.20.117:6002/";
+
+  // static String serverUrl = "http://192.168.2.138:808/";
   static String baseUrl = "${serverUrl}api/";
   static String imageUrl = "${serverUrl}uploads/images/";
 
@@ -21,7 +22,7 @@ class ApiHelper {
   String activePlayersUrl = "${baseUrl}activePlayers";
   String getMyProfileInfoUrl = "${baseUrl}showPlayer";
   String addInfoUrl = "${baseUrl}addInfo";
-  String editInfoUrl = "${baseUrl}update"; // todo fix Url
+  String editInfoUrl = "${baseUrl}update";
   String editMetricsUrl = "${baseUrl}updateInfo";
   String addProgramUrl = "${baseUrl}store";
   String editProgramUrl = "${baseUrl}store"; // todo fix Url
@@ -69,10 +70,11 @@ class ApiHelper {
   static String allProgramsUrl(
       String type, int categoryID,
       ) {
-      String url = "${baseUrl}show?type=$type" ;
-      if (categoryID != 0)
+    String url = "${baseUrl}show?type=$type";
+    if (categoryID != 0) {
       url = "${baseUrl}show?type=$type&categoryId=$categoryID";
-    return  url ;
+    }
+    return url;
   }
 
   static String premiumProgramsUrl(

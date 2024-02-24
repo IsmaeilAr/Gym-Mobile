@@ -9,7 +9,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/coach_availability.dart';
 import 'package:gym/components/widgets/coach_image.dart';
-import 'package:gym/components/widgets/menuItem_model.dart';
+import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/articles/screens/coach_articles_screen.dart';
 import 'package:gym/features/chat/models/chat_model.dart';
 import 'package:gym/features/chat/screens/chat_screen.dart';

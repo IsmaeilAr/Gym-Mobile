@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/progress/models/monthly_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:gym/utils/services/week_days_check.dart';

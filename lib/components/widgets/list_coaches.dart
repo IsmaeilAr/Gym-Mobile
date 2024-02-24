@@ -5,10 +5,14 @@ import '../../features/profile/models/user_model.dart';
 import '../styles/decorations.dart';
 
 class ListCoaches extends StatelessWidget {
+  final double listHeight, listWidth;
+  final List<UserModel> coachesList;
 
-  double listHeight, listWidth;
-  List<UserModel> coachesList;
-  ListCoaches({super.key, required this.listHeight, required this.listWidth, required this.coachesList});
+  const ListCoaches(
+      {super.key,
+      required this.listHeight,
+      required this.listWidth,
+      required this.coachesList});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,7 @@ class ListCoaches extends StatelessWidget {
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: coachesList.length,
-          itemBuilder: (context,index){
+          itemBuilder: (context, index) {
             UserModel coach = coachesList[index];
 
             return Column(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/menuItem_model.dart';
+import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import '../dialog/rate_coach_dialog.dart';
 import '../styles/colors.dart';

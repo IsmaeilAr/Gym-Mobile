@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/home/models/active_players_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';

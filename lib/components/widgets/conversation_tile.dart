@@ -6,9 +6,14 @@ import '../../features/chat/screens/chat_screen.dart';
 import '../styles/colors.dart';
 
 
-class ConversationTile extends StatefulWidget{
-  ChatModel chatModel;
-  ConversationTile(this.chatModel, {super.key,});
+class ConversationTile extends StatefulWidget {
+  final ChatModel chatModel;
+
+  const ConversationTile(
+    this.chatModel, {
+    super.key,
+  });
+
   @override
   State<ConversationTile> createState() => _ConversationTileState();
 }

@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
-import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/main_layout.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:intl/intl.dart';

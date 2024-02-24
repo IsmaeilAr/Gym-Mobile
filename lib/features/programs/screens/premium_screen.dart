@@ -45,7 +45,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         context.watch<ProgramProvider>().nutritionProgramList;
 
     return Scaffold(
-      appBar: ProgramsAppBar(title: "Premium", context: context, search: false),
+      appBar: CustomAppBar(title: "Premium", context: context, search: false),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: Padding(
