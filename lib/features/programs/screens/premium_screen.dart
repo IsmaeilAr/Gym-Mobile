@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
-import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,26 +21,19 @@ class _PremiumScreenState extends State<PremiumScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProgramProvider>().getPremiumProgramsList(
-            context,
-            "Food",
-          );
-      context.read<ProgramProvider>().getPremiumProgramsList(
-            context,
-            "Sport",
-          );
+      _refresh();
     });
     super.initState();
   }
 
   Future<void> _refresh() async {
     context.read<ProgramProvider>().getPremiumProgramsList(
-          context,
-          "Food",
+      context,
+          "food",
         );
     context.read<ProgramProvider>().getPremiumProgramsList(
-          context,
-          "Sport",
+      context,
+          "food",
         );
   }
 
@@ -58,34 +51,35 @@ class _PremiumScreenState extends State<PremiumScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Training",
-                      style: TextStyle(
-                          color: lightGrey,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600),
+            context.watch<ProgramProvider>().isLoadingPrograms
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Training",
+                            style: TextStyle(
+                                color: lightGrey,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600),
                     ),
                     SizedBox(
                       width: 10.w,
                     ),
                     Expanded(
                         child: Divider(
-                      color: dark,
-                      thickness: 1.h,
-                    )),
+                          color: dark,
+                          thickness: 1.h,
+                        )),
                   ],
                 ),
                 sportList.isEmpty
                     ? const NoPrograms(
-                        text1: "No Training Programs",
-                        text2:
-                            " You haven't selected a training program yet. Ask for your training program.",
-                      )
+                  text1: "No Training Programs",
+                              text2:
+                                  " You haven't selected a training program yet. Ask for your training program.",
+                            )
                     : ListPrograms(programModel: sportList),
                 SizedBox(
                   height: 10.h,
@@ -104,20 +98,21 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     ),
                     Expanded(
                         child: Divider(
-                      color: dark,
-                      thickness: 1.h,
-                    )),
-                  ],
-                ),
-                nutList.isEmpty
-                    ? const NoPrograms(
-                        text1: "No Nutrition Programs",
-                        text2:
-                            "You haven't selected a nutrition program yet. Ask for your nutrition program.",
-                      )
-                    : ListPrograms(programModel: nutList),
-              ],
-            ),
+                          color: dark,
+                          thickness: 1.h,
+                        )),
+                        ],
+                      ),
+                      nutList.isEmpty
+                          ? const NoPrograms(
+                              text1: "No Nutrition Programs",
+                              text2:
+                                  "You haven't selected a nutrition program yet. Ask for your nutrition program.",
+                            )
+                          : ListPrograms(programModel: nutList),
+                    ],
+                  )
+                : const LoadingIndicatorWidget(),
             Expanded(child: Container()),
             const ButtonStatus(),
           ]),

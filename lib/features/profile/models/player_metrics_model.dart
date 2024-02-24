@@ -1,7 +1,6 @@
 class PlayerMetricsModel {
   final int id;
   final String gender;
-  final DateTime birthDate;
   final int age;
   final int weight;
   final int waistMeasurement;
@@ -12,7 +11,6 @@ class PlayerMetricsModel {
   PlayerMetricsModel({
     required this.id,
     required this.gender,
-    required this.birthDate,
     required this.age,
     required this.weight,
     required this.waistMeasurement,
@@ -25,7 +23,6 @@ class PlayerMetricsModel {
     return PlayerMetricsModel(
       id: json['id'],
       gender: json['gender'] ?? "not set",
-      birthDate: DateTime.parse(json['birthDate']),
       age: json['age'] ?? 0,
       weight: json['weight'] ?? 0,
       waistMeasurement: json['waist Measurement'] ?? 0,

@@ -7,6 +7,7 @@ import 'package:gym/features/progress/models/monthly_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:gym/utils/services/week_days_check.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProgressProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -40,13 +41,34 @@ class ProgressProvider extends ChangeNotifier {
 
   List<int> doneDaysList = [];
 
-  Future<void> getMonthlyProgress(BuildContext context,) async {
+  bool _isLoadingProgramProgress = false;
+
+  bool get isLoadingProgramProgress => _isLoadingProgramProgress;
+
+  set isLoadingProgramProgress(bool value) {
+    _isLoadingProgramProgress = value;
+    notifyListeners();
+  }
+
+  double _programProgress = 0;
+
+  double get programProgress => _programProgress;
+
+  set programProgress(double value) {
+    _programProgress = value;
+    notifyListeners();
+  }
+
+  Future<void> getMonthlyProgress(
+    BuildContext context,
+  ) async {
     isLoadingMonthlyProgress = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().getMonthlyProgressApi();
+        Either<String, Response> results =
+            await ApiHelper().getMonthlyProgressApi();
         isLoadingMonthlyProgress = false;
         results.fold((l) {
           isLoadingMonthlyProgress = false;
@@ -54,7 +76,7 @@ class ProgressProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            var data = response.data;
             log("data $data");
             // List<dynamic> list = data;
             monthProgress = MonthlyProgressModel.fromJson(data);
@@ -70,7 +92,7 @@ class ProgressProvider extends ChangeNotifier {
         isLoadingMonthlyProgress = false;
       }
     } else {
-      showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingMonthlyProgress = false;
     }
     notifyListeners();
@@ -107,11 +129,48 @@ class ProgressProvider extends ChangeNotifier {
         isLoadingWeeklyProgress = false;
       }
     } else {
-      showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingWeeklyProgress = false;
     }
     notifyListeners();
   }
 
+  Future<void> getProgramProgressApi(
+    BuildContext context,
+  ) async {
+    isLoadingProgramProgress = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results =
+            await ApiHelper().getWeeklyProgressApi();
+        isLoadingProgramProgress = false;
+        results.fold((l) {
+          isLoadingProgramProgress = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("data $data");
+            int number = data;
+            programProgress = number.toDouble();
+            isLoadingProgramProgress = false;
+          } else {
+            isLoadingProgramProgress = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception get program progress : $e");
+        showMessage("$e", false);
+        isLoadingProgramProgress = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingProgramProgress = false;
+    }
+    notifyListeners();
+  }
 }

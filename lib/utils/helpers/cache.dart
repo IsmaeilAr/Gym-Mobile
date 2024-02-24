@@ -4,7 +4,6 @@ class SharedPreferencesService {
   static SharedPreferencesService? _instance;
   late SharedPreferences _prefs;
 
-  // Private constructor to prevent instantiation from outside
   SharedPreferencesService._() {
     _initSharedPreferences();
   }
@@ -46,6 +45,10 @@ class SharedPreferencesService {
   Future<void> removeValue(String key) async {
     await _prefs.remove(key);
   }
+}
+
+Future<void> initSharedPreferences() async {
+  await SharedPreferencesService.instance._initSharedPreferences();
 }
 
 class Cache {

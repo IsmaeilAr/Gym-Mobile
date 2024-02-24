@@ -26,8 +26,12 @@ class _ConversationTileState extends State<ConversationTile> {
       trailing: SizedBox(
         width: 60.w,
         child: Align(
-            alignment: Alignment.centerRight,
-            child: Text(widget.chatModel.latestMessage.createdAt,style: TextStyle(fontSize: 10.sp,color: grey, fontWeight: FontWeight.w400),)),
+            alignment: AlignmentDirectional.centerEnd,
+            child: Text(
+              widget.chatModel.latestMessage.createdAt,
+              style: TextStyle(
+                  fontSize: 10.sp, color: grey, fontWeight: FontWeight.w400),
+            )),
       ),
       onTap: (){
         Navigator.push(

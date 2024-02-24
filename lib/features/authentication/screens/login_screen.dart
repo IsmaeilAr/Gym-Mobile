@@ -5,42 +5,49 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
+import 'package:gym/components/widgets/snackBar.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import '../../profile/screens/add_info_screen.dart';
 import '../provider/auth_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: backgroundDecoration(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const Gap(
-                  h: 108,
-                ),
-                const Logo().sizer(h: 55, w: 116),
-                const Gap(
-                  h: 60,
-                ),
-                const WelcomeText(),
-                const Gap(
-                  h: 64,
-                ),
-                const LoginForm(),
-                const Gap(
-                  h: 50,
-                ),
-              ],
+        body: GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Gap(
+                    h: 108,
+                  ),
+                  const Logo().sizer(h: 55, w: 116),
+                  const Gap(
+                    h: 60,
+                  ),
+                  const WelcomeText(),
+                  const Gap(
+                    h: 64,
+                  ),
+                  const LoginForm(),
+                  const Gap(
+                    h: 50,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -85,7 +92,7 @@ class WelcomeText extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Welcome',
+            AppLocalizations.of(context)!.loginWelcomeKey,
             textAlign: TextAlign.center,
             style: TextStyle(color: lightGrey, fontSize: 30.sp),
           ).sizer(h: 47, w: 128),
@@ -93,7 +100,7 @@ class WelcomeText extends StatelessWidget {
             h: 12,
           ),
           Text(
-            'Enter your number and password',
+            AppLocalizations.of(context)!.loginEnterNumberAndPasswordKey,
             textAlign: TextAlign.center,
             style: TextStyle(color: grey, fontSize: 16.sp),
           ).sizer(
@@ -139,15 +146,17 @@ class _LoginFormState extends State<LoginForm> {
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: MyDecorations.myInputDecoration(
-                  hint: "Mobile Number",
+                  hint: AppLocalizations.of(context)!.loginMobileNumberKey,
                   icon: Icon(
                     Icons.phone,
                     size: 20.sp,
                     color: iconColor,
                   )),
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your mobile number';
+                  return AppLocalizations.of(context)!
+                      .loginEnterMobileNumberKey;
                 }
                 return null;
               },
@@ -156,8 +165,9 @@ class _LoginFormState extends State<LoginForm> {
             TextFormField(
               controller: _passwordController,
               obscureText: obscured,
+              textInputAction: TextInputAction.go,
               decoration: MyDecorations.myInputDecoration(
-                  hint: "Password",
+                  hint: AppLocalizations.of(context)!.loginPasswordKey,
                   icon: Icon(
                     Icons.lock,
                     size: 20.sp,
@@ -176,9 +186,12 @@ class _LoginFormState extends State<LoginForm> {
                         size: 20.sp,
                         color: iconColor,
                       ))),
+              onFieldSubmitted: (_) => {
+                if (_formKey.currentState!.validate()) {doLogin(context)}
+              },
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your password';
+                  return AppLocalizations.of(context)!.loginEnterPasswordKey;
                 }
                 return null;
               },
@@ -195,8 +208,9 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 style: MyDecorations.myButtonStyle(red),
                 child: Text(
-                  'Login',
-                  style: MyDecorations.myButtonTextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  AppLocalizations.of(context)!.loginButtonKey,
+                  style: MyDecorations.myButtonTextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 16),
                 ),
               ),
             ),
@@ -222,6 +236,11 @@ class _LoginFormState extends State<LoginForm> {
             PageTransition(
                 type: PageTransitionType.rightToLeftWithFade,
                 child: const AddInfoScreen()));
+      } else {
+        // _passwordController.clear();
+        _formKey.currentState!.validate();
+        showMessage(
+            "phonenumber or password are not correct", false); // todo localize
       }
     });
   }

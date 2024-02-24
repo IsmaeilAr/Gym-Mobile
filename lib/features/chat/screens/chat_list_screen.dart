@@ -9,8 +9,7 @@ import 'package:gym/features/chat/provider/chat_provider.dart';
 import 'package:gym/features/chat/screens/select_person_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -24,7 +23,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ChatProvider>().callGetAllChats(context);
+      _refresh();
     });
     super.initState();
   }
@@ -38,10 +37,22 @@ class _ChatListScreenState extends State<ChatListScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
-        leading: BarIconButton(onPressed: () { Navigator.pop(context); }, icon: Icons.arrow_back_ios_outlined,),
-        title: const Text("Chats", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),),
+        leading: BarIconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icons.arrow_back_ios_outlined,
+        ),
+        title: Text(
+          AppLocalizations.of(context)!.chats,
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),
+        ),
         actions: [
-          BarIconButton(onPressed: () {  }, icon: Icons.search,),
+          BarIconButton(
+            onPressed: () {},
+            icon: Icons.search,
+          ),
         ],
       ),
       body:

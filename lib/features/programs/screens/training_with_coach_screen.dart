@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/components/widgets/pop_menu_selected.dart';
+import 'package:gym/components/widgets/menuItem_model.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:provider/provider.dart';
-
-
+import '../../../components/pop_menu/pop_menu_set_program.dart';
 
 class TrainingWithCoachesScreen extends StatefulWidget {
   const TrainingWithCoachesScreen(this.category, {super.key});
@@ -28,9 +27,11 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
       context.read<ProgramProvider>().getProgramsList(context, widget.category.type, widget.category.id);
-      context.read<ProgramProvider>().getMyCoachPrograms(context, widget.category.type,
-        context.watch<ProfileProvider>().status.coachId,
-      );
+      context.read<ProgramProvider>().getMyCoachPrograms(
+        context,
+            widget.category.type,
+            context.watch<ProfileProvider>().status.myCoach.id,
+          );
     });
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -42,9 +43,11 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
     super.dispose();
   }
 
+  late bool searching;
+  late Icon customIcon;
+
   @override
   Widget build(BuildContext context) {
-
     String title = "${widget.category.type}⮞${widget.category.name}";
     return Scaffold(
       appBar: ProgramsAppBar(title: title, context: context, search: true),
@@ -116,20 +119,23 @@ class ProgramsList extends StatelessWidget {
                             right: 0.w,
                             top: 0.h,
                             child: PopupMenuButton<MenuItemModel>(
-                                itemBuilder: (context) => [
-                                  ...MenuItems.getMenuItems
-                                      .map(buildItem)
-                                      ,
-                                ],
-                                onSelected: (item) =>
-                                    onSelected(context, item, (){
-                                      _selectProgram(context, program.id);
-                                    }),
-                                color: dark,
-                                iconColor: Colors.white,
-                                icon:Icon(Icons.more_horiz_sharp,size: 20.sp,)
-                            )
-                        ),
+                              itemBuilder: (context) => [
+                                ...SetProgramsMenuItems.getSetProgramMenuItems
+                                    .map(buildItem),
+                              ],
+                              onSelected: (item) => onSelectSetProgram(
+                                  context, item, program, () {
+                                _selectProgram(context, program.id);
+                              }, () {
+                                _deselectProgram(context, program.id);
+                              }),
+                              color: dark,
+                              iconColor: Colors.white,
+                              icon: Icon(
+                                Icons.more_horiz_sharp,
+                                size: 20.sp,
+                              ),
+                            )),
                       ],
                     ),
                     Row(
@@ -162,8 +168,14 @@ class ProgramsList extends StatelessWidget {
       ),
     );
   }
-  void _selectProgram(BuildContext context, int programId){
+
+  void _selectProgram(BuildContext context, int programId) {
     context.read<ProgramProvider>().callSetProgram(context, programId);
+    // todo onRefresh
+  }
+
+  void _deselectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callUnSetProgram(context, programId);
     // todo onRefresh
   }
 }

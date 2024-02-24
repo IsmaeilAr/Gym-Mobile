@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../components/styles/colors.dart';
 import '../models/articles_model.dart';
 import '../provider/article_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ArticleScreen extends StatefulWidget {
   final ArticleModel article;
@@ -29,9 +30,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          'Articles',
+          AppLocalizations.of(context)!.articles,
           style: TextStyle(
-            color:  lightGrey,
+            color: lightGrey,
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),

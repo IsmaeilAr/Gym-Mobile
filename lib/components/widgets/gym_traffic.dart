@@ -5,6 +5,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:provider/provider.dart';
 import '../../features/home/provider/home_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GymTraffic extends StatelessWidget {
   const GymTraffic({super.key});
@@ -29,12 +30,12 @@ class GymTraffic extends StatelessWidget {
                 width: 28.w,
               ),
               Padding(
-                padding: EdgeInsets.fromLTRB(8.w, 0, 0, 0),
+                padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 0),
                 child: Gap(
                   w: 280,
                   h: 22,
                   child: Text(
-                    'About $peopleCount people in the gym right now',
+                    '${AppLocalizations.of(context)!.homeGymTrafficPeopleInGym} $peopleCount ${AppLocalizations.of(context)!.homeGymTrafficPeopleInGym2}',
                     textAlign: TextAlign.start,
                     softWrap: true,
                     style: TextStyle(
@@ -50,12 +51,13 @@ class GymTraffic extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.fromLTRB(36.w, 0, 0, 0),
+            padding: EdgeInsets.fromLTRB(36.w, 0, 36.w, 0),
             child: Text(
-              busy ?
-              'Gym\'s buzzing right now. Consider waiting for a more relaxing session!':
-              "Gym's not full. Perfect time to jump in and claim your spot!",
-              textAlign: TextAlign.left,
+              busy
+                  ? AppLocalizations.of(context)!.homeGymTrafficBusyGymMessage
+                  : AppLocalizations.of(context)!
+                      .homeGymTrafficNotFullGymMessage,
+              textAlign: TextAlign.start,
               softWrap: true,
               style: TextStyle(
                 fontSize: 12.sp,

@@ -1,33 +1,3 @@
-// class ChatModel {
-//   final int chatParticipantId;
-//   final String name;
-//   final double rate;
-//   final String content;
-//   final String chatMessageCreatedAt;
-// // todo backend: add user image
-//   ChatModel({
-//     required this.chatParticipantId,
-//     required this.name,
-//     required this.rate,
-//     required this.content,
-//     required this.chatMessageCreatedAt,
-//   });
-//
-//   factory ChatModel.fromJson(Map<String, dynamic> json) {
-//     final sid2 = json['sid2'];
-//     final latestMessage = sid2['latestMessage'];
-//
-//     return ChatModel(
-//       chatParticipantId: sid2['id'],
-//       name: sid2['name'],
-//       rate: sid2['rate'],
-//       content: latestMessage['content'],
-//       chatMessageCreatedAt: latestMessage['created_at'].currentFormatted(),
-//     );
-//   }
-// }
-
-
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/utils/extensions/time_formatter.dart';
 

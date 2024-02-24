@@ -5,9 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snackBar.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/report_model.dart';
-
 
 class ReportProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -78,7 +77,7 @@ class ReportProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
@@ -115,7 +114,7 @@ class ReportProvider extends ChangeNotifier {
         isLoadingReports = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingReports = false;
     }
     notifyListeners();

@@ -1,22 +1,27 @@
+import 'package:gym/features/profile/models/user_model.dart';
+
 class InitStatusModel {
   final bool hasCoach;
   final bool hasProgram;
-  final int coachId;
-  final List<MyProgram> programType;
+  final List<MyProgram> myProgramList;
+  final UserModel myCoach;
 
   InitStatusModel({
     required this.hasCoach,
     required this.hasProgram,
-    required this.coachId,
-    required this.programType,
+    required this.myProgramList,
+    required this.myCoach,
   });
 
   factory InitStatusModel.fromJson(Map<String, dynamic> json) {
     return InitStatusModel(
       hasCoach: json['hasCoach'] == 'true',
       hasProgram: json['hasProgram'] == 'true',
-      coachId: json['coachId'] ?? 0,
-      programType: List<MyProgram>.from(json['programType'].map((x) => MyProgram.fromJson(x))),
+      myProgramList: (json['programType'] != null)
+          ? List<MyProgram>.from(
+              json['programType'].map((x) => MyProgram.fromJson(x)))
+          : [],
+      myCoach: json['myCoach'][0] ?? 0,
     );
   }
 }

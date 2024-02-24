@@ -5,7 +5,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../features/qr_code/screens/qr_view_screen.dart';
 import '../styles/colors.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScanButton extends StatelessWidget {
   const ScanButton({
@@ -48,7 +48,7 @@ class ScanButton extends StatelessWidget {
                             height: 60.w,
                           ),
                           Text(
-                            "Scan QR",
+                            AppLocalizations.of(context)!.homeScanQR,
                             style: TextStyle(
                                 color: lightGrey,
                                 fontSize: 16.sp,

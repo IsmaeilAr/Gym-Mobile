@@ -7,6 +7,7 @@ import 'package:gym/components/widgets/notification_list_tile.dart';
 import 'package:gym/features/notifications/models/notification_model.dart';
 import 'package:gym/features/notifications/provider/notification_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
@@ -33,8 +34,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
-        leading: BarIconButton(onPressed: () { Navigator.pop(context); }, icon: Icons.arrow_back_ios_outlined,),
-        title: const Text("Notifications", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),),
+        leading: BarIconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icons.arrow_back_ios_outlined,
+        ),
+        title: Text(
+          AppLocalizations.of(context)!.notifications,
+          style: const TextStyle(
+              fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),
+        ),
       ),
       body:
       RefreshIndicator(

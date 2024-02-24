@@ -1,81 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import '../../features/programs/model/program_model.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
+import '../dialog/cancel_button.dart';
 
-class AlertDialogSelect extends StatelessWidget {
-  final Function onConfirm;
-  const AlertDialogSelect({super.key, required this.onConfirm});
+class SelectProgramDialog extends StatelessWidget {
+  final ProgramModel program;
+  final VoidCallback doSelectProgram;
+
+  const SelectProgramDialog(this.doSelectProgram,
+      {super.key, required this.program});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: black,
       surfaceTintColor: black,
-      elevation: 24.0,
       actions: [
-        MaterialButton(
-          onPressed: () {},
-          child: Text(
-            "Cancel",
-            style: MyDecorations.programsTextStyle,
-          ),
-          color: black,
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
-            onConfirm();
+            doSelectProgram();
           },
+          color: primaryColor,
           child: Text(
-            "Set",
+            AppLocalizations.of(context)!.set,
             style: MyDecorations.coachesTextStyle,
           ),
-          color: primaryColor,
         ),
       ],
       content: Text(
-        "Are you sure you want to set this program as your daily one?",
+        AppLocalizations.of(context)!.setProgramConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );
   }
 }
 
-class AlertDialogUnSelect extends StatelessWidget {
-  final Function onConfirm;
-  const AlertDialogUnSelect({super.key, required this.onConfirm});
+class DeselectProgramDialog extends StatelessWidget {
+  final ProgramModel program;
+  final VoidCallback doDeSelectProgram;
+
+  const DeselectProgramDialog(this.doDeSelectProgram,
+      {super.key, required this.program});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: black,
       surfaceTintColor: black,
-      elevation: 24.0,
       actions: [
         MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          color: black,
           child: Text(
-            "Cancel",
+            AppLocalizations.of(context)!.cancel,
             style: MyDecorations.programsTextStyle,
           ),
-          color: black,
         ),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
-            onConfirm();
+            doDeSelectProgram();
           },
+          color: primaryColor,
           child: Text(
-            "Deselect",
+            AppLocalizations.of(context)!.deselect,
             style: MyDecorations.coachesTextStyle,
           ),
-          color: primaryColor,
         ),
       ],
       content: Text(
-        "Are you sure you want to deselect this program? It will not be your daily program once you deselect it.",
+        AppLocalizations.of(context)!.deselectProgramConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );

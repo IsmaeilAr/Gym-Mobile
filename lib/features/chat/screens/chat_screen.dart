@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
+import 'package:gym/components/widgets/coach_image.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/message_bubble.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
+import 'package:gym/features/profile/screens/coach_profile.dart';
 import 'package:gym/utils/extensions/time_formatter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../models/chat_model.dart';
 import '../models/message_model.dart';
@@ -44,7 +47,6 @@ class ChatScreenState extends State<ChatScreen> {
       senderId: 0,
       receiverId: widget.chatModel.sid2.id,
     );
-    // context.read<ChatProvider>().messageList.add( message);
     context.read<ChatProvider>().messageList.insert(0, message);
     scrollController.animateTo(
       0,
@@ -77,12 +79,15 @@ class ChatScreenState extends State<ChatScreen> {
             GestureDetector(
               onTap: () {
                 // navigate to profile
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.fade,
+                        child: CoachProfileScreen(coach)));
               },
               child: CircleAvatar(
                 radius: 18.r,
-                child: Image.network(
-                  coach.images[0].image,
-                ),
+                backgroundImage: coachImage(coach),
               ),
             ),
             const Gap(
@@ -109,18 +114,17 @@ class ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: Align(
-              alignment: Alignment.topCenter,
-              child:
-              context.watch<ChatProvider>().isLoadingMessages ?
-              const   LoadingIndicatorWidget() :
-              ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                controller: scrollController,
-                itemCount: messages.length,
-                itemBuilder: (BuildContext context, int index) {
-                  ChatMessage message = messages[index];
-                  return MessageBubble(
+              alignment: AlignmentDirectional.topCenter,
+              child: context.watch<ChatProvider>().isLoadingMessages
+                  ? const LoadingIndicatorWidget()
+                  : ListView.builder(
+                      reverse: true,
+                      shrinkWrap: true,
+                      controller: scrollController,
+                      itemCount: messages.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ChatMessage message = messages[index];
+                        return MessageBubble(
                     message: message.content,
                     isSender: message.isSender,
                     time: message.createdAt.formatTimestamp(),

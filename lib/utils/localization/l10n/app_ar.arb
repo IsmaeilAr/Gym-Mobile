@@ -9,7 +9,7 @@
   "loginButtonKey": "تسجيل الدخول",
 
 
-    "addInfoSkipKey": "تخطى",
+    "addInfoSkipKey": "تخطي",
     "addInfoInsertKey": "أدخل",
     "addInfoYourPersonalInfoKey": "معلوماتك الشخصية",
     "addInfoSelectGenderKey": "اختر الجنس",
@@ -42,22 +42,24 @@
    "homeDailyNutritionCardTitle": "برنامج التغذية اليومي",
    "homeNoDailyNutritionButton": "تعيين برنامج التغذية",
 
-         "homeWeeklyProgress": "التقدم الأسبوعي",
- "homeWeeklyProgressDays": "{days}",
-  "@homeWeeklyProgressDays": {
-    "placeholders": {
-      "days": {
-        "type": "array",
-        "content": ["سبت", "أحد", "إثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة"]
-      }
-    }
-  },
+  "homeWeeklyProgress": "Weekly Progress",
+
+          "sat": "سبت",
+      "sun": "أحد",
+      "mon": "اثنين",
+      "tue": "ثلاثاء",
+      "wed": "أربعاء",
+      "thu": "خميس",
+      "fri": "جمعة",
+
+
         "homeCheckInSuccessTitle": "تم الحضور بنجاح",
         "homeWelcomeMessage": "مرحبًا في النادي الرياضي",
 
-  "homeGymTrafficPeopleInGym": "حوالي $peopleCount شخص في النادي الرياضي الآن",
-  "homeGymTrafficBusyGymMessage": "النادي حيوي الآن. قد تكون الانتظار هو الخيار الأفضل لجلسة أكثر استرخاء!",
-  "homeGymTrafficNotFullGymMessage": "النادي ليس مكتملًا. الوقت المثالي للانضمام والاستحواذ على مكانك!",
+  "homeGymTrafficPeopleInGym": "حوالي",
+  "homeGymTrafficPeopleInGym2": "شخص في النادي الرياضي الآن",
+  "homeGymTrafficBusyGymMessage": "النادي مزدحم الآن. قد يكون الانتظار هو الخيار الأفضل لتمرين مريح أكثر!",
+  "homeGymTrafficNotFullGymMessage": "النادي ليس مزدحماً. الوقت مثالي للانضمام وحجز على مكانك!",
 
    "homeScanQR": "امسح الرمز ",
 
@@ -119,7 +121,7 @@
                       "programsMyCoach": "مدربي",
                       "programsAll": "الكل",
 
-
+"coach": "المدرب",
  "premiumAskForNewProgram": "اطلب برنامجًا جديدًا",
   "premiumNoTrainingPrograms": "لا توجد برامج تدريبية",
   "premiumNoSelectedTrainingProgram": "لم تحدد برنامج تدريب بعد. اطلب برنامج التدريب الخاص بك.",
@@ -142,7 +144,8 @@
   "coachProfileAvailability": "التوفر",
   "coachProfileCancel": "إلغاء",
   "coachProfileChange": "تغيير",
-  "coachProfileChangeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي إلى {name} كمدرب جديد؟",
+  "coachProfileChangeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي إلى",
+  "coachProfileChangeCoachConfirmation2": "كمدرب جديد؟",
   "coachProfileCoaches": "المدربون",
   "coachProfileSelected": "تم اختياره",
   "coachProfileSetCoach": "تعيين مدرب",
@@ -174,6 +177,7 @@
   "trainingProgram": "برنامج تدريب",
   "nutritionProgram": "برنامج تغذية",
   "revokeRequestConfirmation": "هل أنت متأكد أنك تريد سحب طلبك للحصول على برنامج تدريب (أو تغذية، أو كليهما) الرئيسي؟",
+"noInternet": "لا يوجد اتصال بالإنترنت",
 
   "cancel": "إلغاء",
   "stop": "إيقاف",

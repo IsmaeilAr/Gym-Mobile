@@ -7,7 +7,7 @@ import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../../utils/helpers/cache.dart';
 import '../../profile/models/user_model.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -78,6 +78,7 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
     } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
@@ -135,7 +136,7 @@ class AuthProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("LocaleKeys.txt_no_internet_connection.tr()2", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }

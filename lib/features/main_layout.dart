@@ -12,6 +12,7 @@ import 'package:gym/features/progress/screens/progress_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'articles/screens/articles_screen.dart';
 import 'programs/screens/programs_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -37,25 +38,22 @@ class _MainLayoutState extends State<MainLayout> {
     const MyProfile(),
   ];
 
-  List<String> screenNames = [
-    "Home",
-    "Programs",
-    "Progress",
-    "Profile",
-  ];
-
   @override
   Widget build(BuildContext context) {
+    List<String> screenNames = [
+      AppLocalizations.of(context)!.mainLayoutAppBarHomeScreenName,
+      AppLocalizations.of(context)!.mainLayoutAppBarProgramsScreenName,
+      AppLocalizations.of(context)!.mainLayoutAppBarProgressScreenName,
+      AppLocalizations.of(context)!.mainLayoutAppBarProfileScreenName,
+    ];
     return Scaffold(
       appBar: MainAppBar(
         title: screenNames[_selectedIndex],
       ),
-
       body: Container(
           // padding: EdgeInsets.all(14.w),
           child: screens[_selectedIndex]),
       drawer: const MyDrawer(),
-
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 47.w,

@@ -7,7 +7,7 @@ import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../models/chat_model.dart';
 import '../models/message_model.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatProvider extends ChangeNotifier {
 
@@ -99,7 +99,7 @@ class ChatProvider extends ChangeNotifier {
         isLoadingMessages = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingMessages = false;
     }
     notifyListeners();
@@ -137,7 +137,7 @@ class ChatProvider extends ChangeNotifier {
         isLoadingChats = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingChats = false;
     }
     notifyListeners();
@@ -182,7 +182,7 @@ class ChatProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingSendMsg = false;
       return false;
     }
@@ -227,7 +227,7 @@ class ChatProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingDeleteMsg = false;
       return false;
     }

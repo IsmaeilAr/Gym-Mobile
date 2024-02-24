@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/pop_menu_selected.dart';
+import 'package:gym/components/widgets/menuItem_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:provider/provider.dart';
 import '../../features/programs/model/program_model.dart';
+import '../pop_menu/pop_menu_set_program.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
 
@@ -40,13 +41,15 @@ class ProgramList extends StatelessWidget {
                         top: 0.h,
                         child: PopupMenuButton<MenuItemModel>(
                           itemBuilder: (context) => [
-                            ...MenuItems.getMenuItems.map(buildItem),
+                            ...SetProgramsMenuItems.getSetProgramMenuItems
+                                .map(buildItem),
                           ],
                           onSelected: (item) =>
-                              onSelected(context, item,
-                                    (){
-                                _selectProgram(context, program.id);
-                                         },),
+                              onSelectSetProgram(context, item, program, () {
+                            _selectProgram(context, program.id);
+                          }, () {
+                            _deselectProgram(context, program.id);
+                          }),
                           color: dark,
                           iconColor: Colors.white,
                           icon: Icon(
@@ -76,15 +79,18 @@ class ProgramList extends StatelessWidget {
                 ),
               ],
             );
-          }
-      ),
+          }),
     );
   }
 
-  void _selectProgram(BuildContext context, int programId){
-  context.read<ProgramProvider>().callSetProgram(context, programId);
-  // todo onRefresh
+  void _selectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callSetProgram(context, programId);
+    // todo onRefresh
   }
 
+  void _deselectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callUnSetProgram(context, programId);
+    // todo onRefresh
+  }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/features/home/provider/home_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gym/features/progress/provider/progress_provider.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart';
@@ -22,8 +22,12 @@ class WeeklyProgressWidget extends StatelessWidget {
           return Gap(w: 20.w);
         },
         itemBuilder: (BuildContext context, int index) {
-           List<int> doneDaysList =context.watch<ProgressProvider>().doneDaysList;
-          return MyDayWidget(index: index, dayType: doneDaysList[index],);
+          List<int> doneDaysList =
+              context.watch<ProgressProvider>().doneDaysList;
+          return MyDayWidget(
+            index: index,
+            dayType: doneDaysList[index],
+          );
         },
       ),
     );
@@ -35,12 +39,21 @@ class WeeklyProgressWidget extends StatelessWidget {
 class MyDayWidget extends StatelessWidget {
   final int dayType;
   final int index;
-  final List<String> weekDays = [ "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
 
-  MyDayWidget({super.key, required this.index, required this.dayType});
+  const MyDayWidget({super.key, required this.index, required this.dayType});
 
   @override
   Widget build(BuildContext context) {
+    var translations = AppLocalizations.of(context)!;
+    final List<String> weekDays = [
+      translations.sat,
+      translations.sun,
+      translations.mon,
+      translations.tue,
+      translations.wed,
+      translations.thu,
+      translations.fri
+    ];
     String dayName = weekDays[index];
 
     switch (dayType) {

@@ -6,7 +6,8 @@ import 'package:gym/components/widgets/snackBar.dart';
 import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ArticleProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -115,7 +116,7 @@ class ArticleProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
@@ -151,23 +152,24 @@ class ArticleProvider extends ChangeNotifier {
         isLoadingArticles = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingArticles = false;
     }
     notifyListeners();
   }
 
-  Future<void> callGetCoachArticles(BuildContext context,) async {
+  Future<void> callGetCoachArticles(BuildContext context, coachId) async {
     isLoadingCoachArticles = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().getCoachArticlesApi();
+        Either<String, Response> results =
+            await ApiHelper().getCoachArticlesApi(coachId);
         isLoadingCoachArticles = false;
         results.fold((l) {
           isLoadingCoachArticles = false;
-           showMessage(l, false);
+          showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
@@ -187,7 +189,7 @@ class ArticleProvider extends ChangeNotifier {
         isLoadingCoachArticles = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingCoachArticles = false;
     }
     notifyListeners();
@@ -233,7 +235,7 @@ class ArticleProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
@@ -278,7 +280,7 @@ class ArticleProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }

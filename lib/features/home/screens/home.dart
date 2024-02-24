@@ -14,6 +14,7 @@ import '../../../components/widgets/loading_indicator.dart';
 import '../../../components/widgets/no_daily_program.dart';
 import '../../../components/widgets/qr_scan_button.dart';
 import '../../../components/widgets/weekly_progress.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,7 +24,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -71,21 +71,28 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(vertical: 12.h),
             child: const Divider(
               height: 1,
-              color: dark,
-            ),
-          ),
+                      color: dark,
+                    ),
+                  ),
 
-          context.watch<ProfileProvider>().hasProgram ?
-          // daily card
-          const DailyProgramCard() :
-          // no training program screen
-          const NoDailyPrograms(),
-          // weekly progress
-          const Center(
-              child:
-              WeeklyProgressWidget()
-          ),
-        ]),
+                  context.watch<ProfileProvider>().hasProgram
+                      ?
+                      // daily card
+                      const DailyProgramCard()
+                      :
+                      // no training program screen
+                      const NoDailyPrograms(),
+                  // weekly progress
+                  Text(
+                    AppLocalizations.of(context)!.weeklyProgress,
+                    style: TextStyle(
+                        color: lightGrey,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 7.h),
+                  const Center(child: WeeklyProgressWidget()),
+                ]),
       ) :
       const LoadingIndicatorWidget()
     );

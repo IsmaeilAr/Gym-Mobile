@@ -45,20 +45,22 @@
    "homeNoDailyNutritionButton": "Set nutrition program",
 
 
-   "homeWeeklyProgress": "Weekly Progress",
- "homeWeeklyProgressDays": "{days}",
-  "@homeWeeklyProgressDays": {
-    "placeholders": {
-      "days": {
-        "type": "array",
-        "content": ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-      }
-    }
-  },
-    "homeCheckInSuccessTitle": "Check-In Success",
-    "homeWelcomeMessage": "Welcome to the gym!",
 
-    "homeGymTrafficPeopleInGym": "About $peopleCount people in the gym right now",
+       "sat": "Sat",
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+
+  "homeCheckInSuccessTitle": "Check-In Success",
+  "homeWelcomeMessage": "Welcome to the gym!",
+
+
+
+    "homeGymTrafficPeopleInGym": "About",
+    "homeGymTrafficPeopleInGym2": "people in the gym right now",
     "homeGymTrafficBusyGymMessage": "Gym's buzzing right now. Consider waiting for a more relaxing session!",
     "homeGymTrafficNotFullGymMessage": "Gym's not full. Perfect time to jump in and claim your spot!",
 
@@ -80,7 +82,6 @@
           "myProfileDaysLeft": "%{daysLeft} days left",
           "myProfilePaymentStatusPaid": "paid",
           "myProfilePaymentStatusUnpaid": "unpaid",
-          "myProfilePayCashButton": "please, pay your membership fee",
           "myProfilePayCashButtonText": "Pay cash",
           "myProfileSnackBarMessage": "This service is currently not available",
 
@@ -145,7 +146,8 @@
        "coachProfileAvailability": "Availability",
        "coachProfileCancel": "Cancel",
        "coachProfileChange": "Change",
-       "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach to {name} as your new coach?",
+       "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach to",
+       "coachProfileChangeCoachConfirmation2": "as your new coach?",
        "coachProfileCoaches": "Coaches",
        "coachProfileSelected": "Selected",
        "coachProfileSetCoach": "Set coach",
@@ -155,7 +157,7 @@
        "articlesAll": "All",
        "articlesFavorite": "Favorite",
 
-
+  "coach": "Coach",
 
 
 
@@ -168,6 +170,7 @@
   "coachProfilePopMenueSetCoach": "Set coach",
   "coachProfilePopMenueRevokeRequest": "Revoke request",
 
+
   "stopTimerConfirmation":"Are you sure you want to stop the timer and end the session? You'll need to scan the QR again to resume. Pausing allows you to continue without restarting.",
   "changeCoachConfirmation": "Are you sure you want to change your current coach to Maya as your new coach?",
   "unassignCoachConfirmation": "Are you sure you want to unassign your current coach?",
@@ -178,7 +181,7 @@
 "trainingProgram": "Training program",
 "nutritionProgram": "Nutrition program",
 "revokeRequestConfirmation":"Are you sure you want to revoke your request for a premium training (or nutrition, or both) program(s)?",
-
+"noInternet": "no internet connection",
 
   "cancel": "Cancel",
   "stop": "Stop",

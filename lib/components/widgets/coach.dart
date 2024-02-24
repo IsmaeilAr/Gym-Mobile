@@ -6,7 +6,7 @@ import 'package:gym/features/coaches/screens/all_coaches_screen.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:provider/provider.dart';
 import '../../features/coaches/provider/coach_provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NoCoachScreen extends StatelessWidget {
   const NoCoachScreen({super.key});
@@ -20,10 +20,18 @@ class NoCoachScreen extends StatelessWidget {
             CircleAvatar(
               // backgroundImage: AssetImage( "assets/images/profile1.png",),
               backgroundColor: grey,
-              child: Icon(Icons.person, size: 20.r,color: lightGrey,),
+              child: Icon(
+                Icons.person,
+                size: 20.r,
+                color: lightGrey,
+              ),
             ),
             SizedBox(width: 10.w),
-            Expanded(child: Text("You haven't set your personal coach yet.",style:MyDecorations. profileLight500TextStyle,)),
+            Expanded(
+                child: Text(
+              AppLocalizations.of(context)!.myProfileNoCoachMessage,
+              style: MyDecorations.profileLight500TextStyle,
+            )),
           ],
         ),
         SizedBox(height: 10.h),
@@ -36,7 +44,7 @@ class NoCoachScreen extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const AllCoachesScreen()));
               },
               child: Text(
-                "Find coach",
+                AppLocalizations.of(context)!.myProfileFindCoachButton,
                 style: MyDecorations.myButtonTextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -74,7 +82,10 @@ class MyCoachWidget extends StatelessWidget {
         IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: () {
-            context.read<CoachProvider>().callSetCoach(context, coach.id); // todo show ordered successfully dialog
+            context.read<CoachProvider>().setCoach(
+                context,
+                coach
+                    .id); // todo show confirmation dialog & ordered successfully snack-bar
           },
         )
       ],

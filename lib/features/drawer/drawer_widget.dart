@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
@@ -7,11 +5,11 @@ import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:gym/features/authentication/screens/login_screen.dart';
 import 'package:gym/features/report/screens/report_screen.dart';
-import 'package:gym/main.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/localization/language_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -65,7 +63,7 @@ class MyDrawer extends StatelessWidget {
               color: lightGrey,
             ),
             title: Text(
-              "Report",
+              AppLocalizations.of(context)!.drawerReportKey,
               style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
@@ -86,7 +84,7 @@ class MyDrawer extends StatelessWidget {
               color: lightGrey,
             ),
             title: Text(
-              "Logout",
+              AppLocalizations.of(context)!.drawerLogoutKey,
               style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
@@ -103,13 +101,14 @@ class MyDrawer extends StatelessWidget {
 }
 
 doLogout(BuildContext context) {
-  context.read<AuthProvider>().callLogoutApi(context).then((value) => (value) ?
-  Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (Route<dynamic> route) => false,)
-      : null
-  );
+  context
+      .read<AuthProvider>()
+      .callLogoutApi(context)
+      .then((value) => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (Route<dynamic> route) => false,
+          ));
 }
 
 
@@ -126,7 +125,8 @@ class _LanguageListState extends State<LanguageList> {
   bool _showLanguage = false;
   @override
   Widget build(BuildContext context) {
-    bool isEnglish = LanguageProvider().appLocale.languageCode == 'en';
+    bool isEnglish =
+        context.watch<LanguageProvider>().appLocale.languageCode == 'en';
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +142,7 @@ class _LanguageListState extends State<LanguageList> {
               color: lightGrey,
             ),
             title: Text(
-              "Language",
+              AppLocalizations.of(context)!.drawerLanguageKey,
               style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
@@ -173,7 +173,7 @@ class _LanguageListState extends State<LanguageList> {
               onTap: () {
                 context
                     .read<LanguageProvider>()
-                    .changeLanguage(const Locale('en', ''));
+                    .changeLanguage(const Locale('en', '')); // todo localize
               },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
@@ -181,7 +181,11 @@ class _LanguageListState extends State<LanguageList> {
                     ? const SelectedLangIcon()
                     : const UnSelectedLangIcon(),
               ),
-              title: Text('English', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w400, color: grey),),
+              title: Text(
+                AppLocalizations.of(context)!.drawerEnglishKey,
+                style: TextStyle(
+                    fontSize: 10.sp, fontWeight: FontWeight.w400, color: grey),
+              ),
             ),
           ),
           Visibility(
@@ -190,7 +194,7 @@ class _LanguageListState extends State<LanguageList> {
               onTap: () {
                 context
                     .read<LanguageProvider>()
-                    .changeLanguage(const Locale('ar', ''));
+                    .changeLanguage(const Locale('ar', '')); // todo localize
               },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
@@ -199,7 +203,7 @@ class _LanguageListState extends State<LanguageList> {
                     : const UnSelectedLangIcon(),
               ),
               title: Text(
-                'Arabic',
+                AppLocalizations.of(context)!.drawerArabicKey,
                 style: TextStyle(
                     fontSize: 10.sp,
                     fontWeight: FontWeight.w400,

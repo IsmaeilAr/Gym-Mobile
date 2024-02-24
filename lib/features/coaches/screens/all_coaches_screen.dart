@@ -5,7 +5,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 import 'package:gym/features/profile/models/user_model.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 List<UserModel> coaches = [
   UserModel(
@@ -33,7 +33,10 @@ class _AllCoachesScreenState extends State<AllCoachesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ProgramsAppBar(title: "Coaches", context: context, search: true),
+      appBar: ProgramsAppBar(
+          title: AppLocalizations.of(context)!.coaches,
+          context: context,
+          search: true),
       body: Column(
         children: [
           Expanded(
@@ -52,7 +55,7 @@ class _AllCoachesScreenState extends State<AllCoachesScreen> {
                       color: dark,
                     ),
                     child: Stack(
-                      alignment: Alignment.topRight,
+                      alignment: AlignmentDirectional.topEnd,
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(

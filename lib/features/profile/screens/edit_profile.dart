@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym/components/widgets/coach_image.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
@@ -9,20 +11,29 @@ import 'package:provider/provider.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../../../components/widgets/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 TextEditingController nameController = TextEditingController();
 TextEditingController phoneController = TextEditingController();
-TextEditingController ageController = TextEditingController();
+TextEditingController dobController = TextEditingController();
 TextEditingController heightController = TextEditingController();
 TextEditingController weightController = TextEditingController();
 TextEditingController waistController = TextEditingController();
 TextEditingController neckController = TextEditingController();
 
+File? _currentImagePath;
+
 class EditProfile extends StatefulWidget {
   final UserModel profileInfo;
   final PlayerMetricsModel personalMetrics;
   final bool isEdit;
-  const EditProfile({super.key, required this.isEdit, required this.profileInfo, required this.personalMetrics,});
+
+  const EditProfile({
+    super.key,
+    required this.isEdit,
+    required this.profileInfo,
+    required this.personalMetrics,
+  });
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -31,21 +42,26 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
 
 
-  File? _currentImagePath;
 
 
 
   @override
   void initState() {
-    (widget.isEdit) ? {
-      nameController.text = widget.profileInfo.name,
-      phoneController.text = widget.profileInfo.phoneNumber,
-      ageController.text = widget.personalMetrics.age.toString(),
-      heightController.text = widget.personalMetrics.height.toString(),
-      weightController.text = widget.personalMetrics.weight.toString(),
-      waistController.text = widget.personalMetrics.waistMeasurement.toString(),
-      neckController.text = widget.personalMetrics.neck.toString()
-    } : null;
+    (widget.isEdit)
+        ? {
+            nameController.text = widget.profileInfo.name,
+            phoneController.text = widget.profileInfo.phoneNumber,
+            dobController.text = widget.personalMetrics.age.toString(),
+            heightController.text = widget.personalMetrics.height.toString(),
+            weightController.text = widget.personalMetrics.weight.toString(),
+            waistController.text =
+                widget.personalMetrics.waistMeasurement.toString(),
+            neckController.text = widget.personalMetrics.neck.toString()
+          }
+        : {
+            nameController.text = widget.profileInfo.name,
+            phoneController.text = widget.profileInfo.phoneNumber,
+          };
     super.initState();
   }
 
@@ -78,24 +94,22 @@ class _EditProfileState extends State<EditProfile> {
                   child: Column(
                     children: [
                       Stack(
-                        alignment: Alignment.bottomRight,
+                        alignment: AlignmentDirectional.bottomEnd,
                         children: [
                           GestureDetector(
                             onTap: _pickImage,
-                            child: CircleAvatar(
-                              radius: 90.r,
-                              child: _currentImagePath == null
-                                  ? Image.network(
-                                widget.profileInfo.images[0].image,
-                                fit: BoxFit.fill,
-                              )
-                                  : CircleAvatar(
-                                radius: 90.r,
-                                backgroundImage: FileImage(
-                                  _currentImagePath!,
-                                ),
-                              ),
-                            ),
+                            child: _currentImagePath == null
+                                ? CircleAvatar(
+                                    radius: 90.r,
+                                    backgroundImage:
+                                        coachImage(widget.profileInfo),
+                                  )
+                                : CircleAvatar(
+                                    radius: 90.r,
+                                    backgroundImage: FileImage(
+                                      _currentImagePath!,
+                                    ),
+                                  ),
                           ),
                           GestureDetector(
                             onTap: _pickImage,
@@ -137,7 +151,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     SizedBox(width: 6.w),
                     Text(
-                      "Phone number",
+                      AppLocalizations.of(context)!.myProfilePhoneNumber,
                       style: MyDecorations.mySuffixTextStyle,
                     ),
                   ],
@@ -162,23 +176,40 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 25.h),
-                  child: const DividerWidget(title: "Personal Metrics"),
+                  child: DividerWidget(
+                      title: AppLocalizations.of(context)!
+                          .myProfileDividerPersonalMetrics),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10.h),
                   child: Text(
-                    "Body fat: ${widget.personalMetrics.bfp} %",
+                    "${AppLocalizations.of(context)!.myProfileBodyFat}${widget.personalMetrics.bfp} %",
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                 ),
-                BuildProfileTextField(labelText: "Age:",controller: ageController,),
-                BuildProfileTextField(labelText: "Height (cm):",controller: heightController,),
-                BuildProfileTextField(labelText: "Weight (kg):",controller: weightController,),
-                BuildProfileTextField(labelText: "Waist (cm):",controller: waistController,),
-                BuildProfileTextField(labelText: "Neck (cm):",controller: neckController,),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 25.h),
-                  child: const DividerWidget(title: "Personal Coach"),
+                BuildProfileTextField(
+                  labelText:
+                      "${AppLocalizations.of(context)!.addInfoBirthdateKey}:",
+                  controller: dobController,
+                ),
+                BuildProfileTextField(
+                  labelText:
+                      AppLocalizations.of(context)!.editProfileHeightLabel,
+                  controller: heightController,
+                ),
+                BuildProfileTextField(
+                  labelText:
+                      AppLocalizations.of(context)!.editProfileWeightLabel,
+                  controller: weightController,
+                ),
+                BuildProfileTextField(
+                  labelText:
+                      AppLocalizations.of(context)!.editProfileWaistLabel,
+                  controller: waistController,
+                ),
+                BuildProfileTextField(
+                  labelText: AppLocalizations.of(context)!.editProfileNeckLabel,
+                  controller: neckController,
                 ),
               ],
             ),
@@ -210,7 +241,7 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
-        "Edit",
+        AppLocalizations.of(context)!.myProfileEditButton,
         style: TextStyle(
           color: lightGrey,
           fontSize: 18.sp,
@@ -221,16 +252,22 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           color: lightGrey,
           onPressed: () {
-            context.read<ProfileProvider>().callEditMetrics(context,
-                ageController.text,
-                heightController.text,
-                weightController.text,
-                waistController.text,
-                neckController.text,
-            );
-            context.read<ProfileProvider>().callEditInfo(context,
-                nameController.text,
-                phoneController.text);
+            context.read<ProfileProvider>().callEditInfo(
+                  context,
+                  nameController.text,
+                  phoneController.text,
+                  _currentImagePath,
+                );
+            context.read<ProfileProvider>().callEditMetrics(
+                  context,
+                  dobController.text,
+                  heightController.text,
+                  weightController.text,
+                  waistController.text,
+                  neckController.text,
+                );
+            context.read<ProfileProvider>().getProfileInfo(context);
+            context.read<ProfileProvider>().getPersonalMetrics(context);
           },
           icon: Icon(
             Icons.check,
@@ -256,11 +293,14 @@ class BuildProfileTextField extends StatelessWidget {
         child: TextField(
           controller: controller,
           keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          maxLength: 10,
           decoration: InputDecoration(
-            suffixStyle: MyDecorations.profileLight400TextStyle ,
+            suffixStyle: MyDecorations.profileLight400TextStyle,
             labelText: labelText,
             labelStyle: MyDecorations.mySuffixTextStyle,
             contentPadding: EdgeInsets.zero,
+            counterText: '',
           ),
           style: MyDecorations.profileLight400TextStyle,
         ),

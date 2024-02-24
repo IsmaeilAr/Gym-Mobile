@@ -8,7 +8,7 @@ import 'package:gym/features/coaches/model/coach_time_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CoachProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -118,7 +118,53 @@ class CoachProvider extends ChangeNotifier {
   }
 
   //////////////////////////////////////////////////////////////////////////
-  Future<bool> callSetCoach(BuildContext context, int coachId,) async {
+  Future<bool> setCoach(
+    BuildContext context,
+    int coachId,
+  ) async {
+    isLoadingSetCoach = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+    bool repoStatus = false;
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results = await ApiHelper().addOrderApi(
+          coachId,
+        );
+        isLoadingSetCoach = false;
+        await results.fold((l) {
+          isLoadingSetCoach = false;
+          showMessage(l, false);
+          repoStatus = false;
+        }, (r) async {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("## $data");
+            isLoadingSetCoach = false;
+            repoStatus = true;
+          } else {
+            isLoadingSetCoach = false;
+            log("## ${response.statusCode}");
+            log("## ${response.data}");
+          }
+        });
+        return repoStatus;
+      } on Exception catch (e) {
+        showMessage("$e", false);
+        isLoadingSetCoach = false;
+        return false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingSetCoach = false;
+      return false;
+    }
+  }
+
+  Future<bool> unsetCoach(
+    BuildContext context,
+    int coachId,
+  ) async {
     isLoadingSetCoach = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
@@ -152,7 +198,7 @@ class CoachProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingSetCoach = false;
       return false;
     }
@@ -190,7 +236,7 @@ class CoachProvider extends ChangeNotifier {
         isLoadingGetUsers = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingGetUsers = false;
     }
     notifyListeners();
@@ -212,11 +258,14 @@ class CoachProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            var data = response.data["data"][0];
             log("data $data");
             // List<dynamic> list = data;
             coachInfo = UserModel.fromJson(data);
             isLoadingCoachInfo = false;
+          } else if (response.data["message"] == "Coach not found") {
+            isLoadingCoachInfo = false;
+            log("coach not set yet");
           } else {
             isLoadingCoachInfo = false;
             log("## ${response.data}");
@@ -228,7 +277,7 @@ class CoachProvider extends ChangeNotifier {
         isLoadingCoachInfo = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingCoachInfo = false;
     }
     notifyListeners();
@@ -264,7 +313,7 @@ class CoachProvider extends ChangeNotifier {
         isLoadingCoachTime = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingCoachTime = false;
     }
     notifyListeners();

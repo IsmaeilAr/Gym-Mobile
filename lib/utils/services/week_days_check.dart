@@ -42,26 +42,54 @@ import 'package:flutter/cupertino.dart';
 
 List<int> getNumericCheckList(List<String> doneDays) {
   // Define the order of the days of the week, starting from Saturday
-  List<String> allDays = ["saturday", "sunday", "monday", "tuesday", "wednesday", "thursday", "friday"];
+  List<String> allDays = [
+    "saturday",
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday"
+  ];
 
   // Get today's day of the week
-  int todayIndexISO = DateTime.now().weekday % 7;
-  int todayIndexCalc(todayIndexISO){
-    switch (todayIndexISO){
-      case 0:
-        return 1;
+  int todayIndexISO = DateTime.now().weekday;
+  // int todayIndexCalc(todayIndexISO){
+  //   switch (todayIndexISO){
+  //     case 1:
+  //       return 3;
+  //     case 2:
+  //       return 4;
+  //     case 3:
+  //       return 5;
+  //     case 4:
+  //       return 6;
+  //     case 5:
+  //       return 0;
+  //     case 6:
+  //       return 2;
+  //     case 7:
+  //       return 2;
+  //     default:
+  //       return 0;
+  //   }
+  // }
+  int todayIndexCalc(todayIndexISO) {
+    switch (todayIndexISO) {
       case 1:
-        return 3;
+        return 2;
       case 2:
-        return 4;
+        return 3;
       case 3:
-        return 5;
+        return 4;
       case 4:
-        return 6;
+        return 5;
       case 5:
         return 6;
       case 6:
         return 0;
+      case 7:
+        return 1;
       default:
         return 0;
     }

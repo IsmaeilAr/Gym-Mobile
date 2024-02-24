@@ -1,14 +1,14 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snackBar.dart';
-import 'package:gym/features/home/models/status_model.dart';
+import 'package:gym/features/home/models/active_players_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -30,6 +30,7 @@ class HomeProvider extends ChangeNotifier {
     _isCheckIn = value;
     notifyListeners();
   }
+
   bool _showCheckInSuccess  = false;
 
   bool get showCheckInSuccess  => _showCheckInSuccess ;
@@ -57,7 +58,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  late bool _isBusy;
+  bool _isBusy = false;
 
   bool get isBusy => _isBusy;
 
@@ -65,7 +66,6 @@ class HomeProvider extends ChangeNotifier {
     _isBusy = value;
     notifyListeners();
   }
-
 
   List<dynamic> _playersList = [];
 
@@ -75,7 +75,6 @@ class HomeProvider extends ChangeNotifier {
     _playersList = value;
     notifyListeners();
   }
-
 
 
   Future<void> getActivePlayersApi(BuildContext context,) async {
@@ -88,7 +87,7 @@ class HomeProvider extends ChangeNotifier {
         isLoadingActivePlayers = false;
         results.fold((l) {
           isLoadingActivePlayers = false;
-           showMessage(l, false);
+          showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
@@ -107,32 +106,34 @@ class HomeProvider extends ChangeNotifier {
         });
       } on Exception catch (e) {
         log("Exception get Active players : $e");
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoadingActivePlayers = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingActivePlayers = false;
     }
     notifyListeners();
   }
 
-  Future<bool> callCheckInApi(
-      BuildContext context,
-      ) async {
+  Future<bool> callCheckInApi(BuildContext context,) async {
     isLoadingCheckIn = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        String content = DateTime.now().toString as String;
+        var time = DateTime.now().toString();
+        int day = DateTime.now().day;
+        String content = time;
+        debugPrint(time);
         Either<String, Response> results = await ApiHelper().checkInApi(
           content,
+          day,
         );
         isLoadingCheckIn = false;
         await results.fold((l) {
           isLoadingCheckIn = false;
-           showMessage(l, false);
+          showMessage(l, false);
           repoStatus = false;
         }, (r) async {
           Response response = r;
@@ -141,6 +142,7 @@ class HomeProvider extends ChangeNotifier {
             log("## $data");
             isLoadingCheckIn = false;
             repoStatus = true;
+            onCheckIn();
           } else {
             isLoadingCheckIn = false;
             log("## ${response.statusCode}");
@@ -149,39 +151,48 @@ class HomeProvider extends ChangeNotifier {
         });
         return repoStatus;
       } on Exception catch (e) {
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoadingCheckIn = false;
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingCheckIn = false;
       return false;
     }
   }
 
+  Future<void> onCheckIn() async {
+    showCheckInSuccess = true;
+    isCheckIn = true;
+    Timer(const Duration(seconds: 2), () {
+      showCheckInSuccess = false;
+    });
+  }
+
   Future<bool> callCheckOutApi(
-      BuildContext context,
-      ) async {
+    BuildContext context,
+  ) async {
     isLoadingCheckIn = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        String content = DateTime.now().toString as String;
+        var time = DateTime.now().toString();
+        String content = time;
         Either<String, Response> results = await ApiHelper().checkOutApi(
           content,
         );
         isLoadingCheckIn = false;
         await results.fold((l) {
           isLoadingCheckIn = false;
-           showMessage(l, false);
+          showMessage(l, false);
           repoStatus = false;
         }, (r) async {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
-            log("## $data");
+            // var data = response.data["data"];
+            // log("## $data");
             isLoadingCheckIn = false;
             repoStatus = true;
           } else {
@@ -192,12 +203,12 @@ class HomeProvider extends ChangeNotifier {
         });
         return repoStatus;
       } on Exception catch (e) {
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoadingCheckIn = false;
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingCheckIn = false;
       return false;
     }

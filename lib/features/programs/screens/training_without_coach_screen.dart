@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
-import 'package:gym/components/widgets/pop_menu_selected.dart';
-import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/components/widgets/menuItem_model.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:provider/provider.dart';
+import '../../../components/pop_menu/pop_menu_set_program.dart';
+import '../../../components/widgets/programs_app_bar.dart';
 
 class TrainingWithoutCoachesScreen extends StatefulWidget {
   const TrainingWithoutCoachesScreen(this.category, {super.key});
@@ -22,21 +23,34 @@ class TrainingWithoutCoachesScreen extends StatefulWidget {
 class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ProgramProvider>().getProgramsList(context, widget.category.type, widget.category.id);
+    // todo try put 2 lines below into postFrameCallBack
+    searching = false;
+    customIcon = const Icon(
+      Icons.search,
+      color: lightGrey,
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context
+          .read<ProgramProvider>()
+          .getProgramsList(context, widget.category.type, widget.category.id);
     });
     super.initState();
   }
+
   Future<void> _refresh() async {
-    context.read<ProgramProvider>().getProgramsList(context, widget.category.type, widget.category.id);
+    context
+        .read<ProgramProvider>()
+        .getProgramsList(context, widget.category.type, widget.category.id);
   }
+
+  late bool searching;
+  late Icon customIcon;
 
   @override
   Widget build(BuildContext context) {
-    String title = "${widget.category.type}⮞${widget.category.name}";
+    String title = "${widget.category.type}/${widget.category.name}";
     return Scaffold(
-        appBar: ProgramsAppBar(
-            title: title, context: context, search: true),
+        appBar: ProgramsAppBar(title: title, context: context, search: true),
         body: RefreshIndicator(
           color: red,
           backgroundColor: dark,
@@ -77,12 +91,16 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
                                   top: 0.h,
                                   child: PopupMenuButton<MenuItemModel>(
                                     itemBuilder: (context) => [
-                                      ...MenuItems.getMenuItems.map(buildItem),
+                                      ...SetProgramsMenuItems
+                                          .getSetProgramMenuItems
+                                          .map(buildItem),
                                     ],
-                                    onSelected: (item) =>
-                                        onSelected(context, item, (){
-                                          _selectProgram(context, program.id);
-                                        }),
+                                    onSelected: (item) => onSelectSetProgram(
+                                        context, item, program, () {
+                                      _selectProgram(context, program.id);
+                                    }, () {
+                                      _deselectProgram(context, program.id);
+                                    }),
                                     color: dark,
                                     iconColor: Colors.white,
                                     icon: Icon(
@@ -121,11 +139,22 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
               ],
             ),
           ),
-        )
-    );
+        ));
   }
-  void _selectProgram(BuildContext context, int programId){
+
+  void _selectProgram(BuildContext context, int programId) {
     context.read<ProgramProvider>().callSetProgram(context, programId);
     // todo onRefresh
   }
+
+  void _deselectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callUnSetProgram(context, programId);
+    // todo onRefresh
+  }
+
+// onBackPress(BuildContext context, bool searching) {
+//   this.searching ? searching = !searching :
+//       Navigator.of(context).pop();
+//
+// }
 }

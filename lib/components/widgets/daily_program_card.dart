@@ -18,7 +18,7 @@ class DailyProgramCard extends StatelessWidget {
           image: const DecorationImage(
               image: AssetImage("assets/images/daily_program.png"))),
       child: Align(
-        alignment: Alignment.bottomLeft,
+        alignment: AlignmentDirectional.bottomStart,
         child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             child: Text(

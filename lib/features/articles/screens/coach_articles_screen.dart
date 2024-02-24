@@ -9,7 +9,13 @@ import 'package:provider/provider.dart';
 
 
 class CoachArticlesList extends StatefulWidget {
-  const CoachArticlesList({super.key,});
+  const CoachArticlesList(
+    this.coachId, {
+    super.key,
+  });
+
+  final int coachId;
+
   @override
   State<CoachArticlesList> createState() => _CoachArticlesListState();
 }
@@ -18,7 +24,9 @@ class _CoachArticlesListState extends State<CoachArticlesList> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ArticleProvider>().callGetCoachArticles(context);
+      context
+          .read<ArticleProvider>()
+          .callGetCoachArticles(context, widget.coachId);
     });
     super.initState();
   }

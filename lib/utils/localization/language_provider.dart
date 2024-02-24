@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gym/utils/helpers/cache.dart';
 
 class LanguageProvider extends ChangeNotifier {
-  late Locale _appLocale;
+  late Locale _appLocale = const Locale("en", "");
+
+  // late Locale _appLocale;
+  SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
   LanguageProvider() {
     loadLocale();
   }
 
   Future<void> loadLocale() async {
-    SharedPreferencesService prefsService = SharedPreferencesService
-        .instance; // Get SharedPreferencesService instance
     String? languageCode = prefsService.getValue('language_code') as String?;
     String? countryCode = prefsService.getValue('country_code') as String?;
     if (languageCode != null && countryCode != null) {
@@ -21,8 +22,6 @@ class LanguageProvider extends ChangeNotifier {
   }
 
   changeLanguage(Locale locale) async {
-    SharedPreferencesService prefsService = SharedPreferencesService
-        .instance; // Get SharedPreferencesService instance
     await prefsService.setValue('language_code', locale.languageCode);
     await prefsService.setValue('country_code', locale.countryCode ?? "");
     _appLocale = locale;

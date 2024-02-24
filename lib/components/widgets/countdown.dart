@@ -77,7 +77,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Stack(
-              alignment: Alignment.center,
+              alignment: AlignmentDirectional.center,
               children: [
                 SizedBox(
                   width: 180.r,

@@ -1,31 +1,7 @@
-import '../../programs/model/program_model.dart';
-
-class InitStatus {
-  bool hasCoach;
-  bool hasProgram;
-  List<ProgramModel>? programs;
-
-  InitStatus({
-    required this.hasCoach,
-    required this.hasProgram,
-    required this.programs,
-  });
-
-  factory InitStatus.fromJson(Map<String, dynamic> json) {
-    return InitStatus(
-      hasCoach: json['hasCoach'].toString().toLowerCase() == 'true',
-      hasProgram: json['hasProgram'].toString().toLowerCase() == 'true',
-      programs: json['programType'],
-    );
-  }
-}
-
-
-
-
 class ActivePlayer {
   final int userId;
-  final int dayId;
+
+  // final int dayId;
   final String startTime;
   final String? endTime;
   final String status;
@@ -35,7 +11,7 @@ class ActivePlayer {
 
   ActivePlayer({
     required this.userId,
-    required this.dayId,
+    // required this.dayId,
     required this.startTime,
     this.endTime,
     required this.status,
@@ -47,7 +23,7 @@ class ActivePlayer {
   factory ActivePlayer.fromJson(Map<String, dynamic> json) {
     return ActivePlayer(
       userId: json['userId'],
-      dayId: json['dayId'],
+      // dayId: json['dayId'],
       startTime: json['startTime'],
       endTime: json['endTime'],
       status: json['status'],
@@ -107,7 +83,3 @@ class Traffic {
     );
   }
 }
-
-
-
-

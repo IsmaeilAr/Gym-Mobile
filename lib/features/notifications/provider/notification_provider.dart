@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -58,7 +59,7 @@ class NotificationProvider extends ChangeNotifier {
         isLoadingNotifications = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingNotifications = false;
     }
     notifyListeners();

@@ -1,7 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/utils/helpers/api/session_expired_interceptor.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/helpers/api/dio_exceptions.dart';
 
@@ -16,18 +19,20 @@ class ApiHelper {
   String logoutUrl = "${baseUrl}logout";
   String initStatusUrl = "${baseUrl}status";
   String activePlayersUrl = "${baseUrl}activePlayers";
+  String getMyProfileInfoUrl = "${baseUrl}showPlayer";
   String addInfoUrl = "${baseUrl}addInfo";
+  String editInfoUrl = "${baseUrl}update"; // todo fix Url
   String editMetricsUrl = "${baseUrl}updateInfo";
-  String editInfoUrl = "${baseUrl}update";
   String addProgramUrl = "${baseUrl}store";
   String editProgramUrl = "${baseUrl}store"; // todo fix Url
   String assignProgramUrl = "${baseUrl}store"; // todo fix Url
   String getChatsUrl = "${baseUrl}listChat";
-  String checkInUrl = "${baseUrl}storeTime";
+  String checkInUrl = "${baseUrl}storeUserTime";
   String storeTimeUrl = "${baseUrl}storeTime";
   String checkOutUrl = "${baseUrl}endCounter";
   String weeklyUrl = "${baseUrl}weekly";
   String monthlyUrl = "${baseUrl}monthly";
+  String programProgressUrl = "${baseUrl}programCommitment";
   String sendMessageUrl = "${baseUrl}sendMessage";
   String setRateUrl = "${baseUrl}setRate";
   String submitReportUrl = "${baseUrl}addReport";
@@ -36,16 +41,16 @@ class ApiHelper {
   String acceptOrderUrl = "${baseUrl}acceptOrder";
   String programSearchUrl = "${baseUrl}programSearch";
   String setProgramUrl = "${baseUrl}setProgram";
+  String unsetProgramUrl = "${baseUrl}unsetProgram"; //todo fix url
   String requestProgramUrl = "${baseUrl}requestPrograme";
   String userSearchUrl = "${baseUrl}userSearch";
   String getNotificationsUrl = "${baseUrl}listNotification";
   String getArticlesUrl = "${baseUrl}allArticle";
   String addArticleUrl = "${baseUrl}addArticle";
 
-
-    static String getProfileInfoUrl(
-      int userId,
-      ) {
+  static String getProfileInfoUrl(
+    int userId,
+  ) {
     return "${baseUrl}playerInfo/$userId";
   }
 
@@ -65,21 +70,22 @@ class ApiHelper {
       String type, int categoryID,
       ) {
       String url = "${baseUrl}show?type=$type" ;
-    if (categoryID != 0) url = "${baseUrl}show?type=$type/$categoryID";
-     return  url ;
+      if (categoryID != 0)
+      url = "${baseUrl}show?type=$type&categoryId=$categoryID";
+    return  url ;
   }
 
   static String premiumProgramsUrl(
     String type,
   ) {
-    return "${baseUrl}Premum?type=$type";
+    return "${baseUrl}getPrograms?type=$type";
   }
 
 
   static String allCategoriesUrl(
       String type,
       ) {
-    return "${baseUrl}show?type=$type";
+    return "${baseUrl}getCategories?type=$type";
   }
 
   static String myProgramsUrl(
@@ -142,21 +148,32 @@ class ApiHelper {
 
   //###################################################################################################//
 
-  BaseOptions options = BaseOptions(
+  static final BaseOptions options = BaseOptions(
     receiveDataWhenStatusError: true,
     connectTimeout: const Duration(seconds: 30),
     receiveTimeout: const Duration(seconds: 30),
   );
 
-  final Dio _clientDio = Dio();
+  static final Dio _clientDio = Dio(options);
 
-  Duration connectionTimeoutValue = const Duration(seconds: 30);
-  Duration receiveTimeoutValue = const Duration(seconds: 30);
+  static Duration connectionTimeoutValue = const Duration(seconds: 30);
+  static Duration receiveTimeoutValue = const Duration(seconds: 30);
+
+  static Dio get clientDio => _clientDio;
+
+  static void setupInterceptors(BuildContext context) {
+    _clientDio.interceptors.add(
+      SessionExpiredInterceptor(context),
+    );
+  }
 
 //###################################################################################################//
 
   // Auth
-  Future<Either<String, Response>> loginApi(String phone, String password, ) async {
+  Future<Either<String, Response>> loginApi(
+    String phone,
+    String password,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
@@ -321,9 +338,9 @@ class ApiHelper {
                 'Authorization': token,
               },
             ),
-      )
+          )
           .timeout(const Duration(seconds: 50));
-      log("## Response Profile Info : $response");
+      log("## Response Profile Metrics : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -419,14 +436,16 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> editInfoApi(
-      String name,
-      String phoneNumber,
-      ) async {
+    String name,
+    String phoneNumber,
+    File? image,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
+      // int playerId = prefsService.getValue(Cache.userId) ?? 0;
       var response = await _clientDio.post(
         editInfoUrl,
         options: Options(
@@ -438,6 +457,8 @@ class ApiHelper {
         data: {
           "name": name,
           "phoneNumber": phoneNumber,
+          image != null ? 'image' : await MultipartFile.fromFile(image!.path):
+              null,
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response edit info (API handler) : Good ");
@@ -648,9 +669,41 @@ class ApiHelper {
     }
   }
 
+  Future<Either<String, Response>> unsetProgramApi(
+    int programId,
+  ) async {
+    _clientDio.options.connectTimeout = connectionTimeoutValue;
+    _clientDio.options.receiveTimeout = receiveTimeoutValue;
+    late Either<String, Response> result;
+    try {
+      String token = prefsService.getValue(Cache.token) ?? "";
+      var response = await _clientDio.post(
+        unsetProgramUrl,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token,
+          },
+        ),
+        data: {
+          "programId": programId,
+        },
+      ).timeout(const Duration(seconds: 25));
+      log("## Response unset Program (API handler) : Good ");
+      log("## Response unset Program : $response");
+      result = Right(response);
+      return result;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error message : $errorMessage");
+      result = Left(errorMessage);
+      return result;
+    }
+  }
+
   Future<Either<String, Response>> requestProgramApi(
-      int coachId,
-      ) async {
+    int coachId,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
@@ -794,8 +847,9 @@ class ApiHelper {
 
   // Progress
   Future<Either<String, Response>> checkInApi(
-      String content,
-      ) async {
+    String content,
+    int day,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
@@ -805,12 +859,13 @@ class ApiHelper {
         checkInUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
         data: {
           "startTime": content,
+          "dayId": day,
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response checkIn (API handler) : Good ");
@@ -917,6 +972,35 @@ class ApiHelper {
     }
   }
 
+  Future<Either<String, Response>> getProgramProgressApi() async {
+    _clientDio.options.connectTimeout = connectionTimeoutValue;
+    _clientDio.options.receiveTimeout = receiveTimeoutValue;
+
+    late Either<String, Response> result;
+    try {
+      String token = prefsService.getValue(Cache.token) ?? "";
+
+      var response = await _clientDio
+          .get(
+            monthlyUrl,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
+          .timeout(const Duration(seconds: 50));
+      log("## Response get monthly progress : $response");
+      result = Right(response);
+      return result;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error message : $errorMessage");
+      result = Left(errorMessage);
+      return result;
+    }
+  }
 
   // Coaches
   Future<Either<String, Response>> getUserListApi(String type) async {
@@ -1203,9 +1287,9 @@ class ApiHelper {
 
   // Rates
   Future<Either<String, Response>> setRateApi(
-      int coachId,
-      int rate,
-      ) async {
+    int coachId,
+    double rate,
+  ) async {
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
@@ -1300,7 +1384,8 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> getCoachArticlesApi() async { //todo edit as backend
+  Future<Either<String, Response>> getCoachArticlesApi(int coachId) async {
+    //todo edit as backend
     _clientDio.options.connectTimeout = connectionTimeoutValue;
     _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
@@ -1310,7 +1395,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getArticlesUrl,
+            getCoachArticlesUrl(coachId), // todo url from backend
             options: Options(
               headers: {
                 'Content-Type': 'application/json',

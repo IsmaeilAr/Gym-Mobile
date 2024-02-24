@@ -4,6 +4,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/coach.dart';
 import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/payment.dart';
 import 'package:gym/components/widgets/player_metrics_widget.dart';
@@ -14,6 +15,7 @@ import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/profile/screens/edit_profile.dart';
 import 'package:gym/utils/services/left_days_calculator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -26,10 +28,7 @@ class _MyProfileState extends State<MyProfile> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProfileProvider>().getProfileInfo(context);
-      context.read<ProfileProvider>().getPersonalMetrics(context);
-      context.read<CoachProvider>().getCoachInfo(context,
-      context.read<ProfileProvider>().status.coachId);
+      _refresh();
     });
     super.initState();
   }
@@ -37,25 +36,26 @@ class _MyProfileState extends State<MyProfile> {
   Future<void> _refresh() async {
     context.read<ProfileProvider>().getProfileInfo(context);
     context.read<ProfileProvider>().getPersonalMetrics(context);
-    context.read<CoachProvider>().getCoachInfo(context,
-        context.read<ProfileProvider>().status.coachId);  }
+    context.read<CoachProvider>().getCoachInfo(
+        context, context.read<ProfileProvider>().status.myCoach.id);
+  }
 
   @override
   Widget build(BuildContext context) {
-    PlayerMetricsModel personalMetrics = context.watch<ProfileProvider>().personalMetrics;
+    PlayerMetricsModel personalMetrics =
+        context.watch<ProfileProvider>().personalMetrics;
     UserModel profileInfo = context.watch<ProfileProvider>().profileInfo;
-
-    bool hasPersonalMetrics = (personalMetrics.weight != 0 &&
-        personalMetrics.neck != 0 &&
-        personalMetrics.waistMeasurement != 0 &&
-        personalMetrics.height != 0 &&
-        personalMetrics.gender != "not set");
+    UserModel myCoach = context.watch<CoachProvider>().coachInfo;
+    bool hasPersonalMetrics =
+        context.watch<ProfileProvider>().personalMetrics.id != 0;
 
     return (!context.watch<ProfileProvider>().isLoadingPersonalMetrics &&
             !context.watch<ProfileProvider>().isLoadingProfileInfo)
         ? RefreshIndicator(
-      onRefresh: _refresh,
-          child: Padding(
+            color: red,
+            backgroundColor: dark,
+            onRefresh: _refresh,
+            child: Padding(
               padding: EdgeInsets.symmetric(
                 vertical: 24.h,
                 horizontal: 15.w,
@@ -65,32 +65,33 @@ class _MyProfileState extends State<MyProfile> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          alignment: Alignment.topRight,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.topEnd,
                           children: [
                             Center(
                               child: CircleAvatar(
                                 radius: 90.r,
-                                child: userImage(profileInfo),
+                                backgroundImage: coachImage(profileInfo),
                               ),
                             ),
                             SizedBox(
                               width: 67.w,
                               height: 35.h,
                               child: MaterialButton(
-                                  color: dark,
-                                  onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) => EditProfile(
-                                            isEdit: true,
-                                            profileInfo: profileInfo,
-                                            personalMetrics: personalMetrics)));
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Edit",
+                            color: dark,
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => EditProfile(
+                                      isEdit: true,
+                                      profileInfo: profileInfo,
+                                      personalMetrics: personalMetrics)));
+                            },
+                            child: Row(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!
+                                            .myProfileEditButton,
                                         style: MyDecorations.coachesTextStyle,
                                       ),
                                       Icon(
@@ -103,8 +104,9 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                           ],
                         ),
+                        const Gap(h: 8),
                         Align(
-                          alignment: Alignment.center,
+                          alignment: AlignmentDirectional.center,
                           child: Text(
                             profileInfo.name,
                             style: TextStyle(
@@ -114,79 +116,75 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 25.h),
-                          child: const InfoWithIconWidget(
-                              icon: Icons.phone, info: "Phone number"),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25.h),
+                          child: InfoWithIconWidget(
+                              icon: Icons.phone,
+                              info: AppLocalizations.of(context)!
+                                  .myProfilePhoneNumber),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 19.w),
-                          child: Text(
-                            profileInfo.phoneNumber,
-                            style: MyDecorations.profileLight400TextStyle,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 12.h),
-                          child: Row(
-                            children: [
-                              const InfoWithIconWidget(
-                                  icon: Icons.attach_money, info: "Monthly fee"),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 19.w),
+                    child: Text(
+                      profileInfo.phoneNumber,
+                      style: MyDecorations.profileLight400TextStyle,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 12.h),
+                    child: Row(
+                      children: [
+                              InfoWithIconWidget(
+                                  icon: Icons.attach_money,
+                                  info: AppLocalizations.of(context)!
+                                      .myProfileMonthlyFee),
                               SizedBox(
                                 width: 17.w,
                               ),
                               PaymentStatusWidget(isPaid: profileInfo.isPaid),
                             ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 19.w),
-                          child: Text(
-                            '${profileInfo.finance} s.p',
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 19.w),
+                    child: Text(
+                      '${profileInfo.finance} ${AppLocalizations.of(context)!.myProfileFinance}',
                             style: MyDecorations.profileLight400TextStyle,
                           ),
-                        ),
+                  ),
                         profileInfo.isPaid
                             ? Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 19.w),
                                 child: Text(
-                                  '${DateService.daysLeft(profileInfo.expiration)} days left',
+                                  '${DateService.daysLeft(profileInfo.expiration)} ${AppLocalizations.of(context)!.myProfileDaysLeft}',
                                   style: MyDecorations.profileLight400TextStyle,
                                 ),
                               )
                             : const PayCashButton(),
                         SizedBox(height: 24.h),
-                        const DividerWidget(title: "Personal Metrics"),
+                        DividerWidget(
+                            title: AppLocalizations.of(context)!
+                                .myProfileDividerPersonalMetrics),
                         SizedBox(height: 21.h),
                         hasPersonalMetrics
                             ? PlayerMetricsWidget(personalMetrics)
                             : const AddInfoWidget(),
-                        const DividerWidget(title: "Personal Coach"),
+                        DividerWidget(
+                            title: AppLocalizations.of(context)!
+                                .myProfileDividerPersonalCoach),
                         SizedBox(height: 10.h),
                       ],
-                    ),
-                    context.watch<ProfileProvider>()
-                        .hasCoach // todo critical: get coach data from coachId when backend gives coachID
-                        ? MyCoachWidget(UserModel(id: 1,
-                            name: "Rami",
-                            phoneNumber: "098569875",
-                            birthDate: DateTime(1997),
-                            role: "Coach",
-                            description: "description",
-                            rate: 4.5,
-                            expiration: DateTime.now(),
-                            finance: 50000,
-                            isPaid: false,
-                            images: [
-                                ImageModel(
-                                    id: 1, image: "assets/images/profile.png")
-                              ]))
-                        : const NoCoachScreen(),
-                  ],
-                ),
               ),
-              //  ),
-            ),
+              context
+                            .watch<ProfileProvider>()
+                            .hasCoach // todo critical: get coach data from coachId when backend gives coachID
+                        ? MyCoachWidget(myCoach)
+                        : const NoCoachScreen(),
+            ],
+          ),
+        ),
+        //  ),
+      ),
         )
         : const LoadingIndicatorWidget();
   }
@@ -259,7 +257,7 @@ class AddInfoWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Add your personal metrics to get your body fat and watch your progress",
+          AppLocalizations.of(context)!.myProfileAddInfoAddPersonalMetrics,
           style: MyDecorations.profileGrey400TextStyle,
         ),
         TextButton(
@@ -268,36 +266,32 @@ class AddInfoWidget extends StatelessWidget {
                 builder: (context) => EditProfile(
                       isEdit: false,
                       profileInfo: UserModel(
-                        id: 1,
-                        name: "John Doe",
-                        phoneNumber: "1234567890",
-                        birthDate: DateTime(1990, 10, 15),
-                        role: "user",
-                        description:
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-                        rate: 4.5,
-                        expiration: DateTime(2023, 12, 31),
-                        finance: 1000000,
-                        isPaid: true,
-                        images: [
-                          ImageModel(id: 1, image: "image1.jpg"),
-                        ],
+                        id: 0,
+                        name: "Player",
+                        phoneNumber: "not set",
+                        birthDate: DateTime(2023),
+                        role: "Player",
+                        description: "",
+                        rate: 0,
+                        expiration: DateTime.now(),
+                        finance: 0,
+                        isPaid: false,
+                        images: [],
                       ),
                       personalMetrics: PlayerMetricsModel(
-                        id: 1,
-                        gender: "Male",
-                        birthDate: DateTime(1990, 10, 15),
-                        age: 30,
-                        weight: 80,
-                        waistMeasurement: 90,
-                        neck: 40,
-                        height: 180,
-                        bfp: 18.5,
+                        id: 0,
+                        gender: 'not set',
+                        age: 0,
+                        weight: 0,
+                        waistMeasurement: 0,
+                        neck: 0,
+                        height: 0,
+                        bfp: 0,
                       ),
                     )));
           },
           child: Text(
-            "Tap to add +",
+            AppLocalizations.of(context)!.myProfileAddInfoTapToAdd,
             style: MyDecorations.profileLight500TextStyle,
           ),
         ),

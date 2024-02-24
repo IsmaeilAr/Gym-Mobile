@@ -1,14 +1,15 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snackBar.dart';
+import 'package:gym/features/authentication/models/init_status_model.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
+import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import '../../authentication/models/init_status_model.dart';
-import '../models/user_model.dart';
-
 
 class ProfileProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
@@ -51,8 +52,8 @@ class ProfileProvider extends ChangeNotifier {
 
   UserModel _profileInfo = UserModel(
     id: 0,
-    name: "name",
-    phoneNumber: "0999999999",
+    name: "Player",
+    phoneNumber: "not set",
     birthDate: DateTime(2023),
     role: "Player",
     description: "",
@@ -80,15 +81,14 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   PlayerMetricsModel _personalMetrics = PlayerMetricsModel(
-    id: 1,
-    gender: 'male',
-    birthDate: DateTime.parse('2001-12-03'),
-    age: 22,
-    weight: 50,
-    waistMeasurement: 20,
-    neck: 13,
-    height: 65,
-    bfp: 16.58,
+    id: 0,
+    gender: 'not set',
+    age: 0,
+    weight: 0,
+    waistMeasurement: 0,
+    neck: 0,
+    height: 0,
+    bfp: 0,
   );
 
   PlayerMetricsModel get personalMetrics => _personalMetrics;
@@ -97,8 +97,6 @@ class ProfileProvider extends ChangeNotifier {
     _personalMetrics = value;
     notifyListeners();
   }
-
-
 
   bool _isLoadingProgramStatus = false;
 
@@ -109,7 +107,22 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  InitStatusModel _status = InitStatusModel(hasCoach: false, hasProgram: false, programType: [], coachId: 0);
+  InitStatusModel _status = InitStatusModel(
+      hasCoach: false,
+      hasProgram: false,
+      myProgramList: [],
+      myCoach: UserModel(
+          id: 0,
+          name: "name",
+          phoneNumber: "phoneNumber",
+          birthDate: DateTime.now(),
+          role: "role",
+          description: "description",
+          rate: 1.0,
+          expiration: DateTime.now(),
+          finance: 100000,
+          isPaid: false,
+          images: []));
 
   InitStatusModel get status => _status;
 
@@ -151,14 +164,12 @@ class ProfileProvider extends ChangeNotifier {
         }, (r) async {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            var data = response.data["data"][0];
             log("data $data");
             // List<dynamic> list = data;
             status = InitStatusModel.fromJson(data);
             hasCoach = status.hasCoach;
             hasProgram = status.hasProgram;
-            // await prefs.setBool(Cache.hasCoach, hasCoach);
-            // await prefs.setBool(Cache.hasProgram, hasProgram);
             isLoadingStatus = false;
           } else {
             isLoadingStatus = false;
@@ -171,7 +182,7 @@ class ProfileProvider extends ChangeNotifier {
         isLoadingStatus = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingStatus = false;
     }
     notifyListeners();
@@ -225,7 +236,7 @@ class ProfileProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
@@ -248,7 +259,7 @@ class ProfileProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            var data = response.data["data"][0];
             log("data $data");
             // List<dynamic> list = data;
             profileInfo = UserModel.fromJson(data);
@@ -264,7 +275,7 @@ class ProfileProvider extends ChangeNotifier {
         isLoadingProfileInfo = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingProfileInfo = false;
     }
     notifyListeners();
@@ -289,8 +300,10 @@ class ProfileProvider extends ChangeNotifier {
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("data $data");
-            // List<dynamic> list = data;
-            personalMetrics = PlayerMetricsModel.fromJson(data[0]);
+            List<dynamic> list = data;
+            if (list.isNotEmpty) {
+              personalMetrics = PlayerMetricsModel.fromJson(data[0]);
+            } else {}
             isLoadingPersonalMetrics = false;
           } else {
             isLoadingPersonalMetrics = false;
@@ -303,7 +316,7 @@ class ProfileProvider extends ChangeNotifier {
         isLoadingPersonalMetrics = false;
       }
     } else {
-       showMessage("no_internet_connection", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoadingProfileInfo = false;
     }
     notifyListeners();
@@ -356,17 +369,18 @@ class ProfileProvider extends ChangeNotifier {
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
   }
 
   Future<bool> callEditInfo(
-      BuildContext context,
-      String name,
-      String phoneNumber,
-      ) async {
+    BuildContext context,
+    String name,
+    String phoneNumber,
+    File? image,
+  ) async {
     isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
@@ -375,6 +389,7 @@ class ProfileProvider extends ChangeNotifier {
         Either<String, Response> results = await ApiHelper().editInfoApi(
           name,
           phoneNumber,
+          image,
         );
         isLoading = false;
         await results.fold((l) {
@@ -396,15 +411,59 @@ class ProfileProvider extends ChangeNotifier {
         });
         return repoStatus;
       } on Exception catch (e) {
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoading = false;
         return false;
       }
     } else {
-       showMessage("no internet", false);
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
       isLoading = false;
       return false;
     }
   }
 
+  Future<bool> setRate(
+    BuildContext context,
+    int coachId,
+    double rate,
+  ) async {
+    isLoading = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+    bool repoStatus = false;
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results = await ApiHelper().setRateApi(
+          coachId,
+          rate,
+        );
+        isLoading = false;
+        await results.fold((l) {
+          isLoading = false;
+          showMessage(l, false);
+          repoStatus = false;
+        }, (r) async {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("## $data");
+            isLoading = false;
+            repoStatus = true;
+          } else {
+            isLoading = false;
+            log("## ${response.statusCode}");
+            log("## ${response.data}");
+          }
+        });
+        return repoStatus;
+      } on Exception catch (e) {
+        showMessage("$e", false);
+        isLoading = false;
+        return false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoading = false;
+      return false;
+    }
+  }
 }

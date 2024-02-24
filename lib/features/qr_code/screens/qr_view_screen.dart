@@ -41,16 +41,7 @@ class _QRViewState extends State<QRView> {
           for (final barcode in barcodes) {
             debugPrint('Barcode found! ${barcode.rawValue}');
           }
-          context.read<HomeProvider>().callCheckInApi(context).then((result) {
-           if (result) {
-              context.read<HomeProvider>().isCheckIn = true;
-              context.read<HomeProvider>().showCheckInSuccess = true;
-              Timer(const Duration(seconds: 3), () {
-                context.read<HomeProvider>().showCheckInSuccess = false;
-
-              });
-            }
-          });
+          context.read<HomeProvider>().callCheckInApi(context);
           Navigator.pop(context);
         },
       ),

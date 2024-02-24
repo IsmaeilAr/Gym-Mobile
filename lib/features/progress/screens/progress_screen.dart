@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../../../components/widgets/weekly_progress.dart';
-
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({super.key});
@@ -22,7 +21,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ProgressProvider>().getMonthlyProgress(context);
+      _refresh();
     });
     super.initState();
   }
@@ -33,7 +32,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    MonthlyProgressModel multiDateValue = context.watch<ProgressProvider>().monthProgress;
+    MonthlyProgressModel multiDateValue =
+        context.watch<ProgressProvider>().monthProgress;
+    double programProgress = context.watch<ProgressProvider>().programProgress;
     return Scaffold(
       body: RefreshIndicator(
         color: red,
@@ -47,7 +48,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               Padding(
                 padding: EdgeInsets.only(left: 8.w, bottom: 5.h),
                 child: Text(
-                  "Monthly Progress",
+                  AppLocalizations.of(context)!.monthlyProgress,
                   style: TextStyle(
                       color: lightGrey,
                       fontSize: 16.sp,
@@ -57,7 +58,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
               _buildDefaultMultiDatePickerWithValue(multiDateValue),
               SizedBox(height: 30.h),
               Text(
-                "Weekly Progress",
+                AppLocalizations.of(context)!.weeklyProgress,
                 style: TextStyle(
                     color: lightGrey,
                     fontSize: 16.sp,
@@ -67,21 +68,34 @@ class _ProgressScreenState extends State<ProgressScreen> {
               const WeeklyProgressWidget(),
               Expanded(child: Divider(color: dark, thickness: 1.h,)),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: AlignmentDirectional.bottomCenter,
                 child: Column(
                   children: [
-                    Text("Your progress in the training program",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w600 ),),
-                    SizedBox(height:12.h),
+                    Text(
+                      AppLocalizations.of(context)!.trainingProgramProgress,
+                      style: TextStyle(
+                          color: lightGrey,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 12.h),
                     CircularPercentIndicator(
                       backgroundColor: lightGrey,
-                      radius:70.r,
+                      radius: 70.r,
                       animation: true,
                       animationDuration: 1000,
                       lineWidth: 14.w,
-                      percent: 0.9, //todo critical: request ?
+                      percent: programProgress / 100,
+                      //todo critical: request ?
                       progressColor: primaryColor,
                       circularStrokeCap: CircularStrokeCap.butt,
-                      center: Text("40%",style:TextStyle(color: lightGrey,fontSize: 16.sp,fontWeight: FontWeight.w400 ),),
+                      center: Text(
+                        "$programProgress%",
+                        style: TextStyle(
+                            color: lightGrey,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ],
                 ),
@@ -110,10 +124,10 @@ class _ProgressScreenState extends State<ProgressScreen> {
       selectableDayPredicate: (day) => (day == today),
       controlsTextStyle: MyDecorations.calendarTextStyle,
       selectedDayTextStyle: TextStyle(
-        color: Colors.black,
-        fontSize: 16.sp,
-        fontWeight: FontWeight.w600,
-      ),
+        color: black,
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w600,
+    ),
       selectedYearTextStyle: MyDecorations.calendarTextStyle,
       dayTextStyle: MyDecorations.calendarTextStyle,
       yearTextStyle: MyDecorations.calendarTextStyle,
