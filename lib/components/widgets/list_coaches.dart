@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import '../../features/profile/models/user_model.dart';
 import '../styles/decorations.dart';
 
@@ -34,8 +34,8 @@ class ListCoaches extends StatelessWidget {
                     padding: const EdgeInsets.all(6.0),
                     child: CircleAvatar(
                       radius: 24.r,
-                      backgroundImage:coachImage(coach),
-                      ),
+                      backgroundImage: assetImage(coach),
+                    ),
 
                   ),
                 ),

@@ -10,7 +10,6 @@ class UserModel {
   double rate;
   DateTime expiration;
   double finance;
-  // DateTime createdAt;
   bool isPaid;
   List<ImageModel> images;
 
@@ -24,12 +23,9 @@ class UserModel {
     required this.rate,
     required this.expiration,
     required this.finance,
-    // required this.createdAt,
     required this.isPaid,
     required this.images,
   });
-
-
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
     id: json["id"] ?? 0,
@@ -41,11 +37,9 @@ class UserModel {
     rate: (json["rate"] ?? 0).toDouble(),
     expiration: DateTime.parse(json["expiration"]),
     finance: (json["finance"] ?? 0).toDouble(),
-    // createdAt: json["created_at"] != null ? DateTime.parse(json["created_at"]) : null,
     isPaid: json["is_paid"] == "paid", // Parse string "paid" to boolean
     images: json["image"] != null ? List<ImageModel>.from(json["image"].map((x) => ImageModel.fromJson(x))) : [],
   );
-
 
 }
 

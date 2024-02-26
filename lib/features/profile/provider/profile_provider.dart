@@ -115,11 +115,11 @@ class ProfileProvider extends ChangeNotifier {
           id: 0,
           name: "name",
           phoneNumber: "phoneNumber",
-          birthDate: DateTime.now(),
+          birthDate: DateTime(2000),
           role: "role",
           description: "description",
           rate: 1.0,
-          expiration: DateTime.now(),
+          expiration: DateTime(2000),
           finance: 100000,
           isPaid: false,
           images: []));

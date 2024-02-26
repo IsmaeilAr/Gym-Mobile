@@ -8,7 +8,7 @@ import 'package:gym/components/pop_menu/pop_menu_set_coach.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/coach_availability.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/articles/screens/coach_articles_screen.dart';
 import 'package:gym/features/chat/models/chat_model.dart';
@@ -378,7 +378,7 @@ class CoachImage extends StatelessWidget {
         children: [
           CircleAvatar(
               radius: 90.r,
-              backgroundImage: coachImage(
+              backgroundImage: assetImage(
                 coach,
               )),
           Text(

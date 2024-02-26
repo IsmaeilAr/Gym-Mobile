@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
+import 'package:gym/components/styles/gym_icons.dart';
 import 'package:gym/components/widgets/articles_list.dart';
 import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/features/articles/provider/article_provider.dart';
@@ -50,6 +51,11 @@ class _ArticlesScreensState extends State<ArticlesScreens>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
+        leading: IconButton(
+          color: lightGrey,
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: searching
             ? ActiveSearchBar(
                 hint: "search in articles",
@@ -60,24 +66,20 @@ class _ArticlesScreensState extends State<ArticlesScreens>
             : const InactiveSearchBar(
                 title: "Articles",
               ),
-        leading: IconButton(
-          color: lightGrey,
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
-        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {
               setState(() {
-                searching
+                !searching
                     ? customIcon = Icon(
                         Icons.cancel,
                         color: lightGrey,
                         size: 18.sp,
                       )
                     : customIcon = const Icon(
-                        Icons.search,
+                        GymIcons.search,
+                        // Icons.search,
                         color: lightGrey,
                       );
                 searching = !searching;
@@ -123,15 +125,15 @@ class _ArticlesScreensState extends State<ArticlesScreens>
   void runFilter(String input) {
     List<ArticleModel> results;
     if (input.isEmpty) {
-      results = context.watch<ArticleProvider>().articleList;
+      results = context.read<ArticleProvider>().articleList;
     } else {
       results = context
-          .watch<ArticleProvider>()
+          .read<ArticleProvider>()
           .articleList
           .where((element) =>
               element.title.toLowerCase().contains(input.toLowerCase()))
           .toList();
     }
-    context.watch<ArticleProvider>().foundArticleList = results;
+    context.read<ArticleProvider>().foundArticleList = results;
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/features/articles/provider/article_provider.dart';
 import 'package:gym/features/articles/screens/article_screen.dart';
@@ -27,22 +28,38 @@ class _ArticlesListState extends State<ArticlesList> {
       padding: EdgeInsets.symmetric(
         horizontal: 9.w,
       ),
-      child: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: context.watch<ArticleProvider>().foundArticleList.length,
-              itemBuilder: (context, index) {
-                ArticleModel article;
-                if (widget.isFavourite) {
-                  context.read<ArticleProvider>().favouriteArticleList = context.watch<ArticleProvider>().foundArticleList
-                      .where((element) =>
-                  element.isFavorite == true)
-                      .toList();
-                  article = context.watch<ArticleProvider>().favouriteArticleList[index];
-                } else {
-                  article = context.watch<ArticleProvider>().foundArticleList[index];
-                }
+      child: context.watch<ArticleProvider>().isLoadingArticles
+          ? const LoadingIndicatorWidget()
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: (widget.isFavourite)
+                        ? context
+                            .watch<ArticleProvider>()
+                            .favouriteArticleList
+                            .length
+                        : context
+                            .watch<ArticleProvider>()
+                            .foundArticleList
+                            .length,
+                    itemBuilder: (context, index) {
+                      ArticleModel article;
+                      if (widget.isFavourite) {
+                        context.read<ArticleProvider>().favouriteArticleList =
+                            context
+                                .watch<ArticleProvider>()
+                                .foundArticleList
+                                .where((element) => element.isFavorite == true)
+                                .toList();
+                        article = context
+                            .watch<ArticleProvider>()
+                            .favouriteArticleList[index];
+                      } else {
+                        article = context
+                            .watch<ArticleProvider>()
+                            .foundArticleList[index];
+                      }
 
                 return Padding(
                   padding: EdgeInsets.symmetric(
@@ -73,10 +90,13 @@ class _ArticlesListState extends State<ArticlesList> {
                                 : Icon(Icons.favorite_border, color: lightGrey,size: 20.sp),
                             onPressed: () {
                               setState(() {
-                                article.isFavorite =
-                                !article.isFavorite;
-                              });
-                            },
+                                      article.isFavorite = !article.isFavorite;
+                                    });
+                                    context
+                                        .read<ArticleProvider>()
+                                        .changeArticleFav(context, article.id,
+                                            article.isFavorite);
+                                  },
                           ),
                         ],
                       ),

@@ -65,3 +65,6 @@ flutter:
           weight: 500
         - asset: assets/fonts/Saira-SemiBold.ttf
           weight: 600
+    - family: GymIcons
+      fonts:
+        - asset: assets/fonts/GymIcons.ttf

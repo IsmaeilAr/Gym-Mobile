@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/features/chat/models/chat_model.dart';
 import 'package:gym/features/chat/screens/chat_screen.dart';
 import 'package:gym/features/profile/models/user_model.dart';
@@ -21,7 +21,7 @@ class CoachListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CircleAvatar(
-            backgroundImage: coachImage(coach),
+            backgroundImage: assetImage(coach),
             maxRadius: 24.r,
           ),
         ],

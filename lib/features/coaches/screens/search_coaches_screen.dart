@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:provider/provider.dart';
@@ -34,18 +35,20 @@ class _SearchCoachesScreenState extends State<SearchCoachesScreen> {
           doUserSearch(BuildContext, String);
         },
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: coaches.length,
-              itemBuilder: (context, index) {
-                UserModel coach = coaches[index];
-                return Container(
-                    height: 90.h,
-                    width: 332.w,
-                    margin:
+      body: context.watch<CoachProvider>().isLoadingSearchCoach
+          ? const LoadingIndicatorWidget()
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: coaches.length,
+                    itemBuilder: (context, index) {
+                      UserModel coach = coaches[index];
+                      return Container(
+                          height: 90.h,
+                          width: 332.w,
+                          margin:
                         EdgeInsets.symmetric(vertical: 8.h, horizontal: 14.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),

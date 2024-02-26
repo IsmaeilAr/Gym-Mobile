@@ -74,21 +74,21 @@ class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: black,
       leading: IconButton(
-        color: Colors.white,
+        color: lightGrey,
         icon: const Icon(Icons.arrow_back_ios_new),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
         title,
         style: const TextStyle(
-          color: Colors.white,
+          color: lightGrey,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),
       ),
       actions: [
         IconButton(
-          color: Colors.white,
+          color: lightGrey,
           onPressed: () {
             Navigator.push(
                 context,
@@ -121,9 +121,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black,
+      backgroundColor: black,
       leading: IconButton(
-        color: grey,
+        color: lightGrey,
         icon: const Icon(Icons.arrow_back_ios_new),
         onPressed: () => Navigator.pop(context),
       ),

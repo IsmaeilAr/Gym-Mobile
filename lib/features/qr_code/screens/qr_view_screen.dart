@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/icon_button.dart';
+import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class QRView extends StatefulWidget {
 }
 
 class _QRViewState extends State<QRView> {
-  final bool _torch = false;
+  bool _torch = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,17 @@ class _QRViewState extends State<QRView> {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  _torch = !_torch;
+                });
+              },
+              icon: Icon(_torch
+                  ? Icons.flashlight_off_outlined
+                  : Icons.flashlight_on_outlined))
+        ],
       ),
       body: MobileScanner(
         // fit: BoxFit.contain,
@@ -47,7 +59,7 @@ class _QRViewState extends State<QRView> {
           for (final barcode in barcodes) {
             debugPrint('Barcode found! ${barcode.rawValue}');
           }
-          context.read<HomeProvider>().callCheckInApi(context);
+          context.read<HomeProvider>().onCheckIn();
           Navigator.pop(context);
         },
       ),

@@ -124,7 +124,6 @@ class ArticleProvider extends ChangeNotifier {
   Future<void> callGetArticles(BuildContext context,) async {
     isLoadingArticles = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
-
     if (isDeviceConnected) {
       try {
         Either<String, Response> results = await ApiHelper().getArticlesApi();
@@ -138,6 +137,7 @@ class ArticleProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
+            // articlesList = [];
             articlesList = list.map((e) => ArticleModel.fromJson(e)).toList();
             isLoadingArticles = false;
           } else {

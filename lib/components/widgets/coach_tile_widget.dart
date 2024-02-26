@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../features/profile/models/user_model.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
+import 'net_image.dart';
 
 class CoachTileWidget extends StatelessWidget {
   final UserModel coach;
@@ -19,10 +20,7 @@ class CoachTileWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28.r,
-              child: Image.asset(
-                coach.images[0].image,
-                fit: BoxFit.fill,
-              ),
+              child: imageAsset(coach),
             ),
             SizedBox(
               width: 10.w,

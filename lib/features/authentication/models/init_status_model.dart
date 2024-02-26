@@ -21,7 +21,19 @@ class InitStatusModel {
           ? List<MyProgram>.from(
               json['programType'].map((x) => MyProgram.fromJson(x)))
           : [],
-      myCoach: json['myCoach'][0] ?? 0,
+      myCoach: json['myCoach'][0] ??
+          UserModel(
+              id: 0,
+              name: "name",
+              phoneNumber: "phoneNumber",
+              birthDate: DateTime(2000),
+              role: "role",
+              description: "description",
+              rate: 1.0,
+              expiration: DateTime(2000),
+              finance: 100000,
+              isPaid: false,
+              images: []),
     );
   }
 }

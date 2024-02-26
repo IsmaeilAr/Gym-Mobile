@@ -125,7 +125,6 @@ class HomeProvider extends ChangeNotifier {
         var time = DateTime.now().toString();
         int day = DateTime.now().day;
         String content = time;
-        debugPrint(time);
         Either<String, Response> results = await ApiHelper().checkInApi(
           content,
           day,
@@ -142,7 +141,7 @@ class HomeProvider extends ChangeNotifier {
             log("## $data");
             isLoadingCheckIn = false;
             repoStatus = true;
-            onCheckIn();
+            await onCheckIn();
           } else {
             isLoadingCheckIn = false;
             log("## ${response.statusCode}");
@@ -165,7 +164,7 @@ class HomeProvider extends ChangeNotifier {
   Future<void> onCheckIn() async {
     showCheckInSuccess = true;
     isCheckIn = true;
-    Timer(const Duration(seconds: 2), () {
+    Timer(const Duration(seconds: 3), () {
       showCheckInSuccess = false;
     });
   }

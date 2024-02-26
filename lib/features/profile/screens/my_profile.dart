@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/coach.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/payment.dart';
@@ -16,6 +16,8 @@ import 'package:gym/features/profile/screens/edit_profile.dart';
 import 'package:gym/utils/services/left_days_calculator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../components/styles/gym_icons.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -65,32 +67,34 @@ class _MyProfileState extends State<MyProfile> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        Stack(
+                          alignment: AlignmentDirectional.topEnd,
                           children: [
                             Center(
                               child: CircleAvatar(
                                 radius: 90.r,
-                                backgroundImage: coachImage(profileInfo),
+                                backgroundImage: assetImage(profileInfo),
                               ),
                             ),
                             SizedBox(
                               width: 67.w,
                               height: 35.h,
                               child: MaterialButton(
-                            color: dark,
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EditProfile(
-                                      isEdit: true,
-                                      profileInfo: profileInfo,
-                                      personalMetrics: personalMetrics)));
-                            },
-                            child: Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!
+                                  color: dark,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => EditProfile(
+                                                isEdit: true,
+                                                profileInfo: profileInfo,
+                                                personalMetrics:
+                                                    personalMetrics)));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        AppLocalizations.of(context)!
                                             .myProfileEditButton,
                                         style: MyDecorations.coachesTextStyle,
                                       ),
@@ -116,26 +120,26 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                           ),
                         ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 25.h),
+                        Padding(
+                          padding: EdgeInsets.only(top: 25.h),
                           child: InfoWithIconWidget(
-                              icon: Icons.phone,
+                              icon: GymIcons.phone,
                               info: AppLocalizations.of(context)!
                                   .myProfilePhoneNumber),
                         ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 19.w),
-                    child: Text(
-                      profileInfo.phoneNumber,
-                      style: MyDecorations.profileLight400TextStyle,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 12.h),
-                    child: Row(
-                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 19.w),
+                          child: Text(
+                            profileInfo.phoneNumber,
+                            style: MyDecorations.profileLight400TextStyle,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 12.h),
+                          child: Row(
+                            children: [
                               InfoWithIconWidget(
-                                  icon: Icons.attach_money,
+                                  icon: GymIcons.fee,
                                   info: AppLocalizations.of(context)!
                                       .myProfileMonthlyFee),
                               SizedBox(
@@ -143,15 +147,15 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                               PaymentStatusWidget(isPaid: profileInfo.isPaid),
                             ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 19.w),
-                    child: Text(
-                      '${profileInfo.finance} ${AppLocalizations.of(context)!.myProfileFinance}',
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 19.w),
+                          child: Text(
+                            '${profileInfo.finance} ${AppLocalizations.of(context)!.myProfileFinance}',
                             style: MyDecorations.profileLight400TextStyle,
                           ),
-                  ),
+                        ),
                         profileInfo.isPaid
                             ? Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 19.w),
@@ -174,18 +178,18 @@ class _MyProfileState extends State<MyProfile> {
                                 .myProfileDividerPersonalCoach),
                         SizedBox(height: 10.h),
                       ],
-              ),
-              context
+                    ),
+                    context
                             .watch<ProfileProvider>()
                             .hasCoach // todo critical: get coach data from coachId when backend gives coachID
                         ? MyCoachWidget(myCoach)
                         : const NoCoachScreen(),
-            ],
-          ),
-        ),
-        //  ),
-      ),
-        )
+                  ],
+                ),
+              ),
+              //  ),
+            ),
+          )
         : const LoadingIndicatorWidget();
   }
 }

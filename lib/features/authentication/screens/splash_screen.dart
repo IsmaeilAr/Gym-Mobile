@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/authentication/screens/login_screen.dart';
 import 'package:gym/features/main_layout.dart';
+import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:page_transition/page_transition.dart';
@@ -26,6 +27,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     initData();
+    ApiHelper.setupInterceptors(context);
   }
 
   void initData() async {

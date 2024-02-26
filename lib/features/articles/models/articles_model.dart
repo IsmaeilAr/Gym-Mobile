@@ -2,17 +2,15 @@ class ArticleModel {
   final int id;
   final String title;
   final String content;
-  final DateTime createdAt;
   bool isFavorite;
-  final AuthorModel user;
+  // final AuthorModel user;
 
   ArticleModel({
     required this.id,
     required this.title,
     required this.content,
-    required this.createdAt,
     required this.isFavorite,
-    required this.user,
+    // required this.user,
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> json) {
@@ -20,9 +18,8 @@ class ArticleModel {
       id: json['id'] ?? 0,
       title: json['title'],
       content: json['content'] ?? '',
-      createdAt: DateTime.parse(json['created_at'] ?? ''),
       isFavorite: json['isFavorite'] ?? false,
-      user: AuthorModel.fromJson(json['user']),
+      // user: AuthorModel.fromJson(json['user']),
     );
   }
 

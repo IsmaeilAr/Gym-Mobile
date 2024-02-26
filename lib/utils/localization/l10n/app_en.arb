@@ -78,8 +78,8 @@
         "myProfilePayCashButton": "please, pay your membership fee",
         "myProfilePayCashButtonText": "Pay cash",
 
-          "myProfileFinance": "%{finance} s.p",
-          "myProfileDaysLeft": "%{daysLeft} days left",
+          "myProfileFinance": "s.p",
+          "myProfileDaysLeft": "days left",
           "myProfilePaymentStatusPaid": "paid",
           "myProfilePaymentStatusUnpaid": "unpaid",
           "myProfilePayCashButtonText": "Pay cash",

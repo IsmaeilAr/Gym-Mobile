@@ -7,6 +7,7 @@ import 'package:gym/components/widgets/gym_traffic.dart';
 import 'package:gym/features/home/provider/home_provider.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/progress/provider/progress_provider.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/widgets/countdown.dart';
 import '../../../components/widgets/daily_program_card.dart';
@@ -15,6 +16,7 @@ import '../../../components/widgets/no_daily_program.dart';
 import '../../../components/widgets/qr_scan_button.dart';
 import '../../../components/widgets/weekly_progress.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../qr_code/screens/qr_view_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,12 +61,12 @@ class _HomePageState extends State<HomePage> {
                 const CheckInSuccess() :
             context.watch<HomeProvider>().isCheckIn ?
             const CountdownWidget() :
-            const Column(
-              children: [
-                GymTraffic(),
-                ScanButton(),
-              ],
-            ),
+            Column(
+                                children: [
+                                  const GymTraffic(),
+                                  ScanButton(openQRScan),
+                                ],
+                              ),
           ),
           // Divider
           Padding(
@@ -74,7 +76,6 @@ class _HomePageState extends State<HomePage> {
                       color: dark,
                     ),
                   ),
-
                   context.watch<ProfileProvider>().hasProgram
                       ?
                       // daily card
@@ -93,10 +94,12 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 7.h),
                   const Center(child: WeeklyProgressWidget()),
                 ]),
-      ) :
-      const LoadingIndicatorWidget()
-    );
+              )
+            : const LoadingIndicatorWidget());
   }
 
+  void openQRScan() {
+    Navigator.push(context,
+        PageTransition(type: PageTransitionType.fade, child: const QRView()));
+  }
 }
-

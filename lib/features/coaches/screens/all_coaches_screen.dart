@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
-import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 import '../../../components/widgets/coach_tile_widget.dart';
 
 // final int myCoachId = 1; // todo cache the selected coach ID after get all coaches

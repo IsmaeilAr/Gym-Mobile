@@ -10,11 +10,11 @@ import 'package:gym/utils/helpers/api/dio_exceptions.dart';
 
 
 class ApiHelper {
-  static String serverUrl = "http://91.144.20.117:6002/";
-
-  // static String serverUrl = "http://192.168.2.138:808/";
+  // static String serverUrl = "http://91.144.20.117:6002/";
+  static String serverUrl = "http://192.168.2.138:808/";
   static String baseUrl = "${serverUrl}api/";
   static String imageUrl = "${serverUrl}uploads/images/";
+  static String pdfUrl = "${serverUrl}uploads/programs/";
 
   String loginUrl = "${baseUrl}login";
   String logoutUrl = "${baseUrl}logout";

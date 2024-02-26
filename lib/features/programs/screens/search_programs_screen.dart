@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
+import '../../../components/widgets/loading_indicator.dart';
 import '../../../components/widgets/menu_item_model.dart';
 import '../../../components/widgets/programs_app_bar.dart';
 import '../model/program_model.dart';
@@ -27,18 +28,23 @@ class SearchProgramScreen extends StatelessWidget {
           vertical: 8.h,
           horizontal: 14.w,
         ),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount:
-                    context.watch<ProgramProvider>().searchedPrograms.length,
-                itemBuilder: (context, index) {
-                  ProgramModel program;
-                  program =
-                      context.watch<ProgramProvider>().searchedPrograms[index];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: context.watch<ProgramProvider>().isLoadingSearch
+            ? const LoadingIndicatorWidget()
+            : Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: context
+                          .watch<ProgramProvider>()
+                          .searchedPrograms
+                          .length,
+                      itemBuilder: (context, index) {
+                        ProgramModel program;
+                        program = context
+                            .watch<ProgramProvider>()
+                            .searchedPrograms[index];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Stack(
                         children: [

@@ -6,8 +6,11 @@ import 'package:gym/components/widgets/icon_button.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/styles/gym_icons.dart';
+import '../../coaches/screens/search_coaches_screen.dart';
 
 class SelectPersonScreen extends StatefulWidget {
   const SelectPersonScreen({super.key});
@@ -37,7 +40,16 @@ class _SelectPersonScreenState extends State<SelectPersonScreen> {
         // todo localize
         title: const Text("Select person", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),),
         actions: [
-          BarIconButton(onPressed: () {  }, icon: Icons.search,),
+          BarIconButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      type: PageTransitionType.fade,
+                      child: const SearchCoachesScreen()));
+            },
+            icon: GymIcons.search,
+          ),
         ],
       ),
       body:

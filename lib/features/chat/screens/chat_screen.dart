@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/message_bubble.dart';
@@ -87,7 +87,7 @@ class ChatScreenState extends State<ChatScreen> {
               },
               child: CircleAvatar(
                 radius: 18.r,
-                backgroundImage: coachImage(coach),
+                backgroundImage: assetImage(coach),
               ),
             ),
             const Gap(

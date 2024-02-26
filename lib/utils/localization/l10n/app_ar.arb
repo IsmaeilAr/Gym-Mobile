@@ -61,7 +61,7 @@
   "homeGymTrafficBusyGymMessage": "النادي مزدحم الآن. قد يكون الانتظار هو الخيار الأفضل لتمرين مريح أكثر!",
   "homeGymTrafficNotFullGymMessage": "النادي ليس مزدحماً. الوقت مثالي للانضمام وحجز على مكانك!",
 
-   "homeScanQR": "امسح الرمز ",
+   "homeScanQR": "امسح QR ",
 
      "reportScreenTitle": "التقرير",
      "reportScreenWriteHere": "اكتب هنا...",
@@ -75,8 +75,8 @@
     "myProfilePayCashButton": "من فضلك، قم بدفع رسوم العضوية الخاصة بك",
     "myProfilePayCashButtonText": "الدفع نقدا",
 
-  "myProfileFinance": "%{finance} ل.س",
-  "myProfileDaysLeft": "%{daysLeft} أيام متبقية",
+  "myProfileFinance": "ل.س",
+  "myProfileDaysLeft": "أيام متبقية",
   "myProfilePaymentStatusPaid": "مدفوع",
   "myProfilePaymentStatusUnpaid": "غير مدفوع",
   "myProfilePayCashButton": "من فضلك، قم بدفع رسوم العضوية الخاصة بك",

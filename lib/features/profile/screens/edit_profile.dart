@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/coach_image.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
@@ -99,9 +99,9 @@ class _EditProfileState extends State<EditProfile> {
                             onTap: _pickImage,
                             child: _currentImagePath == null
                                 ? CircleAvatar(
-                                    radius: 90.r,
+                              radius: 90.r,
                                     backgroundImage:
-                                        coachImage(widget.profileInfo),
+                                        assetImage(widget.profileInfo),
                                   )
                                 : CircleAvatar(
                                     radius: 90.r,

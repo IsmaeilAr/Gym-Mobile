@@ -82,11 +82,15 @@ class ChatProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data;
+            var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            // messageList = list.map((e) => ChatMessage.fromJson(e)).toList();
-            messageList = list.map((e) => ChatMessage.fromJson(e)).toList().reversed.toList();
+            messageList = [];
+            messageList = list
+                .map((e) => ChatMessage.fromJson(e))
+                .toList()
+                .reversed
+                .toList();
             isLoadingMessages = false;
           } else {
             isLoadingMessages = false;
@@ -120,10 +124,11 @@ class ChatProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            // var data = response.data["data"];
-            var data = response.data;
+            var data = response.data["data"];
+            // var data = response.data;
             log("data $data");
             List<dynamic> list = data;
+            chatList = [];
             chatList = list.map((e) => ChatModel.fromJson(e)).toList();
             isLoadingChats = false;
           } else {
