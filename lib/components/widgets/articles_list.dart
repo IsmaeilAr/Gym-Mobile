@@ -8,7 +8,6 @@ import 'package:gym/features/articles/provider/article_provider.dart';
 import 'package:gym/features/articles/screens/article_screen.dart';
 import 'package:provider/provider.dart';
 
-
 class ArticlesList extends StatefulWidget {
   const ArticlesList({
     super.key,
@@ -22,6 +21,19 @@ class ArticlesList extends StatefulWidget {
 }
 
 class _ArticlesListState extends State<ArticlesList> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // bad performance here // consider enhance
+      context.read<ArticleProvider>().favouriteArticleList = context
+          .read<ArticleProvider>()
+          .filteredArticleList
+          .where((element) => element.isFavorite == true)
+          .toList();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,55 +53,56 @@ class _ArticlesListState extends State<ArticlesList> {
                             .length
                         : context
                             .watch<ArticleProvider>()
-                            .foundArticleList
+                            .filteredArticleList
                             .length,
                     itemBuilder: (context, index) {
                       ArticleModel article;
                       if (widget.isFavourite) {
-                        context.read<ArticleProvider>().favouriteArticleList =
-                            context
-                                .watch<ArticleProvider>()
-                                .foundArticleList
-                                .where((element) => element.isFavorite == true)
-                                .toList();
                         article = context
                             .watch<ArticleProvider>()
                             .favouriteArticleList[index];
                       } else {
                         article = context
                             .watch<ArticleProvider>()
-                            .foundArticleList[index];
+                            .filteredArticleList[index];
                       }
 
-                return Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 6.h,
-                  ),
-                  child: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=> ArticleScreen(article)));
-                    },
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12.r))),
-                      tileColor: dark,
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            article.title,
-                            style: MyDecorations.calendarTextStyle,
-                          ),
-                          IconButton(
-                            icon: article.isFavorite
-                                ? Icon(
-                              Icons.favorite,
-                              color: primaryColor,
-                              size: 14.sp,
-                            )
-                                : Icon(Icons.favorite_border, color: lightGrey,size: 20.sp),
-                            onPressed: () {
-                              setState(() {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 6.h,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ArticleScreen(article)));
+                          },
+                          child: ListTile(
+                            isThreeLine: true,
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12.r))),
+                            tileColor: dark,
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    article.title,
+                                    style: MyDecorations.calendarTextStyle,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: article.isFavorite
+                                      ? Icon(
+                                          Icons.favorite,
+                                          color: primaryColor,
+                                          size: 20.r,
+                                        )
+                                      : Icon(Icons.favorite_border,
+                                          color: lightGrey, size: 20.r),
+                                  onPressed: () {
+                                    setState(() {
                                       article.isFavorite = !article.isFavorite;
                                     });
                                     context
@@ -97,23 +110,29 @@ class _ArticlesListState extends State<ArticlesList> {
                                         .changeArticleFav(context, article.id,
                                             article.isFavorite);
                                   },
+                                ),
+                              ],
+                            ),
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  article.content,
+                                  style: (MyDecorations.programsTextStyle),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      subtitle: Text(
-                        article.content,
-                        style: (MyDecorations.programsTextStyle),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

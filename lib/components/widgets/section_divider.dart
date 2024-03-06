@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../styles/colors.dart';
-
+import '../styles/decorations.dart';
 
 class SectionDivider extends StatelessWidget {
   final String text;
@@ -13,11 +13,7 @@ class SectionDivider extends StatelessWidget {
       children: [
         Text(
           text,
-          style: TextStyle(
-            color: lightGrey,
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-          ),
+          style: MyDecorations.calendarTextStyle,
         ),
         SizedBox(width: 10.w),
         Expanded(

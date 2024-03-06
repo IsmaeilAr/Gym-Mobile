@@ -160,7 +160,7 @@ class MyDecorations {
     fontFamily: myFont,
   );
 
-  static TextStyle calendarTextStyle=TextStyle(
+  static TextStyle calendarTextStyle = TextStyle(
     color: lightGrey,
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
@@ -194,7 +194,6 @@ class MyDecorations {
     fontWeight: FontWeight.w400,
     fontFamily: myFont,
   );
-
 }
 
 

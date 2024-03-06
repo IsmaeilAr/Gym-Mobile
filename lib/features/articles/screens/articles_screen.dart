@@ -7,7 +7,7 @@ import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/features/articles/provider/article_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import '../../../components/widgets/back_button.dart';
 import '../../../components/widgets/search_bar.dart';
 
 class ArticlesScreens extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ArticlesScreensState extends State<ArticlesScreens>
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-    // todo try put 2 lines below into postFrameCallBack
+    // try put 2 lines below into postFrameCallBack
     searching = false;
     customIcon = const Icon(Icons.search,color: lightGrey,);
     WidgetsBinding.instance.addPostFrameCallback((_){
@@ -51,20 +51,16 @@ class _ArticlesScreensState extends State<ArticlesScreens>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
-        leading: IconButton(
-          color: lightGrey,
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const MyBackButton(),
         title: searching
             ? ActiveSearchBar(
-                hint: "search in articles",
+                hint: AppLocalizations.of(context)!.searchInArticles,
                 runFilter: (value) {
                   runFilter(value);
                 },
               )
-            : const InactiveSearchBar(
-                title: "Articles",
+            : InactiveSearchBar(
+                title: AppLocalizations.of(context)!.articles,
               ),
         automaticallyImplyLeading: false,
         actions: [
@@ -134,6 +130,7 @@ class _ArticlesScreensState extends State<ArticlesScreens>
               element.title.toLowerCase().contains(input.toLowerCase()))
           .toList();
     }
-    context.read<ArticleProvider>().foundArticleList = results;
+    context.read<ArticleProvider>().filteredArticleList = results;
   }
 }
+

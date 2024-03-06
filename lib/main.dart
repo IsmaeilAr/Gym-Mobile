@@ -14,11 +14,14 @@ import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:gym/features/progress/provider/progress_provider.dart';
 import 'package:gym/features/report/provider/report_provider.dart';
+import 'package:gym/test.dart';
+import 'package:gym/test_2.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/localization/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:web_socket_channel/io.dart';
+import 'features/main_layout/main_layout_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +42,7 @@ void main() async {
     ChangeNotifierProvider(create: (_) => ProgressProvider()),
     ChangeNotifierProvider(create: (_) => ReportProvider()),
     ChangeNotifierProvider(create: (_) => LanguageProvider()),
+    ChangeNotifierProvider(create: (_) => MainLayoutProvider()),
   ], child: const MyApp()));
 }
 
@@ -78,8 +82,11 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
         ),
         home: SplashScreen(
-          channel: IOWebSocketChannel.connect("ws://echo.websocket.org"),
+          channel: IOWebSocketChannel.connect(
+            "ws://echo.websocket.org",
+          ),
         ),
+        // home: const DropdownButtonExample(),
       ),
     );
   }

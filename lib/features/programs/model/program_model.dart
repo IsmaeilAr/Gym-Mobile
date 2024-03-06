@@ -1,3 +1,5 @@
+import 'package:gym/utils/helpers/api/api_constants.dart';
+
 import 'category_model.dart';
 
 class ProgramModel {
@@ -24,7 +26,7 @@ class ProgramModel {
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       file: json['file'] ?? '',
-      imageUrl: json['imageUrl'] ?? '',
+      imageUrl: '${ApiConstants.imageUrl}${json['imageUrl']}' ?? '',
       type: json['type'] ?? '',
       coachId: json['coachId'] ?? 0,
       category: TrainingCategoryModel.fromJson(json['category']),

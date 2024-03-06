@@ -122,8 +122,10 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _phoneController =
+      TextEditingController(text: '0935622246');
+  final TextEditingController _passwordController =
+      TextEditingController(text: '123456789');
   bool obscured = true;
 
   @override
@@ -210,7 +212,7 @@ class _LoginFormState extends State<LoginForm> {
                 child: Text(
                   AppLocalizations.of(context)!.loginButtonKey,
                   style: MyDecorations.myButtonTextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 16),
+                      fontWeight: FontWeight.w600, fontSize: 16.sp),
                 ),
               ),
             ),

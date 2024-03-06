@@ -42,8 +42,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         ),
         title: Text(
           AppLocalizations.of(context)!.notifications,
-          style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),
+          style: TextStyle(
+              fontSize: 20.sp, fontWeight: FontWeight.w600, color: lightGrey),
         ),
       ),
       body:

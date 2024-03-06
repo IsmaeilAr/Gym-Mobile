@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
+import 'package:gym/components/widgets/back_button.dart';
 import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
@@ -58,21 +59,13 @@ class ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List messages = context.read<ChatProvider>().messageList;
-    UserModel coach = context.read<CoachProvider>().coachInfo;
+    List messages = context.watch<ChatProvider>().messageList;
+    UserModel coach = context.watch<CoachProvider>().coachInfo;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: black,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new_outlined,
-              color: lightGrey,
-              size: 24.r,
-            )),
+        leading: const MyBackButton(),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -170,7 +163,7 @@ class TextComposerWidget extends StatelessWidget {
           Flexible(
             child: TextField(
               controller: textController,
-              onSubmitted: handleSubmitted,
+              // onSubmitted: handleSubmitted,
               cursorColor: red,
               decoration: InputDecoration.collapsed(
                 hintText: 'Message',

@@ -53,16 +53,7 @@ class DeselectProgramDialog extends StatelessWidget {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: black,
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {

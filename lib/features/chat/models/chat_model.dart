@@ -5,15 +5,19 @@ class ChatModel {
   final UserModel sid2;
   final LatestMessage latestMessage;
 
+  // final String image;
+
   ChatModel({
     required this.sid2,
     required this.latestMessage,
+    // required this.image,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
     return ChatModel(
       sid2: UserModel.fromJson(json['sid2']),
       latestMessage: LatestMessage.fromJson(json['latestMessage']),
+      // image: json['image'],
     );
   }
 }
@@ -44,3 +48,4 @@ class LatestMessage {
     );
   }
 }
+

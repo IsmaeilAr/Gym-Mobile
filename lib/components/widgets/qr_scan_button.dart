@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:page_transition/page_transition.dart';
-
-import '../../features/qr_code/screens/qr_view_screen.dart';
 import '../styles/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

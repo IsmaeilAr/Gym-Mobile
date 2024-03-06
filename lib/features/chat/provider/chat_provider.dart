@@ -49,6 +49,14 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<ChatModel> _foundChatList = [];
+
+  List<ChatModel> get foundChatList => _foundChatList;
+
+  set foundChatList(List<ChatModel> value) {
+    _foundChatList = value;
+    notifyListeners();
+  }
 
   bool _isLoadingSendMsg = false;
 
@@ -130,6 +138,7 @@ class ChatProvider extends ChangeNotifier {
             List<dynamic> list = data;
             chatList = [];
             chatList = list.map((e) => ChatModel.fromJson(e)).toList();
+            foundChatList = chatList;
             isLoadingChats = false;
           } else {
             isLoadingChats = false;

@@ -8,19 +8,19 @@ import 'net_image.dart';
 
 class CoachTileWidget extends StatelessWidget {
   final UserModel coach;
+  final bool isMyCoach;
 
-  const CoachTileWidget({super.key, required this.coach});
+  const CoachTileWidget(this.isMyCoach, {super.key, required this.coach});
 
   @override
   Widget build(BuildContext context) {
-    int myCoachId = 1; // todo make boolean
     return Column(
       children: [
         Row(
           children: [
             CircleAvatar(
               radius: 28.r,
-              child: imageAsset(coach),
+              backgroundImage: assetImage(coach),
             ),
             SizedBox(
               width: 10.w,
@@ -34,7 +34,7 @@ class CoachTileWidget extends StatelessWidget {
                     SizedBox(
                       width: 5.w,
                     ),
-                    coach.id == myCoachId
+                    isMyCoach
                         ? Icon(
                             Icons.check_box,
                             color: Colors.white,

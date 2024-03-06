@@ -26,8 +26,9 @@
      "drawerReportKey": "Report",
      "drawerLogoutKey": "Logout",
      "drawerLanguageKey": "Language",
+     "drawerLangCodeKey": "En",
      "drawerEnglishKey": "English",
-     "drawerArabicKey": "Arabic",
+     "drawerArabicKey": "العربية",
 
 
   "mainLayoutAppBarHomeScreenName": "Home",
@@ -112,6 +113,7 @@
         "editProfileNeckLabel": "Neck (cm):",
 
     "chats": "Chats",
+    "searchChats": "Search in chats",
     "coaches": "Coaches",
     "notifications": "Notifications",
 
@@ -144,8 +146,6 @@
        "coachProfilePhone": "Phone number",
        "coachProfileBio": "Bio",
        "coachProfileAvailability": "Availability",
-       "coachProfileCancel": "Cancel",
-       "coachProfileChange": "Change",
        "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach to",
        "coachProfileChangeCoachConfirmation2": "as your new coach?",
        "coachProfileCoaches": "Coaches",
@@ -156,6 +156,9 @@
        "articles": "Articles",
        "articlesAll": "All",
        "articlesFavorite": "Favorite",
+       "articlesFavorite": "Favorite",
+       "searchInArticles": "search in articles",
+       "searchInUsers": "Search In Users",
 
   "coach": "Coach",
 
@@ -180,8 +183,10 @@
 "requestProgramType": "Select the type of program you'd like to request from your coach:",
 "trainingProgram": "Training program",
 "nutritionProgram": "Nutrition program",
-"revokeRequestConfirmation":"Are you sure you want to revoke your request for a premium training (or nutrition, or both) program(s)?",
+"revokeRequestConfirmation":"Are you sure you want to revoke your request for a premium program?",
+"revokeCoachRequestConfirmation":"Are you sure you want to revoke your request for a selected coach?",
 "noInternet": "no internet connection",
+"selectPerson": "Select person",
 
   "cancel": "Cancel",
   "stop": "Stop",

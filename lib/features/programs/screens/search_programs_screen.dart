@@ -19,8 +19,8 @@ class SearchProgramScreen extends StatelessWidget {
     return Scaffold(
       appBar: SearchAppBar(
         hint: 'Search In Programs',
-        runFilter: () {
-          doProgramSearch(BuildContext, String);
+        runFilter: (value) {
+          doProgramSearch(context, value);
         },
       ),
       body: Padding(

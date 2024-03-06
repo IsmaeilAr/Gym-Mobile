@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:gym/features/authentication/screens/login_screen.dart';
+import 'package:gym/features/main_layout/main_layout_provider.dart';
 import 'package:gym/features/report/screens/report_screen.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/localization/language_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../components/styles/gym_icons.dart';
+import '../profile/models/user_model.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({
@@ -19,9 +23,10 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SharedPreferencesService prefsService = SharedPreferencesService.instance;
+    UserModel userProfile = context.watch<AuthProvider>().playerModel;
     String userName = prefsService.getValue(Cache.userName) ?? "";
     String userPhone = prefsService.getValue(Cache.userPhone) ?? "";
-    String userImage = prefsService.getValue(Cache.userImage) ?? "";
+    // String userImage = prefsService.getValue(Cache.userImage) ?? "";
 
     return Drawer(
       backgroundColor: black,
@@ -30,36 +35,50 @@ class MyDrawer extends StatelessWidget {
           DrawerHeader(
             margin: EdgeInsets.only(bottom: 8.h),
             padding: EdgeInsets.fromLTRB(14.w, 46.h, 16.w, 60.h),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 24.r,
-                  backgroundImage: NetworkImage(userImage),
-                ),
-                Gap(w: 12.w,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      userName,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 14.sp, color: lightGrey,),
-                    ),
-                    Text(
-                      userPhone,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400, fontSize: 12.sp, color: lightGrey,),
-                    ),
-                  ],
-                )
-              ],
+            child: GestureDetector(
+              onTap: () {
+                context.read<MainLayoutProvider>().selectedIndex = 3;
+                Scaffold.of(context).openEndDrawer();
+              },
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 24.r,
+                    backgroundImage: assetImage(userProfile),
+                  ),
+                  Gap(
+                    w: 12.w,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        userName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 14.sp,
+                          color: lightGrey,
+                        ),
+                      ),
+                      Text(
+                        userPhone,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: lightGrey,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
           const LanguageList(),
           ListTile(
             leading: const Icon(
-              Icons.report_gmailerrorred_rounded,
+              GymIcons.report,
               color: lightGrey,
             ),
             title: Text(
@@ -80,7 +99,7 @@ class MyDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(
-              Icons.logout_outlined,
+              GymIcons.logOut,
               color: lightGrey,
             ),
             title: Text(
@@ -138,7 +157,7 @@ class _LanguageListState extends State<LanguageList> {
               });
             },
             leading: const Icon(
-              Icons.language_outlined,
+              GymIcons.language,
               color: lightGrey,
             ),
             title: Text(
@@ -154,7 +173,7 @@ class _LanguageListState extends State<LanguageList> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    "EN",
+                    AppLocalizations.of(context)!.drawerLangCodeKey,
                     style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,

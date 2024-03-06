@@ -7,7 +7,9 @@ import 'package:gym/components/pop_menu/pop_menu_revoke_request.dart';
 import 'package:gym/components/pop_menu/pop_menu_set_coach.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
+import 'package:gym/components/widgets/back_button.dart';
 import 'package:gym/components/widgets/coach_availability.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/articles/screens/coach_articles_screen.dart';
@@ -18,6 +20,8 @@ import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../../../components/dialog/cancel_button.dart';
 
 int popupMenuCase = 2; // 1_ChangeCoach  2_SetCoach  3_RevokeRequest
 
@@ -52,7 +56,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
 
   Future<void> _refresh() async {
     isSelectedCoach =
-        context.watch<ProfileProvider>().status.myCoach.id == widget.coach.id;
+        context.read<ProfileProvider>().status.myCoach.id == widget.coach.id;
     context.read<CoachProvider>().getCoachTime(context, widget.coach.id);
   }
 
@@ -66,24 +70,22 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
         onSelectedChangeCoach: (context, getChangeMenuItems) {},
         coach: widget.coach,
       ),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        color: red,
-        backgroundColor: dark,
-        child: Column(
-          children: <Widget>[
-            TabBar.secondary(
-              controller: _tabController,
-              unselectedLabelColor: grey,
-              labelStyle: const TextStyle(color: primaryColor),
-              indicatorColor: primaryColor,
-              dividerColor: black,
-              tabs: <Widget>[
-                Tab(text: AppLocalizations.of(context)!.coachProfileInfo),
-                Tab(text: AppLocalizations.of(context)!.coachProfileArticles),
-              ],
-            ),
-            Expanded(
+      body: Column(
+        children: <Widget>[
+          TabBar.secondary(
+            controller: _tabController,
+            unselectedLabelColor: grey,
+            labelStyle: const TextStyle(color: primaryColor),
+            indicatorColor: primaryColor,
+            dividerColor: black,
+            tabs: <Widget>[
+              Tab(text: AppLocalizations.of(context)!.coachProfileInfo),
+              Tab(text: AppLocalizations.of(context)!.coachProfileArticles),
+            ],
+          ),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: _refresh,
               child: TabBarView(
                 controller: _tabController,
                 children: <Widget>[
@@ -92,8 +94,8 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -119,7 +121,8 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
                           content: "",
                           senderId: 0,
                           receiverId: 0,
-                          createdAt: "")))));
+                        createdAt: ""),
+                  ))));
         },
         backgroundColor: dark,
         child: Icon(
@@ -178,7 +181,9 @@ class CoachInfoTab extends StatelessWidget {
                 icon: Icons.alarm_rounded,
                 info: AppLocalizations.of(context)!.coachProfileAvailability),
           ),
-          const CoachAvailabilityWidget()
+          context.watch<CoachProvider>().isLoadingCoachTime
+              ? const LoadingIndicatorWidget()
+              : const CoachAvailabilityWidget()
         ],
       ),
     );
@@ -227,14 +232,7 @@ class _ChangeCoachState extends State<ChangeCoach> {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {},
-          color: black,
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
@@ -278,17 +276,13 @@ class CoachesProfileAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.black,
-      leading: IconButton(
-        color: Colors.grey[300],
-        icon: const Icon(Icons.arrow_back_ios_new, size: 24),
-        onPressed: () => Navigator.pop(context),
-      ),
+      backgroundColor: black,
+      leading: const MyBackButton(),
       title: Text(
         AppLocalizations.of(context)!.coachProfileCoaches,
         style: TextStyle(
-          color: Colors.grey[300],
-          fontSize: 18,
+          color: lightGrey,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -8,7 +8,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
-import 'package:gym/features/main_layout.dart';
+import 'package:gym/features/main_layout/main_layout.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -44,8 +44,7 @@ class AddInfoScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainLayout()),
+                        MaterialPageRoute(builder: (context) => MainLayout()),
                         (Route<dynamic> route) => false,
                       );
                     },
@@ -332,7 +331,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
                 child: Text(
                   AppLocalizations.of(context)!.addInfoContinueButtonKey,
                   style: MyDecorations.myButtonTextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
+                      fontSize: 16.sp, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
@@ -359,8 +358,8 @@ class _RegInfoFormState extends State<RegInfoForm> {
         log("view status: $value");
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const MainLayout()),
-              (Route<dynamic> route) => false,
+          MaterialPageRoute(builder: (context) => MainLayout()),
+          (Route<dynamic> route) => false,
         );
         dispose();
       }

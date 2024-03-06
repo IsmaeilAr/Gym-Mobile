@@ -26,15 +26,18 @@ class _ArticleScreenState extends State<ArticleScreen> {
         backgroundColor: black,
         leading: IconButton(
           color:lightGrey,
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 22.r,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           AppLocalizations.of(context)!.articles,
           style: TextStyle(
             color: lightGrey,
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w500,
           ),
         ),
         actions: [
@@ -57,7 +60,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
           children: [
             Center(child: Text(widget.article.title,style: MyDecorations.calendarTextStyle,),),
             SizedBox(height: 12.h,),
-            Text(widget.article.content,style: MyDecorations.profileLight400TextStyle,),
+            Text(widget.article.content,
+                style: MyDecorations.profileLight400TextStyle,
+                textAlign: TextAlign.start),
           ],
         ),
       ),

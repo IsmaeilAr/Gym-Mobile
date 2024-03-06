@@ -8,6 +8,8 @@ import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
+import 'package:gym/features/programs/screens/program_pdf_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
 
@@ -102,64 +104,76 @@ class ProgramsList extends StatelessWidget {
                 category.type == "Sport" ?
                 program = context.watch<ProgramProvider>().sportProgramList[index] :
                 program = context.watch<ProgramProvider>().nutritionProgramList[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        SizedBox(
-                          height: 156.h,
-                          width: 332.w,
-                          child: Image.asset(
-                            program.imageUrl,
-                            fit: BoxFit.fill,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            type: PageTransitionType.fade,
+                            child: PDFScreen(
+                              programName: program.name,
+                              programFileName: program.file,
+                            )));
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: 156.h,
+                            width: 332.w,
+                            child: Image.asset(
+                              program.imageUrl,
+                              fit: BoxFit.fill,
+                            ),
                           ),
-                        ),
-                        Positioned(
-                            right: 0.w,
-                            top: 0.h,
-                            child: PopupMenuButton<MenuItemModel>(
-                              itemBuilder: (context) => [
-                                ...SetProgramsMenuItems.getSetProgramMenuItems
-                                    .map(buildItem),
-                              ],
-                              onSelected: (item) => onSelectSetProgram(
-                                  context, item, program, () {
-                                _selectProgram(context, program.id);
-                              }, () {
-                                _deselectProgram(context, program.id);
-                              }),
-                              color: dark,
-                              iconColor: Colors.white,
-                              icon: Icon(
-                                Icons.more_horiz_sharp,
-                                size: 20.sp,
-                              ),
-                            )),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          program.name,
-                          style: MyDecorations.programsTextStyle,
-                        ),
-                        SizedBox(
-                          width: 5.h,
-                        ),
-                        program.id ==  program.id
-                            ? Icon(
-                          Icons.check_box,
-                          color: grey,
-                          size: 12.sp,
-                        )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                  ],
+                          Positioned(
+                              right: 0.w,
+                              top: 0.h,
+                              child: PopupMenuButton<MenuItemModel>(
+                                itemBuilder: (context) => [
+                                  ...SetProgramsMenuItems.getSetProgramMenuItems
+                                      .map(buildItem),
+                                ],
+                                onSelected: (item) => onSelectSetProgram(
+                                    context, item, program, () {
+                                  _selectProgram(context, program.id);
+                                }, () {
+                                  _deselectProgram(context, program.id);
+                                }),
+                                color: dark,
+                                iconColor: Colors.white,
+                                icon: Icon(
+                                  Icons.more_horiz_sharp,
+                                  size: 20.sp,
+                                ),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            program.name,
+                            style: MyDecorations.programsTextStyle,
+                          ),
+                          SizedBox(
+                            width: 5.h,
+                          ),
+                          program.id == program.id
+                              ? Icon(
+                                  Icons.check_box,
+                                  color: grey,
+                                  size: 12.sp,
+                                )
+                              : const SizedBox.shrink(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),

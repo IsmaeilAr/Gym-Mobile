@@ -5,6 +5,7 @@ import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart';
 import 'gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CoachAvailabilityWidget extends StatelessWidget {
   const CoachAvailabilityWidget({super.key});
@@ -17,6 +18,7 @@ class CoachAvailabilityWidget extends StatelessWidget {
       height: 51.h,
       width: 316.w,
       child: ListView.separated(
+        // itemCount: context.watch<CoachProvider>().coachTimesList.length,
         itemCount: 7,
         scrollDirection: Axis.vertical,
         separatorBuilder: (BuildContext context, int index) {
@@ -25,7 +27,10 @@ class CoachAvailabilityWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           List<CoachTimeModel> coachTimesList = context.watch<CoachProvider>().coachTimesList;
           // List<int> doneDaysList = context.watch<ProfileProvider>().coachTimesList;
-          return CoachDayWidget(index: index, dayType: coachTimesList[index].dayId,);
+          return CoachDayWidget(
+            index: index,
+            day: coachTimesList[index],
+          );
         },
       ),
     );
@@ -35,21 +40,29 @@ class CoachAvailabilityWidget extends StatelessWidget {
 
 
 class CoachDayWidget extends StatelessWidget {
-  final int dayType;
+  final CoachTimeModel day;
   final int index;
-  final List<String> weekDays = [ "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
 
-  CoachDayWidget({super.key, required this.index, required this.dayType});
+  const CoachDayWidget({super.key, required this.index, required this.day});
 
   @override
   Widget build(BuildContext context) {
+    var translations = AppLocalizations.of(context)!;
+    final List<String> weekDays = [
+      translations.sat,
+      translations.sun,
+      translations.mon,
+      translations.tue,
+      translations.wed,
+      translations.thu,
+      translations.fri
+    ];
     String dayName = weekDays[index];
-
-    switch (dayType) {
-      case 0:
+    switch (day.isAvailable) {
+      case false:
         return UnAvailableDay(dayName: dayName);
-      case 1:
-        return AvailableDay(dayName: dayName);
+      case true:
+        return AvailableDay(dayName: dayName, dayInfo: day);
       default:
         return UnAvailableDay(dayName: dayName);
     }
@@ -91,8 +104,9 @@ class UnAvailableDay extends StatelessWidget {
 
 class AvailableDay extends StatelessWidget {
   final String dayName;
+  final CoachTimeModel dayInfo;
 
-  const AvailableDay({super.key, required this.dayName});
+  const AvailableDay({super.key, required this.dayName, required this.dayInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -100,19 +114,29 @@ class AvailableDay extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: lightGrey,
-          radius: 14.r,
+          radius: 17.r,
         ),
         const Gap(
           w: 8,
         ),
-        Text(
-          dayName,
-          style: TextStyle(
-            color: lightGrey,
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w400,
+        SizedBox(
+          width: 25.w,
+          child: Text(
+            dayName,
+            style: TextStyle(
+              color: lightGrey,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
+        const Gap(
+          w: 20,
+        ),
+        SizedBox(
+          width: 140.w,
+          child: Text("${dayInfo.startTime} - ${dayInfo.endTime}"),
+        )
       ],
     );
   }

@@ -6,29 +6,25 @@ import 'package:gym/components/widgets/icon_button.dart';
 import 'package:gym/features/chat/screens/chat_list_screen.dart';
 import 'package:gym/features/drawer/drawer_widget.dart';
 import 'package:gym/features/home/screens/home.dart';
+import 'package:gym/features/main_layout/main_layout_provider.dart';
 import 'package:gym/features/notifications/screens/notifications_screen.dart';
 import 'package:gym/features/profile/screens/my_profile.dart';
 import 'package:gym/features/progress/screens/progress_screen.dart';
 import 'package:page_transition/page_transition.dart';
-import 'articles/screens/articles_screen.dart';
-import 'programs/screens/programs_screen.dart';
+import 'package:provider/provider.dart';
+import '../../components/styles/gym_icons.dart';
+import '../articles/screens/articles_screen.dart';
+import '../programs/screens/programs_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
-
-  @override
-  State<MainLayout> createState() => _MainLayoutState();
-}
-
-class _MainLayoutState extends State<MainLayout> {
-  int _selectedIndex = 0;
+class MainLayout extends StatelessWidget {
+  MainLayout({super.key});
 
   final pageIconList = <IconData>[
-    Icons.home_filled,
-    Icons.paste_outlined,
-    Icons.query_stats_outlined,
-    Icons.person,
+    GymIcons.home,
+    GymIcons.programs,
+    GymIcons.progress,
+    GymIcons.profile,
   ];
 
   final screens = <Widget>[
@@ -40,7 +36,10 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> screenNames = [
+    final selectedIndexProvider =
+        context.watch<MainLayoutProvider>().selectedIndex;
+
+    final List<String> screenNames = [
       AppLocalizations.of(context)!.mainLayoutAppBarHomeScreenName,
       AppLocalizations.of(context)!.mainLayoutAppBarProgramsScreenName,
       AppLocalizations.of(context)!.mainLayoutAppBarProgressScreenName,
@@ -48,11 +47,11 @@ class _MainLayoutState extends State<MainLayout> {
     ];
     return Scaffold(
       appBar: MainAppBar(
-        title: screenNames[_selectedIndex],
+        title: screenNames[selectedIndexProvider],
       ),
       body: Container(
           // padding: EdgeInsets.all(14.w),
-          child: screens[_selectedIndex]),
+          child: screens[selectedIndexProvider]),
       drawer: const MyDrawer(),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.symmetric(
@@ -77,23 +76,23 @@ class _MainLayoutState extends State<MainLayout> {
             GButton(
               icon: pageIconList[2],
               iconColor: grey,
+              iconSize: 20.sp,
             ),
             GButton(
               icon: pageIconList[3],
               iconColor: grey,
             ),
           ],
-          selectedIndex: _selectedIndex,
+          selectedIndex: selectedIndexProvider,
           onTabChange: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+            context.read<MainLayoutProvider>().selectedIndex = index;
           },
         ),
       ),
     );
   }
 }
+
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MainAppBar({
     super.key,
@@ -120,7 +119,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         BarIconButton(
-          icon: Icons.notifications_none_outlined,
+          icon: GymIcons.notification,
           onPressed: () {
             Navigator.push(
                 context,
@@ -132,7 +131,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         BarIconButton(
-          icon: Icons.article_outlined,
+          icon: GymIcons.article,
           onPressed: () {
             Navigator.push(
                 context,
@@ -144,7 +143,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         BarIconButton(
-          icon: Icons.chat_outlined,
+          icon: GymIcons.chat,
           onPressed: () {
             Navigator.push(
                 context,

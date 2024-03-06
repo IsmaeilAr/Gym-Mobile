@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/dialog/rate_coach_dialog.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
+import '../dialog/cancel_button.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RevokeRequestMenuItems {
   static const MenuItemModel itemChangeCoach =
@@ -49,29 +51,19 @@ class RevokeRequest extends StatelessWidget {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: black,
-          child: Text(
-            "Cancel",
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {},
           color: primaryColor,
           child: Text(
-            "Revoke",
+            AppLocalizations.of(context)!.revoke,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
       ],
       content: Text(
-        "Are you sure you want to revoke your request for a selected coach?",
-        //todo localize
+        AppLocalizations.of(context)!.revokeCoachRequestConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );

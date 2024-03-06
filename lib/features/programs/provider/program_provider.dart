@@ -48,21 +48,12 @@ class ProgramProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<ProgramModel> _sportPremiumProgramList = [];
+  List<ProgramModel> _premiumProgramList = [];
 
-  List<ProgramModel> get sportPremiumProgramList => _sportPremiumProgramList;
+  List<ProgramModel> get premiumProgramList => _premiumProgramList;
 
-  set sportPremiumProgramList(List<ProgramModel> value) {
-    _sportPremiumProgramList = value;
-    notifyListeners();
-  }
-
-  List<ProgramModel> _nutritionPremiumProgramList = [];
-
-  List<ProgramModel> get nutritionPremiumProgramList => _nutritionPremiumProgramList;
-
-  set nutritionPremiumProgramList(List<ProgramModel> value) {
-    _nutritionPremiumProgramList = value;
+  set premiumProgramList(List<ProgramModel> value) {
+    _premiumProgramList = value;
     notifyListeners();
   }
 
@@ -158,12 +149,18 @@ class ProgramProvider extends ChangeNotifier {
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("data $data");
-            // List<dynamic> list = data;
+            List<dynamic> list = data;
             type == "sport"
-                ? sportProgramList =
-                data.map((e) => ProgramModel.fromJson(e)).toList()
-                : nutritionProgramList =
-                data.map((e) => ProgramModel.fromJson(e)).toList();
+                ? {
+                    sportProgramList = [],
+                    sportProgramList =
+                        list.map((e) => ProgramModel.fromJson(e)).toList()
+                  }
+                : {
+                    nutritionProgramList = [],
+                    nutritionProgramList =
+                        list.map((e) => ProgramModel.fromJson(e)).toList()
+                  };
             isLoadingPrograms = false;
           } else {
             isLoadingPrograms = false;
@@ -225,7 +222,7 @@ class ProgramProvider extends ChangeNotifier {
     BuildContext context,
     String type,
   ) async {
-    isLoadingPrograms = true;
+    isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
@@ -234,9 +231,9 @@ class ProgramProvider extends ChangeNotifier {
             await ApiHelper().getPremiumProgramsApi(
           type,
         );
-        isLoadingPrograms = false;
+        isLoading = false;
         results.fold((l) {
-          isLoadingPrograms = false;
+          isLoading = false;
           showMessage(l, false);
         }, (r) {
           Response response = r;
@@ -244,25 +241,22 @@ class ProgramProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            type == "sport"
-                ? sportPremiumProgramList =
-                list.map((e) => ProgramModel.fromJson(e)).toList()
-                : nutritionPremiumProgramList =
+            premiumProgramList =
                 list.map((e) => ProgramModel.fromJson(e)).toList();
-            isLoadingPrograms = false;
+            isLoading = false;
           } else {
-            isLoadingPrograms = false;
+            isLoading = false;
             log("## ${response.data}");
           }
         });
       } on Exception catch (e) {
         log("Exception get premium $type programs : $e");
          showMessage("$e", false);
-        isLoadingPrograms = false;
+        isLoading = false;
       }
     } else {
       showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoadingPrograms = false;
+      isLoading = false;
     }
     notifyListeners();
   }
@@ -291,7 +285,7 @@ class ProgramProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            type == "sport"
+            type == "Sport"
                 ? _sportCategoriesList =
                     list.map((e) => TrainingCategoryModel.fromJson(e)).toList()
                 : _nutritionCategoriesList =
@@ -315,216 +309,73 @@ class ProgramProvider extends ChangeNotifier {
   }
 
   Future<void> callSetProgram(BuildContext context, int programId) async {
-    isLoadingCategories = true;
+    isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
             await ApiHelper().setProgramApi(programId);
-        isLoadingCategories = false;
+        isLoading = false;
         results.fold((l) {
-          isLoadingCategories = false;
+          isLoading = false;
            showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("## $data");
-            isLoadingCategories = false;
+            isLoading = false;
           } else {
-            isLoadingCategories = false;
+            isLoading = false;
             log("## ${response.data}");
           }
         });
       } on Exception catch (e) {
         log("Exception set program : $e");
         showMessage("$e", false);
-        isLoadingCategories = false;
+        isLoading = false;
       }
     } else {
       showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoadingCategories = false;
+      isLoading = false;
     }
     notifyListeners();
   }
 
   Future<void> callUnSetProgram(BuildContext context, int programId) async {
-    isLoadingCategories = true;
+    isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
             await ApiHelper().setProgramApi(programId);
-        isLoadingCategories = false;
+        isLoading = false;
         results.fold((l) {
-          isLoadingCategories = false;
+          isLoading = false;
           showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("## $data");
-            isLoadingCategories = false;
+            isLoading = false;
           } else {
-            isLoadingCategories = false;
+            isLoading = false;
             log("## ${response.data}");
           }
         });
       } on Exception catch (e) {
         log("Exception Unset program : $e");
         showMessage("$e", false);
-        isLoadingCategories = false;
+        isLoading = false;
       }
     } else {
       showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoadingCategories = false;
+      isLoading = false;
     }
     notifyListeners();
-  }
-
-  Future<bool> callAddProgram(
-    BuildContext context,
-    String name,
-    String type,
-    int categoryId,
-    String file,
-  ) async {
-    isLoading = true;
-    isDeviceConnected = await InternetConnectionChecker().hasConnection;
-    bool repoStatus = false;
-    if (isDeviceConnected) {
-      try {
-        Either<String, Response> results = await ApiHelper().addProgramApi(
-          name,
-          type,
-          categoryId,
-          file,
-        );
-        isLoading = false;
-        await results.fold((l) {
-          isLoading = false;
-           showMessage(l, false);
-          repoStatus = false;
-        }, (r) async {
-          Response response = r;
-          if (response.statusCode == 200) {
-            var data = response.data["data"];
-            log("## $data");
-            isLoading = false;
-            repoStatus = true;
-          } else {
-            isLoading = false;
-            log("## ${response.statusCode}");
-            log("## ${response.data}");
-          }
-        });
-        return repoStatus;
-      } on Exception catch (e) {
-         showMessage("$e", false);
-        isLoading = false;
-        return false;
-      }
-    } else {
-      showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoading = false;
-      return false;
-    }
-  }
-
-  Future<bool> callEditProgram(
-      BuildContext context,
-      int id,
-      String name,
-      String type,
-      int categoryId,
-      String file,
-      ) async {
-    isLoading = true;
-    isDeviceConnected = await InternetConnectionChecker().hasConnection;
-    bool repoStatus = false;
-    if (isDeviceConnected) {
-      try {
-        Either<String, Response> results = await ApiHelper().editProgramApi(
-          id,
-          name,
-          type,
-          categoryId,
-          file,
-        );
-        isLoading = false;
-        await results.fold((l) {
-          isLoading = false;
-           showMessage(l, false);
-          repoStatus = false;
-        }, (r) async {
-          Response response = r;
-          if (response.statusCode == 200) {
-            var data = response.data["data"];
-            log("## $data");
-            isLoading = false;
-            repoStatus = true;
-          } else {
-            isLoading = false;
-            log("## ${response.statusCode}");
-            log("## ${response.data}");
-          }
-        });
-        return repoStatus;
-      } on Exception catch (e) {
-         showMessage("$e", false);
-        isLoading = false;
-        return false;
-      }
-    } else {
-      showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoading = false;
-      return false;
-    }
-  }
-
-  Future<bool> callDeleteProgram(
-      BuildContext context,
-      int id,
-      ) async {
-    isLoading = true;
-    isDeviceConnected = await InternetConnectionChecker().hasConnection;
-    bool repoStatus = false;
-    if (isDeviceConnected) {
-      try {
-        Either<String, Response> results = await ApiHelper().deleteProgramApi(
-          id,
-        );
-        isLoading = false;
-        await results.fold((l) {
-          isLoading = false;
-           showMessage(l, false);
-          repoStatus = false;
-        }, (r) async {
-          Response response = r;
-          if (response.statusCode == 200) {
-            var data = response.data["data"];
-            log("## $data");
-            isLoading = false;
-            repoStatus = true;
-          } else {
-            isLoading = false;
-            log("## ${response.statusCode}");
-            log("## ${response.data}");
-          }
-        });
-        return repoStatus;
-      } on Exception catch (e) {
-         showMessage("$e", false);
-        isLoading = false;
-        return false;
-      }
-    } else {
-      showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoading = false;
-      return false;
-    }
   }
 
 }

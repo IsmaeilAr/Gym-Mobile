@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/icon_button.dart';
-import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 import '../../home/provider/home_provider.dart';
+
+bool _torch = false;
 
 class QRView extends StatefulWidget {
   const QRView({super.key});
@@ -16,7 +17,6 @@ class QRView extends StatefulWidget {
 }
 
 class _QRViewState extends State<QRView> {
-  bool _torch = false;
 
   @override
   Widget build(BuildContext context) {

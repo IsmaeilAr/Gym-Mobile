@@ -11,6 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/widgets/countdown.dart';
 import '../../../components/widgets/daily_program_card.dart';
+import '../../../components/widgets/divider.dart';
 import '../../../components/widgets/loading_indicator.dart';
 import '../../../components/widgets/no_daily_program.dart';
 import '../../../components/widgets/qr_scan_button.dart';
@@ -29,54 +30,54 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      context.read<HomeProvider>().getActivePlayersApi(context,);
-      context.read<ProgressProvider>().getWeeklyProgressApi(context,);
-      context.read<ProfileProvider>().getStatus(context,);
+      _refresh();
     });
     super.initState();
   }
+
   Future<void> _refresh() async {
-    context.read<HomeProvider>().getActivePlayersApi(context,);
-    context.read<ProgressProvider>().getWeeklyProgressApi(context,);
-    context.read<ProfileProvider>().getStatus(context,);
+    context.read<HomeProvider>().getActivePlayersApi(
+          context,
+        );
+    context.read<ProgressProvider>().getWeeklyProgressApi(
+          context,
+        );
+    context.read<ProfileProvider>().getStatus(
+          context,
+        );
   }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
         color: red,
         backgroundColor: dark,
         onRefresh: _refresh,
-      child:
-      !context.watch<ProfileProvider>().isLoadingStatus &&
-      !context.watch<HomeProvider>().isLoadingActivePlayers &&
-      !context.watch<ProgressProvider>().isLoadingWeeklyProgress
-          ?
-      Container(
-        padding: EdgeInsets.all(14.w),
-        child: ListView(children: [
-          SizedBox(
-            height: 228.h,
-            child:
-            context.watch<HomeProvider>().showCheckInSuccess ?
-                const CheckInSuccess() :
-            context.watch<HomeProvider>().isCheckIn ?
-            const CountdownWidget() :
-            Column(
+        child: !context.watch<ProfileProvider>().isLoadingStatus &&
+                !context.watch<HomeProvider>().isLoadingActivePlayers &&
+                !context.watch<ProgressProvider>().isLoadingWeeklyProgress
+            ? Container(
+                padding: EdgeInsets.all(14.w),
+                child: ListView(children: [
+                  SizedBox(
+                    height: 228.h,
+                    child: context.watch<HomeProvider>().showCheckInSuccess
+                        ? const CheckInSuccess()
+                        : context.watch<HomeProvider>().isCheckIn
+                            ? const CountdownWidget()
+                            : Column(
                                 children: [
                                   const GymTraffic(),
                                   ScanButton(openQRScan),
                                 ],
                               ),
-          ),
-          // Divider
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 12.h),
-            child: const Divider(
-              height: 1,
-                      color: dark,
-                    ),
                   ),
-                  context.watch<ProfileProvider>().hasProgram
+                  // Divider
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
+                    child: myDivider(),
+                  ),
+                  context.watch<ProfileProvider>().status.hasProgram
                       ?
                       // daily card
                       const DailyProgramCard()

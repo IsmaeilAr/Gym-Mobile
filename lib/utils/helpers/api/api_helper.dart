@@ -8,143 +8,10 @@ import 'package:gym/utils/helpers/api/session_expired_interceptor.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/helpers/api/dio_exceptions.dart';
 
+import 'api_constants.dart';
 
 class ApiHelper {
-  // static String serverUrl = "http://91.144.20.117:6002/";
-  static String serverUrl = "http://192.168.2.138:808/";
-  static String baseUrl = "${serverUrl}api/";
-  static String imageUrl = "${serverUrl}uploads/images/";
-  static String pdfUrl = "${serverUrl}uploads/programs/";
 
-  String loginUrl = "${baseUrl}login";
-  String logoutUrl = "${baseUrl}logout";
-  String initStatusUrl = "${baseUrl}status";
-  String activePlayersUrl = "${baseUrl}activePlayers";
-  String getMyProfileInfoUrl = "${baseUrl}showPlayer";
-  String addInfoUrl = "${baseUrl}addInfo";
-  String editInfoUrl = "${baseUrl}update";
-  String editMetricsUrl = "${baseUrl}updateInfo";
-  String addProgramUrl = "${baseUrl}store";
-  String editProgramUrl = "${baseUrl}store"; // todo fix Url
-  String assignProgramUrl = "${baseUrl}store"; // todo fix Url
-  String getChatsUrl = "${baseUrl}listChat";
-  String checkInUrl = "${baseUrl}storeUserTime";
-  String storeTimeUrl = "${baseUrl}storeTime";
-  String checkOutUrl = "${baseUrl}endCounter";
-  String weeklyUrl = "${baseUrl}weekly";
-  String monthlyUrl = "${baseUrl}monthly";
-  String programProgressUrl = "${baseUrl}programCommitment";
-  String sendMessageUrl = "${baseUrl}sendMessage";
-  String setRateUrl = "${baseUrl}setRate";
-  String submitReportUrl = "${baseUrl}addReport";
-  String orderProgramUrl = "${baseUrl}addOrder";
-  String getMyOrderUrl = "${baseUrl}getMyOrder";
-  String acceptOrderUrl = "${baseUrl}acceptOrder";
-  String programSearchUrl = "${baseUrl}programSearch";
-  String setProgramUrl = "${baseUrl}setProgram";
-  String unsetProgramUrl = "${baseUrl}unsetProgram"; //todo fix url
-  String requestProgramUrl = "${baseUrl}requestPrograme";
-  String userSearchUrl = "${baseUrl}userSearch";
-  String getNotificationsUrl = "${baseUrl}listNotification";
-  String getArticlesUrl = "${baseUrl}allArticle";
-  String addArticleUrl = "${baseUrl}addArticle";
-
-  static String getProfileInfoUrl(
-    int userId,
-  ) {
-    return "${baseUrl}playerInfo/$userId";
-  }
-
-  static String getPersonMetricsUrl(
-      int userId,
-      ) {
-    return "${baseUrl}showInfo/$userId";
-  }
-
-  static String chatMessagesUrl(
-      int userId,
-      ) {
-    return "${baseUrl}showChat/$userId";
-  }
-
-  static String allProgramsUrl(
-      String type, int categoryID,
-      ) {
-    String url = "${baseUrl}show?type=$type";
-    if (categoryID != 0) {
-      url = "${baseUrl}show?type=$type&categoryId=$categoryID";
-    }
-    return url;
-  }
-
-  static String premiumProgramsUrl(
-    String type,
-  ) {
-    return "${baseUrl}getPrograms?type=$type";
-  }
-
-
-  static String allCategoriesUrl(
-      String type,
-      ) {
-    return "${baseUrl}getCategories?type=$type";
-  }
-
-  static String myProgramsUrl(
-      String type,
-      ) {
-    return "${baseUrl}myprogram?type=$type";
-  }
-
-  static String assignUrl(
-      int programId,
-      ) {
-    return "${baseUrl}asignprogram/$programId";
-  }
-
-  static String showCoachTimeUrl(
-      int coachId,
-      ) {
-    return "${baseUrl}showCoachTime/$coachId";
-  }
-
-  static String showCoachInfoUrl(
-      int coachId,
-      ) {
-    return "${baseUrl}showCoachInfo/$coachId";
-  }
-  static String getUserListUrl(
-      String type,
-      ) {
-    return "${baseUrl}show$type";
-  }
-
-  static String deleteMessageUrl(
-      int messageID,
-      ) {
-    return "${baseUrl}deleteMessage/$messageID";
-  }
-
-  static String deleteArticleUrl(
-      int articleID,
-      ) {
-    return "${baseUrl}deleteArticle/$articleID";
-  }
-
-  static String favArticleUrl(
-      int articleID,
-      ) {
-    return "${baseUrl}makeFavouritre/$articleID";
-  }
-
-  static String getCoachArticlesUrl(
-      int coachId,) {
-    return "${baseUrl}coachArticle/$coachId";
-  }
-
-  static String deleteRateUrl(int rateId,) {
-    return "${baseUrl}deleteRate?id=/$rateId";
-  }
 
   SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
@@ -158,8 +25,8 @@ class ApiHelper {
 
   static final Dio _clientDio = Dio(options);
 
-  static Duration connectionTimeoutValue = const Duration(seconds: 30);
-  static Duration receiveTimeoutValue = const Duration(seconds: 30);
+  // static Duration connectionTimeoutValue = const Duration(seconds: 30);
+  // static Duration receiveTimeoutValue = const Duration(seconds: 30);
 
   static Dio get clientDio => _clientDio;
 
@@ -176,15 +43,12 @@ class ApiHelper {
     String phone,
     String password,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       var response = await _clientDio
-          .post(
-        loginUrl,
-        data: {
-          'phoneNumber': phone,
+          .post(ApiConstants.loginUrl,
+              data: {
+                'phoneNumber': phone,
           'password': password,
         },
         options: Options(
@@ -207,8 +71,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> logoutApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
 
@@ -216,7 +78,7 @@ class ApiHelper {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
           .post(
-            logoutUrl,
+            ApiConstants.logoutUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -237,13 +99,11 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> initStatusApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
-          .get(initStatusUrl,
+          .get(ApiConstants.initStatusUrl,
               options: Options(
                 headers: {
                   'Accept': 'application/json',
@@ -263,13 +123,11 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> activePlayerApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio
-          .get(activePlayersUrl,
+          .get(ApiConstants.activePlayersUrl,
               options: Options(
                 headers: {
                   'Accept': 'application/json',
@@ -290,18 +148,16 @@ class ApiHelper {
 
   // Profile
   Future<Either<String, Response>> getProfileInfoApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       int playerId = prefsService.getValue(Cache.userId) ?? 0;
       log(playerId.toString());
-      log(getProfileInfoUrl(playerId));
+      log(ApiConstants.getProfileInfoUrl(playerId));
       var response = await _clientDio
           .get(
-            getProfileInfoUrl(playerId),
+            ApiConstants.getProfileInfoUrl(playerId),
             options: Options(
               headers: {
                 'accept': 'application/json',
@@ -322,18 +178,16 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getPersonMetricsApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       int playerId = prefsService.getValue(Cache.userId) ?? 0;
       log(playerId.toString());
-      log(getPersonMetricsUrl(playerId));
+      log(ApiConstants.getPersonMetricsUrl(playerId));
       var response = await _clientDio
           .get(
-            getPersonMetricsUrl(playerId),
+            ApiConstants.getPersonMetricsUrl(playerId),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -361,13 +215,11 @@ class ApiHelper {
       double waist,
       double neck,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        addInfoUrl,
+        ApiConstants.addInfoUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -403,13 +255,11 @@ class ApiHelper {
       String waist,
       String neck,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        editMetricsUrl,
+        ApiConstants.editMetricsUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -442,14 +292,12 @@ class ApiHelper {
     String phoneNumber,
     File? image,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       // int playerId = prefsService.getValue(Cache.userId) ?? 0;
       var response = await _clientDio.post(
-        editInfoUrl,
+        ApiConstants.editInfoUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -477,16 +325,15 @@ class ApiHelper {
 
   // Programs
   Future<Either<String, Response>> getAllProgramsApi(String type, int categoryID) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
-
+      String url = ApiConstants.allProgramsUrl(type, categoryID);
+      log(url);
       var response = await _clientDio
           .get(
-            ApiHelper.allProgramsUrl(type, categoryID),
+            ApiConstants.allProgramsUrl(type, categoryID),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -509,8 +356,6 @@ class ApiHelper {
   Future<Either<String, Response>> getPremiumProgramsApi(
     String type,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -518,7 +363,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.premiumProgramsUrl(
+            ApiConstants.premiumProgramsUrl(
               type,
             ),
             options: Options(
@@ -541,8 +386,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getAllCategoriesApi(String type) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -550,7 +393,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.allCategoriesUrl(type),
+            ApiConstants.allCategoriesUrl(type),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -571,8 +414,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getMyProgramsApi(String type) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -580,7 +421,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.myProgramsUrl(type),
+            ApiConstants.myProgramsUrl(type),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -606,13 +447,11 @@ class ApiHelper {
       int categoryId,
       String file,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        addProgramUrl,
+        ApiConstants.addProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -642,13 +481,11 @@ class ApiHelper {
   Future<Either<String, Response>> setProgramApi(
       int programId,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        setProgramUrl,
+        ApiConstants.setProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -674,13 +511,11 @@ class ApiHelper {
   Future<Either<String, Response>> unsetProgramApi(
     int programId,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        unsetProgramUrl,
+        ApiConstants.unsetProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -706,13 +541,11 @@ class ApiHelper {
   Future<Either<String, Response>> requestProgramApi(
     int coachId,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        requestProgramUrl,
+        ApiConstants.requestProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -742,13 +575,11 @@ class ApiHelper {
       int categoryId,
       String file,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.put(
-        editProgramUrl,
+        ApiConstants.editProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -779,13 +610,11 @@ class ApiHelper {
   Future<Either<String, Response>> deleteProgramApi(
       int programID,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        deleteMessageUrl(programID),
+        ApiConstants.deleteMessageUrl(programID),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -814,13 +643,11 @@ class ApiHelper {
       int days,
       String startDate,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        assignProgramUrl,
+        ApiConstants.assignProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -852,13 +679,11 @@ class ApiHelper {
     String content,
     int day,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        checkInUrl,
+        ApiConstants.checkInUrl,
         options: Options(
           headers: {
             'Accept': 'application/json',
@@ -885,13 +710,11 @@ class ApiHelper {
   Future<Either<String, Response>> checkOutApi( // todo check with backend
       String endTime,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        checkOutUrl,
+        ApiConstants.checkOutUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -915,8 +738,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getWeeklyProgressApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -924,7 +745,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            weeklyUrl,
+            ApiConstants.weeklyUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -945,8 +766,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getMonthlyProgressApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -954,7 +773,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            monthlyUrl,
+            ApiConstants.monthlyUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -975,8 +794,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getProgramProgressApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -984,7 +801,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            monthlyUrl,
+            ApiConstants.monthlyUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1006,8 +823,6 @@ class ApiHelper {
 
   // Coaches
   Future<Either<String, Response>> getUserListApi(String type) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1015,7 +830,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getUserListUrl(type),
+            ApiConstants.getUserListUrl(type),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1036,8 +851,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getCoachInfoApi(int coachId) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1045,7 +858,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.showCoachInfoUrl(coachId),
+            ApiConstants.showCoachInfoUrl(coachId),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1066,8 +879,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getCoachTimeApi(int coachId) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1075,7 +886,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.showCoachTimeUrl(coachId),
+            ApiConstants.showCoachTimeUrl(coachId),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1097,8 +908,6 @@ class ApiHelper {
 
   // Chats
   Future<Either<String, Response>> getChatMessagesApi(userId) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1106,7 +915,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            ApiHelper.chatMessagesUrl(userId),
+            ApiConstants.chatMessagesUrl(userId),
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1127,8 +936,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getChatsApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1136,7 +943,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getChatsUrl,
+            ApiConstants.getChatsUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1160,16 +967,14 @@ class ApiHelper {
       int receiverID,
       String content,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        sendMessageUrl,
+        ApiConstants.sendMessageUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1193,13 +998,11 @@ class ApiHelper {
   Future<Either<String, Response>> deleteMessageApi(
       int messageID,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        deleteMessageUrl(messageID),
+        ApiConstants.deleteMessageUrl(messageID),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1227,13 +1030,11 @@ class ApiHelper {
       int coachId,
       // int programId,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        orderProgramUrl,
+        ApiConstants.orderProgramUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1258,8 +1059,6 @@ class ApiHelper {
   }
 
   Future<Either<String, Response>> getMyOrderApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1267,7 +1066,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getMyOrderUrl,
+            ApiConstants.getMyOrderUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1292,13 +1091,11 @@ class ApiHelper {
     int coachId,
     double rate,
   ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        setRateUrl,
+        ApiConstants.setRateUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1326,13 +1123,11 @@ class ApiHelper {
   Future<Either<String, Response>> submitReportApi(
       String content,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        submitReportUrl,
+        ApiConstants.submitReportUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1357,8 +1152,6 @@ class ApiHelper {
 
   // Articles
   Future<Either<String, Response>> getArticlesApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1366,7 +1159,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getArticlesUrl,
+            ApiConstants.getArticlesUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1388,8 +1181,6 @@ class ApiHelper {
 
   Future<Either<String, Response>> getCoachArticlesApi(int coachId) async {
     //todo edit as backend
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1397,7 +1188,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getCoachArticlesUrl(coachId), // todo url from backend
+            ApiConstants.getCoachArticlesUrl(coachId), // todo url from backend
             options: Options(
               headers: {
                 'Content-Type': 'application/json',
@@ -1421,13 +1212,11 @@ class ApiHelper {
       String title,
       String content,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        addArticleUrl,
+        ApiConstants.addArticleUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1454,13 +1243,11 @@ class ApiHelper {
   Future<Either<String, Response>> deleteArticleApi(
       int articleID,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        deleteArticleUrl(articleID),
+        ApiConstants.deleteArticleUrl(articleID),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1487,13 +1274,11 @@ class ApiHelper {
       int articleId,
       bool isFav,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        favArticleUrl(articleId),
+        ApiConstants.favArticleUrl(articleId),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1520,15 +1305,13 @@ class ApiHelper {
   Future<Either<String, Response>> searchProgramsApi(
       String content,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio.post(
-        programSearchUrl,
+        ApiConstants.programSearchUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1554,15 +1337,13 @@ class ApiHelper {
   Future<Either<String, Response>> searchUsersApi(
       String content,
       ) async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio.post(
-        userSearchUrl,
+        ApiConstants.userSearchUrl,
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -1587,8 +1368,6 @@ class ApiHelper {
 
   // Notifications
   Future<Either<String, Response>> getNotificationsApi() async {
-    _clientDio.options.connectTimeout = connectionTimeoutValue;
-    _clientDio.options.receiveTimeout = receiveTimeoutValue;
 
     late Either<String, Response> result;
     try {
@@ -1596,7 +1375,7 @@ class ApiHelper {
 
       var response = await _clientDio
           .get(
-            getNotificationsUrl,
+            ApiConstants.getNotificationsUrl,
             options: Options(
               headers: {
                 'Content-Type': 'application/json',

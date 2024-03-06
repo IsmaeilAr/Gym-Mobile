@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../components/styles/gym_icons.dart';
+import '../../../components/widgets/divider.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({super.key});
@@ -123,7 +124,7 @@ class _MyProfileState extends State<MyProfile> {
                         Padding(
                           padding: EdgeInsets.only(top: 25.h),
                           child: InfoWithIconWidget(
-                              icon: GymIcons.phone,
+                              icon: GymIcons.phoneFilled,
                               info: AppLocalizations.of(context)!
                                   .myProfilePhoneNumber),
                         ),
@@ -181,6 +182,7 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                     context
                             .watch<ProfileProvider>()
+                            .status
                             .hasCoach // todo critical: get coach data from coachId when backend gives coachID
                         ? MyCoachWidget(myCoach)
                         : const NoCoachScreen(),
@@ -230,21 +232,13 @@ class DividerWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: Divider(
-                color: dark,
-                thickness: 1.h,
-              ),
+              child: myDivider(),
             ),
             Text(
               title,
               style: MyDecorations.profileGreyTextStyle,
             ),
-            Expanded(
-              child: Divider(
-                color: dark,
-                thickness: 1.h,
-              ),
-            ),
+            Expanded(child: myDivider()),
           ],
         ),
       ],

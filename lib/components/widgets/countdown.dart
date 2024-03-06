@@ -118,19 +118,21 @@ class _CountdownWidgetState extends State<CountdownWidget>
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Saira',
                         color: lightGrey,
-
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-            const Gap(w: 44,),
+            const Gap(
+              w: 44,
+            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
                   onTap: () {
+                    debugPrint("controller reset");
                     controller.reset();
                     setState(() {
                       isCounting = false;
@@ -142,16 +144,20 @@ class _CountdownWidgetState extends State<CountdownWidget>
                     bgColor: red,
                   ),
                 ),
-                const Gap(h: 24,),
+                const Gap(
+                  h: 24,
+                ),
                 GestureDetector(
                   onTap: () {
                     if (controller.isAnimating) {
+                      debugPrint("controller isAnimating");
                       controller.stop();
                       setState(() {
                         isCounting = false;
                       });
                     } else {
-                      controller.reverse(
+                      debugPrint("controller is else");
+                      controller.forward(
                           from: controller.value == 0 ? 1.0 : controller.value);
                       setState(() {
                         isCounting = true;

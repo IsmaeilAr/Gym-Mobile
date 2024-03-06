@@ -68,8 +68,8 @@ class _CoachArticlesListState extends State<CoachArticlesList> {
                                 ? Icon(
                               Icons.favorite,
                               color: primaryColor,
-                              size: 14.sp,
-                            )
+                                    size: 20.sp,
+                                  )
                                 : Icon(Icons.favorite_border, color: lightGrey,size: 20.sp),
                             onPressed: () {
                               setState(() {

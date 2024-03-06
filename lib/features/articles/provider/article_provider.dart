@@ -33,16 +33,16 @@ class ArticleProvider extends ChangeNotifier {
 
   List<ArticleModel> get articleList => _articleList;
 
-  set articlesList(List<ArticleModel> value) {
+  set articleList(List<ArticleModel> value) {
     _articleList = value;
     notifyListeners();
   }
 
   List<ArticleModel> _filteredArticleList = [];
 
-  List<ArticleModel> get foundArticleList => _filteredArticleList;
+  List<ArticleModel> get filteredArticleList => _filteredArticleList;
 
-  set foundArticleList (List<ArticleModel> value) {
+  set filteredArticleList(List<ArticleModel> value) {
     _filteredArticleList = value;
     notifyListeners();
   }
@@ -137,8 +137,9 @@ class ArticleProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            // articlesList = [];
-            articlesList = list.map((e) => ArticleModel.fromJson(e)).toList();
+            filteredArticleList = [];
+            articleList = list.map((e) => ArticleModel.fromJson(e)).toList();
+            filteredArticleList = articleList;
             isLoadingArticles = false;
           } else {
             isLoadingArticles = false;
@@ -176,6 +177,11 @@ class ArticleProvider extends ChangeNotifier {
             log("data $data");
             List<dynamic> list = data;
             coachArticleList = list.map((e) => ArticleModel.fromJson(e)).toList();
+            favouriteArticleList = list
+                .map((e) => ArticleModel.fromJson(e))
+                .where((article) => article.isFavorite == true)
+                .toList();
+
             isLoadingCoachArticles = false;
           } else {
             isLoadingCoachArticles = false;

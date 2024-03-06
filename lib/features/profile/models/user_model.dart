@@ -1,4 +1,4 @@
-import 'package:gym/utils/helpers/api/api_helper.dart';
+import 'package:gym/utils/helpers/api/api_constants.dart';
 
 class UserModel {
   int id;
@@ -38,9 +38,11 @@ class UserModel {
     expiration: DateTime.parse(json["expiration"]),
     finance: (json["finance"] ?? 0).toDouble(),
     isPaid: json["is_paid"] == "paid", // Parse string "paid" to boolean
-    images: json["image"] != null ? List<ImageModel>.from(json["image"].map((x) => ImageModel.fromJson(x))) : [],
-  );
-
+        images: (json["image"] != null && json["image"] != [])
+            ? List<ImageModel>.from(
+                json["image"].map((x) => ImageModel.fromJson(x)))
+            : [],
+      );
 }
 
 class ImageModel {
@@ -55,7 +57,7 @@ class ImageModel {
   factory ImageModel.fromJson(Map<String, dynamic> json) {
     return ImageModel(
       id: json['id'],
-      image: "${ApiHelper.imageUrl}${json['image']}",
+      image: "${ApiConstants.imageUrl}${json['image']}",
     );
   }
 }

@@ -51,7 +51,26 @@ class CoachListTile extends StatelessWidget {
       tileColor: dark,
       isThreeLine: true,
       onTap: (){
-          ChatModel chatModel = ChatModel(sid2: UserModel(id: coach.id, name: coach.name, phoneNumber: "09", birthDate: DateTime(1997), role: "role", description: "description", rate: 2.0, expiration: DateTime(1997), finance: 10000, isPaid: true, images: []), latestMessage: LatestMessage(id: 1, content: "content", senderId: 2, receiverId: 3, createdAt: "1997"));
+        ChatModel chatModel = ChatModel(
+          sid2: UserModel(
+              id: coach.id,
+              name: coach.name,
+              phoneNumber: "09",
+              birthDate: DateTime(1997),
+              role: "role",
+              description: "description",
+              rate: 2.0,
+              expiration: DateTime(1997),
+              finance: 10000,
+              isPaid: true,
+              images: []),
+          latestMessage: LatestMessage(
+              id: 1,
+              content: "content",
+              senderId: 2,
+              receiverId: 3,
+              createdAt: "1997"),
+        );
         Navigator.push(
             context,
             PageTransition(

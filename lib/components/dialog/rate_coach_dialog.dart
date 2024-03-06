@@ -8,6 +8,8 @@ import '../styles/colors.dart';
 import '../styles/decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'cancel_button.dart';
+
 class RateStarsCoachDialog extends StatefulWidget {
   final UserModel coach;
 
@@ -27,19 +29,11 @@ class _RateStarsCoachDialogState extends State<RateStarsCoachDialog> {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: black,
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
+            Navigator.pop(context);
             showDialog(
                 context: context,
                 builder: (context) => RateCoachDialog(
@@ -96,22 +90,14 @@ class RateCoachDialog extends StatelessWidget {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: black,
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
             context
                 .read<ProfileProvider>()
-                .setRate(context, coach.id, coach.rate);
+                .setRate(context, coach.id, coach.rate)
+                .then((value) => Navigator.pop(context));
           },
           color: primaryColor,
           child: Text(

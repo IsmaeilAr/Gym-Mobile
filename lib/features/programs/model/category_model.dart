@@ -1,3 +1,7 @@
+import 'package:gym/utils/helpers/api/api_constants.dart';
+
+import '../../../utils/helpers/api/api_helper.dart';
+
 class TrainingCategoryModel {
   final int id;
   final String name;
@@ -15,7 +19,7 @@ class TrainingCategoryModel {
     return TrainingCategoryModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      imageUrl: json['imageUrl'] ?? '',
+      imageUrl: "${ApiConstants.imageUrl}${json['imageUrl']}" ?? '',
       type: json['type'] ?? '',
     );
   }

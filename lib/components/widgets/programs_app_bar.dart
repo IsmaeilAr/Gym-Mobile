@@ -4,6 +4,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/features/coaches/screens/search_coaches_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../features/programs/screens/search_programs_screen.dart';
+import 'back_button.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -24,11 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: black,
-      leading: IconButton(
-        color: Colors.white,
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: () => Navigator.pop(context),
-      ),
+      leading: const MyBackButton(),
       title: Text(
         title,
         style: const TextStyle(
@@ -73,11 +70,7 @@ class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: black,
-      leading: IconButton(
-        color: lightGrey,
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: () => Navigator.pop(context),
-      ),
+      leading: const MyBackButton(),
       title: Text(
         title,
         style: const TextStyle(
@@ -105,7 +98,7 @@ class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String hint;
-  final Function runFilter;
+  final Function(String) runFilter;
   final Icon customIcon = const Icon(Icons.cancel, color: lightGrey, size: 18);
   final TextEditingController searchController = TextEditingController();
 
@@ -122,11 +115,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: black,
-      leading: IconButton(
-        color: lightGrey,
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: () => Navigator.pop(context),
-      ),
+      leading: const MyBackButton(),
       title: ListTile(
         leading: Icon(
           Icons.search,

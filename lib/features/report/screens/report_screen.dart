@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../provider/report_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReportScreen extends StatelessWidget {
    ReportScreen({super.key});
@@ -24,11 +25,11 @@ class ReportScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios_new,size: 24.sp,),
           onPressed: () => Navigator.pop(context), // todo UX: exit confirmation dialog
         ),
-        title: const Text(
-          "Report",
+        title: Text(
+          AppLocalizations.of(context)!.reportScreenTitle,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -52,7 +53,7 @@ class ReportScreen extends StatelessWidget {
           style: MyDecorations.coachesTextStyle,
           decoration: InputDecoration(
             suffixStyle: MyDecorations.coachesTextStyle,
-            hintText: "write here...",
+            hintText: AppLocalizations.of(context)!.reportScreenWriteHere,
             hintStyle:MyDecorations.coachesTextStyle ,
             border: InputBorder.none,
           ),

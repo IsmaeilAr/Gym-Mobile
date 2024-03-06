@@ -26,7 +26,8 @@
      "drawerReportKey": "تقرير",
      "drawerLogoutKey": "تسجيل الخروج",
      "drawerLanguageKey": "اللغة",
-     "drawerEnglishKey": "الإنجليزية",
+          "drawerLangCodeKey": "Ar",
+     "drawerEnglishKey": "English",
      "drawerArabicKey": "العربية",
 
   "mainLayoutAppBarHomeScreenName": "الرئيسية",
@@ -113,6 +114,7 @@
                   "chats": "الدردشات",
                   "coaches": "المدربون",
                    "notifications": "الإشعارات",
+    "searchChats": "البحث في المحادثات",
 
                      "programsRecommended": "موصى به",
                      "programsTraining": "تدريب",
@@ -154,7 +156,9 @@
     "articles": "المقالات",
     "articlesAll": "الكل",
     "articlesFavorite": "المفضلة",
+       "searchInArticles": "البحث في التقارير",
 
+       "searchInUsers": "البحث في المستخدمين",
 
 
                "remove": "إزالة",
@@ -176,8 +180,11 @@
   "requestProgramType": "حدد نوع البرنامج الذي ترغب في طلبه من مدربك:",
   "trainingProgram": "برنامج تدريب",
   "nutritionProgram": "برنامج تغذية",
-  "revokeRequestConfirmation": "هل أنت متأكد أنك تريد سحب طلبك للحصول على برنامج تدريب (أو تغذية، أو كليهما) الرئيسي؟",
+  "revokeRequestConfirmation": "هل أنت متأكد أنك تريد سحب طلبك للحصول على برنامج تدريب الرئيسي؟",
+    "revokeCoachRequestConfirmation":"هل أنت متأكد أنك تريد إلغاء طلبك لمدرب محدد؟",
+
 "noInternet": "لا يوجد اتصال بالإنترنت",
+"selectPerson": "تحديد شخص",
 
   "cancel": "إلغاء",
   "stop": "إيقاف",

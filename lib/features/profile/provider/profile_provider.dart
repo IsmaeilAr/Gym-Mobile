@@ -131,24 +131,6 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _hasCoach = false;
-
-  bool get hasCoach => _hasCoach;
-
-  set hasCoach(bool value) {
-    _hasCoach = value;
-    notifyListeners();
-  }
-
-  bool _hasProgram = false;
-
-  bool get hasProgram => _hasProgram;
-
-  set hasProgram(bool value) {
-    _hasProgram = value;
-    notifyListeners();
-  }
-
 
   Future<void> getStatus(BuildContext context,) async {
     isLoadingStatus = true;
@@ -168,8 +150,6 @@ class ProfileProvider extends ChangeNotifier {
             log("data $data");
             // List<dynamic> list = data;
             status = InitStatusModel.fromJson(data);
-            hasCoach = status.hasCoach;
-            hasProgram = status.hasProgram;
             isLoadingStatus = false;
           } else {
             isLoadingStatus = false;

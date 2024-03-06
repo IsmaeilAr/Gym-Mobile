@@ -21,6 +21,27 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // late UserModel _playerModel;
+  UserModel _playerModel = UserModel(
+      id: 0,
+      name: "name",
+      phoneNumber: "phoneNumber",
+      birthDate: DateTime(1999),
+      role: 'player ',
+      description: 'description',
+      rate: 0,
+      expiration: DateTime(2000),
+      finance: 10000,
+      isPaid: false,
+      images: []);
+
+  UserModel get playerModel => _playerModel;
+
+  set playerModel(UserModel value) {
+    _playerModel = value;
+    notifyListeners();
+  }
+
   SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
   Future<bool> callLoginApi(
@@ -51,15 +72,15 @@ class AuthProvider extends ChangeNotifier {
             // log(user);
             String uToken = "Bearer ${data["data"]['token']}";
             // UserModel userModel = UserModel.fromJson(userData);
-            UserModel playerModel = UserModel.fromJson(userData);
+            playerModel = UserModel.fromJson(userData);
             await prefsService.setValue(Cache.token, uToken);
             await prefsService.setValue(Cache.isAuth, true);
             await prefsService.setValue(Cache.userId, playerModel.id);
             await prefsService.setValue(Cache.userName, playerModel.name);
             await prefsService.setValue(Cache.userPhone, phone);
             await prefsService.setValue(Cache.userPassword, password);
-            await prefsService.setValue(Cache.userImage,
-                "${ApiHelper.imageUrl}${playerModel.images[0].image}");
+            // if (playerModel.images != null) {
+            //   await prefsService.setValue(Cache.userImage, playerModel.images[0].image); }
             await prefsService.setValue(Cache.user, user);
             // await prefs.setBool(Constants.firstOpen, true);
             // await prefs.setBool(Constants.isIphone, true);

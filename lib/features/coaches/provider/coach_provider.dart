@@ -10,6 +10,8 @@ import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../utils/services/coach_week_days_check.dart';
+
 class CoachProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
 
@@ -278,6 +280,7 @@ class CoachProvider extends ChangeNotifier {
             var data = response.data["data"][0];
             log("data $data");
             List<dynamic> list = data;
+            searchCoachList = [];
             searchCoachList = list.map((e) => UserModel.fromJson(e)).toList();
             isLoadingSearchCoach = false;
           } else {
@@ -397,8 +400,13 @@ class CoachProvider extends ChangeNotifier {
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("data $data");
+            // List<dynamic> list = data;
+            // List<String> namedDaysList = list.map((item) => item.toString()).toList();
+            // doneDaysList = getNumericCheckList(namedDaysList);
             List<dynamic> list = data;
-            coachTimesList = list.map((e) => CoachTimeModel.fromJson(e)).toList();
+            List<CoachTimeModel> activeDaysList =
+                list.map((e) => CoachTimeModel.fromJson(e)).toList();
+            coachTimesList = getCoachDayList(activeDaysList);
             isLoadingCoachTime = false;
           } else {
             isLoadingCoachTime = false;

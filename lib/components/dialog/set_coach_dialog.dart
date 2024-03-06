@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
+import 'cancel_button.dart';
 
 class SelectCoachDialog extends StatelessWidget {
   final UserModel coach;
@@ -17,16 +18,7 @@ class SelectCoachDialog extends StatelessWidget {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          color: black,
-          child: Text(
-            AppLocalizations.of(context)!.cancel,
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
@@ -34,14 +26,13 @@ class SelectCoachDialog extends StatelessWidget {
           },
           color: primaryColor,
           child: Text(
-            "Set Coach",
+            AppLocalizations.of(context)!.coachProfileSetCoach,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
       ],
       content: Text(
-        "Are you sure you want to set coach name as your coach ?",
-        //todo localize
+        "${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation} ${coach.name} ${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation2}",
         style: MyDecorations.coachesTextStyle,
       ),
     );

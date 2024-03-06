@@ -38,6 +38,9 @@ dependencies:
     sdk: flutter
   jwt_decoder: ^2.0.1
   web_socket_channel: ^2.4.0
+  easy_pdf_viewer: ^1.0.7
+
+
 
 dev_dependencies:
   flutter_test:

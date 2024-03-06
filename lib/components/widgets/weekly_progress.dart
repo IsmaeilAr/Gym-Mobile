@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/progress/provider/progress_provider.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart';
@@ -15,9 +16,11 @@ class WeeklyProgressWidget extends StatelessWidget {
     return SizedBox(
       height: 51.h,
       width: 316.w,
-      child: ListView.separated(
-        itemCount: 7,
-        scrollDirection: Axis.horizontal,
+      child: context.watch<ProgressProvider>().isLoadingWeeklyProgress
+          ? const LoadingIndicatorWidget()
+          : ListView.separated(
+              itemCount: 7,
+              scrollDirection: Axis.horizontal,
         separatorBuilder: (BuildContext context, int index) {
           return Gap(w: 20.w);
         },

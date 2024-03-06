@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym/components/widgets/net_image.dart';
 import 'package:page_transition/page_transition.dart';
 import '../../features/chat/models/chat_model.dart';
 import '../../features/chat/screens/chat_screen.dart';
@@ -23,7 +24,8 @@ class _ConversationTileState extends State<ConversationTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        // backgroundImage: NetworkImage(widget.chatUser.imageUrl),
+        backgroundImage: AssetImage("assets/images/profile.png"),
+        // backgroundImage: assetImage(widget.chatModel),
         maxRadius: 24.r,
       ),
       title: Text(widget.chatModel.sid2.name, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: lightGrey),),

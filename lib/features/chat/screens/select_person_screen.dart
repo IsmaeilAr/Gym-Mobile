@@ -38,7 +38,11 @@ class _SelectPersonScreenState extends State<SelectPersonScreen> {
         backgroundColor: black,
         leading: BarIconButton(onPressed: () { Navigator.pop(context); }, icon: Icons.arrow_back_ios_outlined,),
         // todo localize
-        title: const Text("Select person", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),),
+        title: Text(
+          "Select person",
+          style: TextStyle(
+              fontSize: 20.sp, fontWeight: FontWeight.w600, color: lightGrey),
+        ),
         actions: [
           BarIconButton(
             onPressed: () {

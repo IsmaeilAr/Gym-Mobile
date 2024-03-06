@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
+import 'package:gym/components/widgets/back_button.dart';
 import 'package:gym/components/widgets/conversation_tile.dart';
 import 'package:gym/components/widgets/icon_button.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
@@ -10,6 +11,9 @@ import 'package:gym/features/chat/screens/select_person_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../components/styles/gym_icons.dart';
+import '../../../components/widgets/search_bar.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -24,6 +28,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
       _refresh();
+      searching = false;
+      customIcon = const Icon(
+        Icons.search,
+        color: lightGrey,
+      );
     });
     super.initState();
   }
@@ -32,27 +41,49 @@ class _ChatListScreenState extends State<ChatListScreen> {
     context.read<ChatProvider>().callGetAllChats(context);
   }
 
+  late bool searching = false;
+  late Icon customIcon = const Icon(
+    Icons.search,
+    color: lightGrey,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
-        leading: BarIconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icons.arrow_back_ios_outlined,
-        ),
-        title: Text(
-          AppLocalizations.of(context)!.chats,
-          style: const TextStyle(
-              fontSize: 20, fontWeight: FontWeight.w600, color: lightGrey),
-        ),
+        leading: const MyBackButton(),
+        title: searching
+            ? ActiveSearchBar(
+                hint: AppLocalizations.of(context)!.searchChats,
+                runFilter: (value) {
+                  runFilter(value);
+                },
+              )
+            : InactiveSearchBar(
+                title: AppLocalizations.of(context)!.chats,
+              ),
+        automaticallyImplyLeading: false,
         actions: [
-          BarIconButton(
-            onPressed: () {},
-            icon: Icons.search,
-          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                !searching
+                    ? customIcon = Icon(
+                        Icons.cancel,
+                        color: lightGrey,
+                        size: 18.sp,
+                      )
+                    : customIcon = const Icon(
+                        GymIcons.search,
+                        // Icons.search,
+                        color: lightGrey,
+                      );
+                searching = !searching;
+              });
+            },
+            icon: customIcon,
+          )
         ],
       ),
       body:
@@ -65,12 +96,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
         context.watch<ChatProvider>().isLoadingChats ?
         const LoadingIndicatorWidget() :
         ListView.builder(
-          itemCount: context.watch<ChatProvider>().chatList.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index){
-            ChatModel chatUser = context.watch<ChatProvider>().chatList[index];
-            return ConversationTile(
-                chatUser
+                itemCount: context.watch<ChatProvider>().foundChatList.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index){
+                  ChatModel chatUser =
+                      context.watch<ChatProvider>().foundChatList[index];
+                  return ConversationTile(chatUser
             );
           },
         ),
@@ -91,5 +122,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
       ),
     );
+  }
+
+  void runFilter(String input) {
+    List<ChatModel> results;
+    if (input.isEmpty) {
+      results = context.read<ChatProvider>().chatList;
+    } else {
+      results = context
+          .read<ChatProvider>()
+          .chatList
+          .where((element) =>
+              element.sid2.name.toLowerCase().contains(input.toLowerCase()))
+          .toList();
+    }
+    context.read<ChatProvider>().foundChatList = results;
   }
 }

@@ -7,12 +7,18 @@ import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/programs_app_bar.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
+import 'package:gym/features/programs/screens/program_pdf_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../components/dialog/cancel_button.dart';
+import '../../../components/pop_menu/pop_menu_set_program.dart';
+import '../../../components/widgets/menu_item_model.dart';
 
 class PremiumScreen extends StatefulWidget {
-  const PremiumScreen({super.key});
+  const PremiumScreen({super.key, required this.genre});
 
+  final String genre;
   @override
   State<PremiumScreen> createState() => _PremiumScreenState();
 }
@@ -28,93 +34,51 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   Future<void> _refresh() async {
     context.read<ProgramProvider>().getPremiumProgramsList(
-      context,
-          "food",
-        );
-    context.read<ProgramProvider>().getPremiumProgramsList(
-      context,
-          "food",
+          context,
+          widget.genre,
         );
   }
 
   @override
   Widget build(BuildContext context) {
-    List<ProgramModel> sportList =
-        context.watch<ProgramProvider>().sportProgramList;
-    List<ProgramModel> nutList =
-        context.watch<ProgramProvider>().nutritionProgramList;
+    String type = (widget.genre == 'sport')
+        ? AppLocalizations.of(context)!.programsTraining
+        : AppLocalizations.of(context)!.programsNutrition;
+    String title = "${AppLocalizations.of(context)!.premium}/$type";
+    List<ProgramModel> premiumList =
+        context.watch<ProgramProvider>().premiumProgramList;
 
     return Scaffold(
-      appBar: CustomAppBar(title: "Premium", context: context, search: false),
+      appBar: CustomAppBar(title: title, context: context, search: false),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(children: [
-            context.watch<ProgramProvider>().isLoadingPrograms
+            !context.watch<ProgramProvider>().isLoading
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            "Training",
-                            style: TextStyle(
-                                color: lightGrey,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Expanded(
-                        child: Divider(
-                          color: dark,
-                          thickness: 1.h,
-                        )),
-                  ],
-                ),
-                sportList.isEmpty
-                    ? const NoPrograms(
-                  text1: "No Training Programs",
-                              text2:
-                                  " You haven't selected a training program yet. Ask for your training program.",
-                            )
-                    : ListPrograms(programModel: sportList),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Nutrition",
-                      style: TextStyle(
-                          color: lightGrey,
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ),
-                    Expanded(
-                        child: Divider(
-                          color: dark,
-                          thickness: 1.h,
-                        )),
-                        ],
-                      ),
-                      nutList.isEmpty
-                          ? const NoPrograms(
-                              text1: "No Nutrition Programs",
-                              text2:
-                                  "You haven't selected a nutrition program yet. Ask for your nutrition program.",
-                            )
-                          : ListPrograms(programModel: nutList),
+                      premiumList.isEmpty
+                          ? (widget.genre == 'sport')
+                              ? NoPrograms(
+                                  text1: AppLocalizations.of(context)!
+                                      .premiumNoTrainingPrograms,
+                                  text2: AppLocalizations.of(context)!
+                                      .premiumNoSelectedTrainingProgram,
+                                )
+                              : NoPrograms(
+                                  text1: AppLocalizations.of(context)!
+                                      .premiumNoNutritionPrograms,
+                                  text2: AppLocalizations.of(context)!
+                                      .premiumnoSelectedNutritionProgram,
+                                )
+                          : ListPrograms(programModel: premiumList),
                     ],
                   )
                 : const LoadingIndicatorWidget(),
             Expanded(child: Container()),
-            const ButtonStatus(),
+            const ButtonStatus(), //todo cases of this button is inside
           ]),
         ),
       ),
@@ -123,7 +87,6 @@ class _PremiumScreenState extends State<PremiumScreen> {
 }
 
 class ListPrograms extends StatelessWidget {
-
   final List<ProgramModel> programModel;
 
   const ListPrograms({super.key, required this.programModel});
@@ -138,34 +101,94 @@ class ListPrograms extends StatelessWidget {
           itemCount: programModel.length,
           itemBuilder: (context, index) {
             ProgramModel program = programModel[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 156.h,
-                  width: 243.w,
-                  child: GestureDetector(
-                    child: Card(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
+            return GestureDetector(
+              onTap: () {
+                // go to program file
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.fade,
+                        child: PDFScreen(
+                          programName: program.name,
+                          programFileName: program.file,
+                        )));
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 156.h,
+                        width: 332.w,
+                        child: Image.network(
+                          program.imageUrl,
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, url, error) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
-                      child: Image.asset(
-                        program.imageUrl,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    onTap: () {},
+                      Positioned(
+                          right: 0.w,
+                          top: 0.h,
+                          child: PopupMenuButton<MenuItemModel>(
+                            itemBuilder: (context) => [
+                              ...SetProgramsMenuItems.getSetProgramMenuItems
+                                  .map(buildItem),
+                            ],
+                            onSelected: (item) =>
+                                onSelectSetProgram(context, item, program, () {
+                              _selectProgram(context, program.id);
+                            }, () {
+                              _deselectProgram(context, program.id);
+                            }),
+                            color: dark,
+                            iconColor: Colors.white,
+                            icon: Icon(
+                              Icons.more_horiz_sharp,
+                              size: 20.sp,
+                            ),
+                          )),
+                    ],
                   ),
-                ),
-                Text(
-                  program.name,
-                  style: MyDecorations.programsTextStyle,
-                ),
-              ],
+                  Row(
+                    children: [
+                      Text(
+                        program.name,
+                        style: MyDecorations.programsTextStyle,
+                      ),
+                      SizedBox(
+                        width: 5.h,
+                      ),
+                      program.id ==
+                              program
+                                  .id // todo compare with my selected program
+                          ? Icon(
+                              Icons.check_box,
+                              color: grey,
+                              size: 12.sp,
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                ],
+              ),
             );
           }),
     );
+  }
+
+  void _selectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callSetProgram(context, programId);
+    // todo onRefresh
+  }
+
+  void _deselectProgram(BuildContext context, int programId) {
+    context.read<ProgramProvider>().callUnSetProgram(context, programId);
+    // todo onRefresh
   }
 }
 
@@ -190,8 +213,8 @@ class NoPrograms extends StatelessWidget {
             const Gap(h: 8),
             Text(
               text2,
-              style: const TextStyle(
-                fontSize: 12,
+              style: TextStyle(
+                fontSize: 12.sp,
                 fontWeight: FontWeight.w400,
                 color: lightGrey,
               ),
@@ -224,12 +247,13 @@ class _ButtonStatusState extends State<ButtonStatus> {
             style: MyDecorations.myButtonStyle(primaryColor),
             onPressed: () {
               showDialog(
-                  context: context, builder: (context) => const AskForNewProgram());
+                  context: context,
+                  builder: (context) => const AskForNewProgram());
             },
             child: Text(
-              "Ask For A New Program",
+              AppLocalizations.of(context)!.premiumAskForNewProgram,
               style: MyDecorations.myButtonTextStyle(
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
             )),
@@ -238,7 +262,7 @@ class _ButtonStatusState extends State<ButtonStatus> {
       return Column(
         children: [
           Text(
-            "You need to have a personal coach to request a premium program.",
+            AppLocalizations.of(context)!.premiumNeedPersonalCoachForPremium,
             style: MyDecorations.premiumTextStyle,
             textAlign: TextAlign.center,
           ),
@@ -249,7 +273,7 @@ class _ButtonStatusState extends State<ButtonStatus> {
               onPressed: () {},
               style: MyDecorations.myButtonStyle(dark),
               child: Text(
-                'Find coach',
+                AppLocalizations.of(context)!.premiumFindCoachButton,
                 style: MyDecorations.myButtonTextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
@@ -263,7 +287,7 @@ class _ButtonStatusState extends State<ButtonStatus> {
       return Column(
         children: [
           Text(
-            "Your program request is currently being processed",
+            AppLocalizations.of(context)!.premiumProgramRequestProcessing,
             style: MyDecorations.programsTextStyle,
             textAlign: TextAlign.center,
           ),
@@ -274,7 +298,7 @@ class _ButtonStatusState extends State<ButtonStatus> {
               onPressed: () {},
               style: MyDecorations.myButtonStyle(dark),
               child: Text(
-                'Revoke request',
+                AppLocalizations.of(context)!.premiumRevokeRequestButton,
                 style: TextStyle(
                   color: primaryColor,
                   fontFamily: "Saira",
@@ -288,7 +312,7 @@ class _ButtonStatusState extends State<ButtonStatus> {
         ],
       );
     } else {
-      return Container();
+      return const SizedBox.shrink();
     }
   }
 }
@@ -310,20 +334,13 @@ class _AskForNewProgramState extends State<AskForNewProgram> {
       backgroundColor: black,
       surfaceTintColor: black,
       actions: [
-        MaterialButton(
-          onPressed: () {},
-          color: black,
-          child: Text(
-            "Cancel",
-            style: MyDecorations.programsTextStyle,
-          ),
-        ),
+        const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {},
           color: primaryColor,
           child: Text(
-            "Send",
+            AppLocalizations.of(context)!.send,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
@@ -333,7 +350,7 @@ class _AskForNewProgramState extends State<AskForNewProgram> {
         child: Column(
           children: [
             Text(
-              "Select the type of program you'd like to request from your coach:",
+              AppLocalizations.of(context)!.requestProgramType,
               style: MyDecorations.coachesTextStyle,
             ),
             CheckboxListTile(
@@ -347,7 +364,7 @@ class _AskForNewProgramState extends State<AskForNewProgram> {
               checkColor: black,
               controlAffinity: ListTileControlAffinity.leading,
               title: Text(
-                "Training program",
+                AppLocalizations.of(context)!.trainingProgram,
                 style: MyDecorations.programsTextStyle,
               ),
             ),
@@ -362,7 +379,7 @@ class _AskForNewProgramState extends State<AskForNewProgram> {
               checkColor: black,
               controlAffinity: ListTileControlAffinity.leading,
               title: Text(
-                "Nutrition program",
+                AppLocalizations.of(context)!.nutritionProgram,
                 style: MyDecorations.programsTextStyle,
               ),
             ),
