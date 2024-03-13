@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
-import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/components/widgets/custom_app_bar.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
@@ -12,6 +12,9 @@ import 'package:gym/features/programs/screens/program_pdf_screen.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
+import '../../../components/widgets/gap.dart';
+import '../../../components/widgets/loading_indicator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrainingWithCoachesScreen extends StatefulWidget {
   const TrainingWithCoachesScreen(this.category, {super.key});
@@ -25,15 +28,21 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
 
+  Future<void> _refresh() async {
+    context
+        .read<ProgramProvider>()
+        .getProgramsList(context, widget.category.type, widget.category.id)
+        .then((value) => context.read<ProgramProvider>().getMyCoachPrograms(
+              context,
+              widget.category.type,
+              context.read<ProfileProvider>().status.myCoach.id,
+            ));
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
-      context.read<ProgramProvider>().getProgramsList(context, widget.category.type, widget.category.id);
-      context.read<ProgramProvider>().getMyCoachPrograms(
-        context,
-            widget.category.type,
-            context.watch<ProfileProvider>().status.myCoach.id,
-          );
+      _refresh();
     });
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
@@ -50,29 +59,48 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
 
   @override
   Widget build(BuildContext context) {
-    String title = "${widget.category.type}⮞${widget.category.name}";
+    String title = "${widget.category.type}/${widget.category.name}";
     return Scaffold(
       appBar: CustomAppBar(title: title, context: context, search: true),
       body: Column(
         children: <Widget>[
-          TabBar.secondary(
-            controller: _tabController,
-            unselectedLabelColor: grey,
-            labelStyle: const TextStyle(color: primaryColor),
-            indicatorColor: primaryColor,
-            dividerColor: black,
-            tabs: const <Widget>[
-              Tab(text: 'My coach'),
-              Tab(text: 'All'),
-            ],
+          Container(
+            color: black,
+            child: TabBar.secondary(
+              controller: _tabController,
+              unselectedLabelColor: grey,
+              labelStyle: const TextStyle(color: primaryColor),
+              indicatorColor: primaryColor,
+              dividerColor: black,
+              tabs: <Widget>[
+                Tab(text: AppLocalizations.of(context)!.programsMyCoach),
+                Tab(text: AppLocalizations.of(context)!.programsAll),
+              ],
+            ),
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
+            child: context.watch<ProgramProvider>().isLoadingPrograms
+                ? const LoadingIndicatorWidget()
+                : TabBarView(
+                    controller: _tabController,
               children: <Widget>[
-                ProgramsList(category: widget.category,),
-                ProgramsList(category: widget.category,),
-              ],
+                      RefreshIndicator(
+                          onRefresh: _refresh,
+                          color: red,
+                          backgroundColor: dark,
+                          child: ProgramsList(
+                            category: widget.category,
+                            isCoach: true,
+                          )),
+                      RefreshIndicator(
+                          onRefresh: _refresh,
+                          color: red,
+                          backgroundColor: dark,
+                          child: ProgramsList(
+                            category: widget.category,
+                            isCoach: false,
+                          )),
+                    ],
             ),
           ),
         ],
@@ -82,9 +110,10 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
 }
 
 class ProgramsList extends StatelessWidget {
-  const ProgramsList({super.key, required this.category});
+  const ProgramsList(
+      {super.key, required this.category, required this.isCoach});
   final TrainingCategoryModel category;
-  // final bool isCoach;
+  final bool isCoach;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -96,13 +125,18 @@ class ProgramsList extends StatelessWidget {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: category.type == "Sport" ?
-              context.watch<ProgramProvider>().sportProgramList.length :
+              itemCount: (isCoach)
+                  ? context.watch<ProgramProvider>().myCoachPrograms.length
+                  : (category.type == "sport")
+                      ? context.watch<ProgramProvider>().sportProgramList.length :
               context.watch<ProgramProvider>().nutritionProgramList.length,
               itemBuilder: (context, index) {
                 ProgramModel program;
-                category.type == "Sport" ?
-                program = context.watch<ProgramProvider>().sportProgramList[index] :
+                (isCoach)
+                    ? program =
+                        context.watch<ProgramProvider>().myCoachPrograms[index]
+                    : category.type == "sport"
+                        ? program = context.watch<ProgramProvider>().sportProgramList[index] :
                 program = context.watch<ProgramProvider>().nutritionProgramList[index];
                 return GestureDetector(
                   onTap: () {
@@ -123,9 +157,18 @@ class ProgramsList extends StatelessWidget {
                           SizedBox(
                             height: 156.h,
                             width: 332.w,
-                            child: Image.asset(
-                              program.imageUrl,
-                              fit: BoxFit.fill,
+                            child: Card(
+                              elevation: 0,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              child: Image.network(
+                                program.imageUrl,
+                                fit: BoxFit.fill,
+                                errorBuilder: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
                             ),
                           ),
                           Positioned(
@@ -151,23 +194,26 @@ class ProgramsList extends StatelessWidget {
                               )),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            program.name,
-                            style: MyDecorations.programsTextStyle,
-                          ),
-                          SizedBox(
-                            width: 5.h,
-                          ),
-                          program.id == program.id
-                              ? Icon(
-                                  Icons.check_box,
-                                  color: grey,
-                                  size: 12.sp,
-                                )
-                              : const SizedBox.shrink(),
-                        ],
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                        child: Row(
+                          children: [
+                            Text(
+                              program.name,
+                              style: MyDecorations.programsTextStyle,
+                            ),
+                            SizedBox(
+                              width: 5.h,
+                            ),
+                            program.id == program.id
+                                ? Icon(
+                                    Icons.check_box,
+                                    color: grey,
+                                    size: 12.sp,
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         height: 10.h,

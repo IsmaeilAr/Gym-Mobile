@@ -15,6 +15,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../profile/provider/profile_provider.dart';
+
 class ProgramsScreen extends StatefulWidget {
   const ProgramsScreen({super.key});
 
@@ -34,9 +36,11 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
 
   Future<void> _refresh() async {
     context.read<ProgramProvider>().getProgramsList(context, "Recommended", 0);
-    context.read<ProgramProvider>().getCategoriesList(context, "Sport");
-    context.read<ProgramProvider>().getCategoriesList(context, "Food");
-    context.read<CoachProvider>().getUsersList(context, "Coach");  }
+    context.read<ProgramProvider>().getCategoriesList(context, "sport");
+    context.read<ProgramProvider>().getCategoriesList(context, "food");
+    context.read<CoachProvider>().getUsersList(context, "Coach");
+    context.read<ProfileProvider>().callGetStatus(context);
+  }
 
   @override
   Widget build(BuildContext context) {

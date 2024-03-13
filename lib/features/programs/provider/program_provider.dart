@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/programs/model/category_model.dart';
+import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import '../model/premium_status_model.dart';
 import '../model/program_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,6 +56,24 @@ class ProgramProvider extends ChangeNotifier {
 
   set premiumProgramList(List<ProgramModel> value) {
     _premiumProgramList = value;
+    notifyListeners();
+  }
+
+  bool _isLoadingPremiumStatus = false;
+
+  bool get isLoadingPremiumStatus => _isLoadingPremiumStatus;
+
+  set isLoadingPremiumStatus(bool value) {
+    _isLoadingPremiumStatus = value;
+    notifyListeners();
+  }
+
+  List<PremiumStatusModel> _premiumStatusList = [];
+
+  List<PremiumStatusModel> get premiumStatusList => _premiumStatusList;
+
+  set premiumStatusList(List<PremiumStatusModel> value) {
+    _premiumStatusList = value;
     notifyListeners();
   }
 
@@ -181,7 +201,8 @@ class ProgramProvider extends ChangeNotifier {
 
   Future<void> callSearchProgram(
       BuildContext context, String programName) async {
-    isLoadingSearch = true;
+    searchedPrograms = [];
+    (programName.isEmpty) ? {} : isLoadingSearch = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
     if (isDeviceConnected) {
@@ -261,9 +282,52 @@ class ProgramProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getPremiumStatus(
+    // todo use this
+    BuildContext context,
+    String genre,
+  ) async {
+    isLoadingPremiumStatus = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results = await ApiHelper().getMyOrderApi(
+          genre,
+        );
+        isLoadingPremiumStatus = false;
+        results.fold((l) {
+          isLoadingPremiumStatus = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            List<dynamic> data = response.data["data"];
+            log("data $data");
+            premiumStatusList =
+                data.map((e) => PremiumStatusModel.fromJson(e)).toList();
+            isLoadingPremiumStatus = false;
+          } else {
+            isLoadingPremiumStatus = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception get premium $genre status : $e");
+        showMessage("$e", false);
+        isLoadingPremiumStatus = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingPremiumStatus = false;
+    }
+    notifyListeners();
+  }
+
   void getMyCoachPrograms (BuildContext context, String type, myCoachId){
-    type == "Sport" ?
-    myCoachPrograms = sportProgramList.where((item) => item.coachId == myCoachId).toList() :
+    myCoachPrograms = [];
+    type == "sport"
+        ? myCoachPrograms = sportProgramList.where((item) => item.coachId == myCoachId).toList() :
     myCoachPrograms = nutritionProgramList.where((item) => item.coachId == myCoachId).toList();
   }
 
@@ -285,7 +349,7 @@ class ProgramProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            type == "Sport"
+            type == "sport"
                 ? _sportCategoriesList =
                     list.map((e) => TrainingCategoryModel.fromJson(e)).toList()
                 : _nutritionCategoriesList =
@@ -350,7 +414,7 @@ class ProgramProvider extends ChangeNotifier {
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
-            await ApiHelper().setProgramApi(programId);
+            await ApiHelper().unsetProgramApi(programId);
         isLoading = false;
         results.fold((l) {
           isLoading = false;
@@ -378,4 +442,79 @@ class ProgramProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> callRequestPremiumProgram(
+      BuildContext context, int coachId, String genre) async {
+    isLoading = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results =
+            await ApiHelper().requestPremiumProgramApi(coachId, genre);
+        isLoading = false;
+        results.fold((l) {
+          isLoading = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("## $data");
+            isLoading = false;
+          } else {
+            isLoading = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception request premium program : $e");
+        showMessage("$e", false);
+        isLoading = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  Future<void> callCancelOrder(
+    BuildContext context,
+    int orderId,
+  ) async {
+    isLoading = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results = await ApiHelper().cancelOrderApi(
+          orderId,
+        );
+        isLoading = false;
+        results.fold((l) {
+          isLoading = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("## $data");
+            isLoading = false;
+            showMessage('order canceled', true);
+          } else {
+            isLoading = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception cancel order : $e");
+        showMessage("$e", false);
+        isLoading = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoading = false;
+    }
+    notifyListeners();
+  }
 }

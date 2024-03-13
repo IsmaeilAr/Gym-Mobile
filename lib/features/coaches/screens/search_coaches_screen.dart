@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/widgets/coach_tile_widget.dart';
-import '../../../components/widgets/programs_app_bar.dart';
+import '../../../components/widgets/search_app_bar.dart';
 import '../../profile/provider/profile_provider.dart';
 
 class SearchCoachesScreen extends StatelessWidget {
@@ -20,8 +20,8 @@ class SearchCoachesScreen extends StatelessWidget {
     return Scaffold(
       appBar: SearchAppBar(
         hint: AppLocalizations.of(context)!.searchInUsers,
-        runFilter: (value) {
-          doUserSearch(context, value);
+        searchFun: (value) {
+          context.read<CoachProvider>().searchUsers(context, value);
         },
       ),
       body: context.watch<CoachProvider>().isLoadingSearchCoach
@@ -73,9 +73,5 @@ class SearchCoachesScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  void doUserSearch(context, value) {
-    context.read<CoachProvider>().searchUsers(context, value);
   }
 }

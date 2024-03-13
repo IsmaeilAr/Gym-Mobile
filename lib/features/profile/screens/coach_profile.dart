@@ -7,6 +7,7 @@ import 'package:gym/components/pop_menu/pop_menu_revoke_request.dart';
 import 'package:gym/components/pop_menu/pop_menu_set_coach.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
+import 'package:gym/components/styles/gym_icons.dart';
 import 'package:gym/components/widgets/back_button.dart';
 import 'package:gym/components/widgets/coach_availability.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
@@ -22,6 +23,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/dialog/cancel_button.dart';
+import '../../../components/dialog/set_coach_dialog.dart';
 
 int popupMenuCase = 2; // 1_ChangeCoach  2_SetCoach  3_RevokeRequest
 
@@ -65,23 +67,26 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
     return Scaffold(
       appBar: CoachesProfileAppBar(
         popupMenuCase: 1,
-        onSelectedSetCoach: (context, getSetMenuItems) {},
-        onSelectedRevokeRequest: (context, getRevokeMenuItems) {},
-        onSelectedChangeCoach: (context, getChangeMenuItems) {},
+        onSelectedSetCoachFun: (context, getSetMenuItems) {},
+        onSelectedRevokeRequestFun: (context, getRevokeMenuItems) {},
+        onSelectedChangeCoachFun: (context, getChangeMenuItems) {},
         coach: widget.coach,
       ),
       body: Column(
         children: <Widget>[
-          TabBar.secondary(
-            controller: _tabController,
-            unselectedLabelColor: grey,
-            labelStyle: const TextStyle(color: primaryColor),
-            indicatorColor: primaryColor,
-            dividerColor: black,
-            tabs: <Widget>[
-              Tab(text: AppLocalizations.of(context)!.coachProfileInfo),
-              Tab(text: AppLocalizations.of(context)!.coachProfileArticles),
-            ],
+          Container(
+            color: black,
+            child: TabBar.secondary(
+              controller: _tabController,
+              unselectedLabelColor: grey,
+              labelStyle: const TextStyle(color: primaryColor),
+              indicatorColor: primaryColor,
+              dividerColor: black,
+              tabs: <Widget>[
+                Tab(text: AppLocalizations.of(context)!.coachProfileInfo),
+                Tab(text: AppLocalizations.of(context)!.coachProfileArticles),
+              ],
+            ),
           ),
           Expanded(
             child: RefreshIndicator(
@@ -103,30 +108,11 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
               context,
               PageTransition(
                   type: PageTransitionType.fade,
-                  child: ChatScreen(ChatModel(
-                      sid2: UserModel(
-                          id: widget.coach.id,
-                          name: widget.coach.name,
-                          phoneNumber: widget.coach.phoneNumber,
-                          birthDate: widget.coach.birthDate,
-                          role: widget.coach.role,
-                          description: widget.coach.description,
-                          rate: widget.coach.rate,
-                          expiration: widget.coach.expiration,
-                          finance: widget.coach.finance,
-                          isPaid: widget.coach.isPaid,
-                          images: widget.coach.images),
-                      latestMessage: LatestMessage(
-                          id: 1,
-                          content: "",
-                          senderId: 0,
-                          receiverId: 0,
-                        createdAt: ""),
-                  ))));
+                  child: ChatScreen(widget.coach.id, widget.coach.name)));
         },
         backgroundColor: dark,
         child: Icon(
-          Icons.chat,
+          GymIcons.chat,
           size: 20.sp,
           color: lightGrey,
         ),
@@ -148,43 +134,49 @@ class CoachInfoTab extends StatelessWidget {
         vertical: 6.h,
         horizontal: 9.w,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CoachImage(coach, isSelectedCoach),
-          InfoWithIconWidget(
-              icon: Icons.phone,
-              info: AppLocalizations.of(context)!.coachProfilePhone),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 19.w),
-            child: Text(
-              coach.phoneNumber,
-              style: MyDecorations.profileLight400TextStyle,
+      child: SizedBox(
+        width: 360.w,
+        height: 731.h,
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CoachImage(coach, isSelectedCoach),
+            InfoWithIconWidget(
+                icon: Icons.phone,
+                info: AppLocalizations.of(context)!.coachProfilePhone),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 19.w),
+              child: Text(
+                coach.phoneNumber,
+                style: MyDecorations.profileLight400TextStyle,
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 12.h),
-            child: InfoWithIconWidget(
-                icon: Icons.error,
-                info: AppLocalizations.of(context)!.coachProfileBio),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 19.w),
-            child: Text(
-              coach.description,
-              style: MyDecorations.profileLight400TextStyle,
+            Padding(
+              padding: EdgeInsets.only(top: 12.h),
+              child: InfoWithIconWidget(
+                  icon: Icons.error,
+                  info: AppLocalizations.of(context)!.coachProfileBio),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 12.h),
-            child: InfoWithIconWidget(
-                icon: Icons.alarm_rounded,
-                info: AppLocalizations.of(context)!.coachProfileAvailability),
-          ),
-          context.watch<CoachProvider>().isLoadingCoachTime
-              ? const LoadingIndicatorWidget()
-              : const CoachAvailabilityWidget()
-        ],
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 19.w),
+              child: Text(
+                (coach.description.isEmpty)
+                    ? 'not set yet..'
+                    : coach.description,
+                style: MyDecorations.profileLight400TextStyle,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 12.h),
+              child: InfoWithIconWidget(
+                  icon: GymIcons.stopwatchFilled,
+                  info: AppLocalizations.of(context)!.coachProfileAvailability),
+            ),
+            context.watch<CoachProvider>().isLoadingCoachTime
+                ? const LoadingIndicatorWidget()
+                : const CoachAvailabilityWidget()
+          ],
+        ),
       ),
     );
   }
@@ -259,17 +251,17 @@ class CoachesProfileAppBar extends StatelessWidget
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   final int popupMenuCase;
-  final Function(BuildContext, MenuItemModel) onSelectedChangeCoach;
-  final Function(BuildContext, MenuItemModel) onSelectedSetCoach;
-  final Function(BuildContext, MenuItemModel) onSelectedRevokeRequest;
+  final Function(BuildContext, MenuItemModel) onSelectedChangeCoachFun;
+  final Function(BuildContext, MenuItemModel) onSelectedSetCoachFun;
+  final Function(BuildContext, MenuItemModel) onSelectedRevokeRequestFun;
   final UserModel coach;
 
   const CoachesProfileAppBar({
     super.key,
     required this.popupMenuCase,
-    required this.onSelectedSetCoach,
-    required this.onSelectedRevokeRequest,
-    required this.onSelectedChangeCoach,
+    required this.onSelectedSetCoachFun,
+    required this.onSelectedRevokeRequestFun,
+    required this.onSelectedChangeCoachFun,
     required this.coach,
   });
 
@@ -354,7 +346,7 @@ class CustomPopupMenuButton extends StatelessWidget {
   }
 
   void _doUnselectCoach(BuildContext context, int coachId) {
-    context.read<CoachProvider>().unsetCoach(context, coachId);
+    context.read<CoachProvider>().callUnsetCoach(context, coachId);
     // todo onRefresh
   }
 }
@@ -419,9 +411,14 @@ class CoachImage extends StatelessWidget {
                   )
                 : ElevatedButton(
                     onPressed: () {
-                      context
-                          .read<CoachProvider>()
-                          .setCoach(context, coach.id); //todo put dialog
+                      showDialog(
+                          context: context,
+                          builder: (context) => SelectCoachDialog(
+                                () {
+                                  _doSelectCoach(context, coach.id);
+                                },
+                                coach: coach,
+                              ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: dark,
@@ -446,5 +443,13 @@ class CoachImage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _doSelectCoach(
+    BuildContext context,
+    int coachId,
+  ) {
+    context.read<CoachProvider>().setCoach(context, coach.id);
+    // todo onRefresh
   }
 }

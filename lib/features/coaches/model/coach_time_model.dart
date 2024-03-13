@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class CoachTimeModel {
   final String startTime;
   final String endTime;
@@ -11,10 +13,16 @@ class CoachTimeModel {
     required this.isAvailable,
   });
 
+  static String extractTime(String dateTimeString) {
+    final DateTime dateTime = DateTime.parse(dateTimeString);
+    final formattedTime = DateFormat('h:mm a').format(dateTime);
+    return formattedTime;
+  }
+
   factory CoachTimeModel.fromJson(Map<String, dynamic> json) {
     return CoachTimeModel(
-      startTime: json['startTime'].toString().substring(11, 16),
-      endTime: json['endTime'].toString().substring(11, 16),
+      startTime: extractTime(json['startTime']),
+      endTime: extractTime(json['endTime']),
       dayId: json['dayId'],
       isAvailable: false,
     );

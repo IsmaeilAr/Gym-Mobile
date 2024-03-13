@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
+import 'package:gym/components/widgets/gap.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/programs/model/category_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
@@ -11,7 +13,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
 import '../../../components/widgets/net_image.dart';
-import '../../../components/widgets/programs_app_bar.dart';
+import '../../../components/widgets/custom_app_bar.dart';
 import '../../../test.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -57,8 +59,10 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
               vertical: 8.h,
               horizontal: 14.w,
             ),
-            child: Column(
-              children: [
+            child: context.watch<ProgramProvider>().isLoadingPrograms
+                ? const LoadingIndicatorWidget()
+                : Column(
+                    children: [
                 Expanded(
                   child: ListView.builder(
                     itemCount: widget.category.type == "sport"
@@ -94,12 +98,21 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
                                 SizedBox(
                                   height: 156.h,
                                   width: 332.w,
-                                  child: Image.network(
-                                    program.imageUrl,
-                                    fit: BoxFit.fill,
-                                    errorBuilder: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
+                                        child: Card(
+                                          elevation: 0,
+                                          clipBehavior: Clip.antiAlias,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12.r),
+                                          ),
+                                          child: Image.network(
+                                            program.imageUrl,
+                                            fit: BoxFit.fill,
+                                            errorBuilder:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        ),
                                 ),
                                 Positioned(
                                     right: 0.w,
@@ -125,24 +138,29 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
                                     )),
                               ],
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  program.name,
-                                  style: MyDecorations.programsTextStyle,
-                                ),
-                                SizedBox(
-                                  width: 5.h,
-                                ),
-                                program.id == program.id
-                                    ? Icon(
-                                        Icons.check_box,
-                                        color: grey,
-                                        size: 12.sp,
-                                      )
-                                    : const SizedBox.shrink(),
-                              ],
-                            ),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          program.name,
+                                          style:
+                                              MyDecorations.programsTextStyle,
+                                        ),
+                                        SizedBox(
+                                          width: 5.h,
+                                        ),
+                                        program.id == program.id
+                                            ? Icon(
+                                                Icons.check_box,
+                                                color: grey,
+                                                size: 12.sp,
+                                              )
+                                            : const SizedBox.shrink(),
+                                      ],
+                                    ),
+                                  ),
                             SizedBox(
                               height: 10.h,
                             ),

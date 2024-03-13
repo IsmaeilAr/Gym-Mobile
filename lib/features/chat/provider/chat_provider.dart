@@ -79,7 +79,7 @@ class ChatProvider extends ChangeNotifier {
   Future<void> callGetChatMessages(BuildContext context, int userId) async {
     isLoadingMessages = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
-
+    messageList = [];
     if (isDeviceConnected) {
       try {
         Either<String, Response> results = await ApiHelper().getChatMessagesApi(userId);
@@ -93,7 +93,6 @@ class ChatProvider extends ChangeNotifier {
             var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
-            messageList = [];
             messageList = list
                 .map((e) => ChatMessage.fromJson(e))
                 .toList()

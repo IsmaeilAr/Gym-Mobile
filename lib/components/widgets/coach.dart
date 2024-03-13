@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../../features/coaches/provider/coach_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'find_coach_button.dart';
+
 class NoCoachScreen extends StatelessWidget {
   const NoCoachScreen({super.key});
 
@@ -35,22 +37,7 @@ class NoCoachScreen extends StatelessWidget {
           ],
         ),
         SizedBox(height: 10.h),
-        SizedBox(
-          width: 296.w,
-          height: 46.h,
-          child: ElevatedButton(
-              style:MyDecorations.profileButtonStyle(dark),
-              onPressed:() {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const AllCoachesScreen()));
-              },
-              child: Text(
-                AppLocalizations.of(context)!.myProfileFindCoachButton,
-                style: MyDecorations.myButtonTextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              )),
-        ),
+        const FindCoachButton(),
       ],
     );
   }

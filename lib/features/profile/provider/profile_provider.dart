@@ -131,8 +131,9 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  Future<void> getStatus(BuildContext context,) async {
+  Future<void> callGetStatus(
+    BuildContext context,
+  ) async {
     isLoadingStatus = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
 
@@ -148,7 +149,6 @@ class ProfileProvider extends ChangeNotifier {
           if (response.statusCode == 200) {
             var data = response.data["data"][0];
             log("data $data");
-            // List<dynamic> list = data;
             status = InitStatusModel.fromJson(data);
             isLoadingStatus = false;
           } else {
@@ -172,18 +172,18 @@ class ProfileProvider extends ChangeNotifier {
   Future<bool> callAddInfoApi(
     BuildContext context,
     String gender,
-    String dob,
-    double height,
-    double weight,
-    double waist,
-    double neck,
+    String? dob,
+    double? height,
+    double? weight,
+    double? waist,
+    double? neck,
   ) async {
     isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().addInfoApi(
+        Either<String, Response> results = await ApiHelper().addMetricsApi(
           gender,
           dob,
           height,
@@ -304,8 +304,8 @@ class ProfileProvider extends ChangeNotifier {
 
   Future<bool> callEditMetrics(
       BuildContext context,
-      // String gender,
-      String dob,
+    String gender,
+    String dob,
       String height,
       String weight,
       String waist,
@@ -317,7 +317,7 @@ class ProfileProvider extends ChangeNotifier {
     if (isDeviceConnected) {
       try {
         Either<String, Response> results = await ApiHelper().editMetricsApi(
-          // gender,
+          gender,
           dob,
           height,
           weight,

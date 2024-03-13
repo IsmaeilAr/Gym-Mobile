@@ -6,21 +6,25 @@ import 'package:gym/features/profile/models/player_metrics_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../../../components/widgets/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../components/widgets/snack_bar.dart';
+
 TextEditingController nameController = TextEditingController();
 TextEditingController phoneController = TextEditingController();
+TextEditingController genderKeeper = TextEditingController();
 TextEditingController dobController = TextEditingController();
 TextEditingController heightController = TextEditingController();
 TextEditingController weightController = TextEditingController();
 TextEditingController waistController = TextEditingController();
 TextEditingController neckController = TextEditingController();
 
-File? _currentImagePath;
+File? _currentImage;
 
 class EditProfile extends StatefulWidget {
   final UserModel profileInfo;
@@ -40,22 +44,23 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
 
-
-
-
-
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      dobController.text =
+          '${AppLocalizations.of(context)!.myProfileAge} ${widget.personalMetrics.age.toString()}';
+    });
+
     (widget.isEdit)
         ? {
             nameController.text = widget.profileInfo.name,
             phoneController.text = widget.profileInfo.phoneNumber,
-            dobController.text = widget.personalMetrics.age.toString(),
             heightController.text = widget.personalMetrics.height.toString(),
             weightController.text = widget.personalMetrics.weight.toString(),
             waistController.text =
                 widget.personalMetrics.waistMeasurement.toString(),
-            neckController.text = widget.personalMetrics.neck.toString()
+            neckController.text = widget.personalMetrics.neck.toString(),
+            genderKeeper.text = widget.personalMetrics.gender.toString(),
           }
         : {
             nameController.text = widget.profileInfo.name,
@@ -70,7 +75,7 @@ class _EditProfileState extends State<EditProfile> {
     await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickImage != null) {
       setState(() {
-        _currentImagePath = File(pickImage.path);
+        _currentImage = File(pickImage.path);
       });
     }
   }
@@ -78,6 +83,45 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    // Date picker
+    // #########################################################
+    Future<void> selectDate(BuildContext context) async {
+      final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: Colors.black,
+                // specify the color you want for the calendar
+                onPrimary: Colors
+                    .red, // specify the color you want for the selected date
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: red, // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
+        initialDate: DateTime(2000),
+        firstDate: DateTime(1940, 1),
+        lastDate: DateTime(2016, 12),
+      );
+
+      if (pickedDate != null) {
+        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+        setState(() {
+          dobController.text = formattedDate;
+        });
+      } else {
+        showMessage("Birthdate is not selected", false); //todo localize
+      }
+    }
+
+    // #########################################################
     return Scaffold(
         appBar: EditAppBar(context),
         body: Padding(
@@ -97,7 +141,7 @@ class _EditProfileState extends State<EditProfile> {
                         children: [
                           GestureDetector(
                             onTap: _pickImage,
-                            child: _currentImagePath == null
+                            child: _currentImage == null
                                 ? CircleAvatar(
                               radius: 90.r,
                                     backgroundImage:
@@ -106,7 +150,7 @@ class _EditProfileState extends State<EditProfile> {
                                 : CircleAvatar(
                                     radius: 90.r,
                                     backgroundImage: FileImage(
-                                      _currentImagePath!,
+                                      _currentImage!,
                                     ),
                                   ),
                           ),
@@ -186,7 +230,10 @@ class _EditProfileState extends State<EditProfile> {
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                 ),
-                BuildProfileTextField(
+                BuildProfileTextField2(
+                  () {
+                    selectDate(context);
+                  },
                   labelText:
                       "${AppLocalizations.of(context)!.addInfoBirthdateKey}:",
                   controller: dobController,
@@ -255,10 +302,12 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
                   context,
                   nameController.text,
                   phoneController.text,
-                  _currentImagePath,
+                  _currentImage,
                 );
+
             context.read<ProfileProvider>().callEditMetrics(
                   context,
+                  genderKeeper.text,
                   dobController.text,
                   heightController.text,
                   weightController.text,
@@ -267,6 +316,8 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
                 );
             context.read<ProfileProvider>().getProfileInfo(context);
             context.read<ProfileProvider>().getPersonalMetrics(context);
+            _currentImage = null;
+            Navigator.pop(context);
           },
           icon: Icon(
             Icons.check,
@@ -297,6 +348,46 @@ class BuildProfileTextField extends StatelessWidget {
           decoration: InputDecoration(
             suffixStyle: MyDecorations.profileLight400TextStyle,
             labelText: labelText,
+            labelStyle: MyDecorations.mySuffixTextStyle,
+            contentPadding: EdgeInsets.zero,
+            counterText: '',
+          ),
+          style: MyDecorations.profileLight400TextStyle,
+        ),
+      ),
+    );
+  }
+}
+
+class BuildProfileTextField2 extends StatefulWidget {
+  final String labelText;
+  final TextEditingController controller;
+  final VoidCallback showDP;
+
+  const BuildProfileTextField2(this.showDP,
+      {super.key, required this.labelText, required this.controller});
+
+  @override
+  State<BuildProfileTextField2> createState() => _BuildProfileTextField2State();
+}
+
+class _BuildProfileTextField2State extends State<BuildProfileTextField2> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 9.h),
+      child: SizedBox(
+        width: 109.w,
+        child: TextField(
+          readOnly: true,
+          onTap: widget.showDP,
+          controller: widget.controller,
+          keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.next,
+          maxLength: 14,
+          decoration: InputDecoration(
+            suffixStyle: MyDecorations.profileLight400TextStyle,
+            labelText: widget.labelText,
             labelStyle: MyDecorations.mySuffixTextStyle,
             contentPadding: EdgeInsets.zero,
             counterText: '',

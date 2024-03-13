@@ -38,6 +38,7 @@ class UserModel {
     expiration: DateTime.parse(json["expiration"]),
     finance: (json["finance"] ?? 0).toDouble(),
     isPaid: json["is_paid"] == "paid", // Parse string "paid" to boolean
+
         images: (json["image"] != null && json["image"] != [])
             ? List<ImageModel>.from(
                 json["image"].map((x) => ImageModel.fromJson(x)))

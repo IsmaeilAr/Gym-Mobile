@@ -24,6 +24,7 @@ class SelectProgramDialog extends StatelessWidget {
         MaterialButton(
           onPressed: () {
             doSelectProgram();
+            Navigator.pop(context);
           },
           color: primaryColor,
           child: Text(
@@ -58,6 +59,7 @@ class DeselectProgramDialog extends StatelessWidget {
         MaterialButton(
           onPressed: () {
             doDeSelectProgram();
+            Navigator.pop(context);
           },
           color: primaryColor,
           child: Text(

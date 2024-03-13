@@ -89,16 +89,20 @@ class _ArticlesScreensState extends State<ArticlesScreens>
         onRefresh: _refresh,
         child: Column(
           children: <Widget>[
-            TabBar.secondary(
-              controller: _tabController,
-              unselectedLabelColor: grey,
-              labelStyle: const TextStyle(color: primaryColor),
-              indicatorColor: primaryColor,
-              dividerColor: black,
-              tabs: <Widget>[
-                Tab(text: AppLocalizations.of(context)!.articlesAll),
-                Tab(text: AppLocalizations.of(context)!.articlesFavorite),
-              ],
+            Container(
+              color: black,
+              child: TabBar.secondary(
+                controller: _tabController,
+                unselectedLabelColor: grey,
+                labelStyle: const TextStyle(color: primaryColor),
+                indicatorColor: primaryColor,
+                dividerColor: black,
+                // overlayColor: MaterialStateProperty.all(black),
+                tabs: <Widget>[
+                  Tab(text: AppLocalizations.of(context)!.articlesAll),
+                  Tab(text: AppLocalizations.of(context)!.articlesFavorite),
+                ],
+              ),
             ),
             Expanded(
               child: TabBarView(

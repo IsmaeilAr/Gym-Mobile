@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/gap.dart';
-import 'package:gym/features/home/provider/home_provider.dart';
+import 'package:gym/components/widgets/round_button.dart';
 import 'package:provider/provider.dart';
-import '../widgets/round_button.dart';
+
+import '../../features/home/provider/home_provider.dart';
 
 class CountdownWidget extends StatefulWidget {
   const CountdownWidget({super.key});
@@ -29,9 +30,11 @@ class _CountdownWidgetState extends State<CountdownWidget>
 
   double progress = 1.0;
 
-  void _checkout() {
-    context.read<HomeProvider>().callCheckOutApi(context);
-    context.read<HomeProvider>().isCheckIn = false;
+  void observant() {
+    if (countText == '0:00:00') {
+      context.read<HomeProvider>().callCheckOutApi(context);
+      context.read<HomeProvider>().isCheckIn = false;
+    }
   }
 
   @override
@@ -43,17 +46,15 @@ class _CountdownWidgetState extends State<CountdownWidget>
     );
 
     controller.addListener(() {
+      observant();
       if (controller.isAnimating) {
         setState(() {
           progress = controller.value;
-          debugPrint(controller.value.toString());
         });
       } else {
         setState(() {
           progress = 1.0;
           isCounting = false;
-          debugPrint("isCounting = false");
-          _checkout();
         });
       }
     });
@@ -77,7 +78,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Stack(
-              alignment: AlignmentDirectional.center,
+              alignment: Alignment.center,
               children: [
                 SizedBox(
                   width: 180.r,
@@ -98,6 +99,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
                         builder: (context) => SizedBox(
                           height: 300,
                           child: CupertinoTimerPicker(
+                            // todo change style
                             initialTimerDuration: controller.duration!,
                             onTimerDurationChanged: (time) {
                               setState(() {
@@ -132,12 +134,11 @@ class _CountdownWidgetState extends State<CountdownWidget>
               children: [
                 GestureDetector(
                   onTap: () {
-                    debugPrint("controller reset");
                     controller.reset();
                     setState(() {
                       isCounting = false;
                     });
-                    _checkout();
+                    observant();
                   },
                   child: const RoundButton(
                     icon: Icons.stop,
@@ -150,14 +151,12 @@ class _CountdownWidgetState extends State<CountdownWidget>
                 GestureDetector(
                   onTap: () {
                     if (controller.isAnimating) {
-                      debugPrint("controller isAnimating");
                       controller.stop();
                       setState(() {
                         isCounting = false;
                       });
                     } else {
-                      debugPrint("controller is else");
-                      controller.forward(
+                      controller.reverse(
                           from: controller.value == 0 ? 1.0 : controller.value);
                       setState(() {
                         isCounting = true;

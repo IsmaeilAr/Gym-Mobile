@@ -46,7 +46,8 @@ class _ConversationTileState extends State<ConversationTile> {
             PageTransition(
                 type: PageTransitionType.fade,
                 child: ChatScreen(
-                    widget.chatModel
+                  widget.chatModel.sid2.id,
+                  widget.chatModel.sid2.name,
                 )
             ));
       },

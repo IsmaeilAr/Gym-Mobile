@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/features/coaches/model/coach_time_model.dart';
@@ -10,15 +12,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CoachAvailabilityWidget extends StatelessWidget {
   const CoachAvailabilityWidget({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 51.h,
-      width: 316.w,
+    return Padding(
+      padding: EdgeInsets.fromLTRB(35.w, 12.h, 35.w, 25.h),
       child: ListView.separated(
-        // itemCount: context.watch<CoachProvider>().coachTimesList.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: 7,
         scrollDirection: Axis.vertical,
         separatorBuilder: (BuildContext context, int index) {
@@ -26,7 +26,6 @@ class CoachAvailabilityWidget extends StatelessWidget {
         },
         itemBuilder: (BuildContext context, int index) {
           List<CoachTimeModel> coachTimesList = context.watch<CoachProvider>().coachTimesList;
-          // List<int> doneDaysList = context.watch<ProfileProvider>().coachTimesList;
           return CoachDayWidget(
             index: index,
             day: coachTimesList[index],
@@ -64,7 +63,7 @@ class CoachDayWidget extends StatelessWidget {
       case true:
         return AvailableDay(dayName: dayName, dayInfo: day);
       default:
-        return UnAvailableDay(dayName: dayName);
+        return const SizedBox();
     }
   }
 }
@@ -76,18 +75,18 @@ class UnAvailableDay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
         CircleAvatar(
           backgroundColor: lightGrey,
-          radius: 14.r,
+          radius: 8.5.r,
           child: CircleAvatar(
             backgroundColor: black,
-            radius: 13.r,
+            radius: 7.5.r,
           ),
         ),
         const Gap(
-          h: 4,
+          w: 8,
         ),
         Text(
           dayName,
@@ -114,7 +113,7 @@ class AvailableDay extends StatelessWidget {
       children: [
         CircleAvatar(
           backgroundColor: lightGrey,
-          radius: 17.r,
+          radius: 9.r,
         ),
         const Gap(
           w: 8,
@@ -135,7 +134,14 @@ class AvailableDay extends StatelessWidget {
         ),
         SizedBox(
           width: 140.w,
-          child: Text("${dayInfo.startTime} - ${dayInfo.endTime}"),
+          child: Text(
+            "${dayInfo.startTime} - ${dayInfo.endTime}",
+            style: TextStyle(
+              color: lightGrey,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         )
       ],
     );

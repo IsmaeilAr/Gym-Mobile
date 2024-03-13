@@ -77,9 +77,10 @@ class MyDrawer extends StatelessWidget {
           ),
           const LanguageList(),
           ListTile(
-            leading: const Icon(
+            leading: Icon(
               GymIcons.report,
               color: lightGrey,
+              size: 16.r,
             ),
             title: Text(
               AppLocalizations.of(context)!.drawerReportKey,
@@ -98,9 +99,10 @@ class MyDrawer extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(
+            leading: Icon(
               GymIcons.logOut,
               color: lightGrey,
+              size: 16.r,
             ),
             title: Text(
               AppLocalizations.of(context)!.drawerLogoutKey,
@@ -156,9 +158,10 @@ class _LanguageListState extends State<LanguageList> {
                 _showLanguage = !_showLanguage;
               });
             },
-            leading: const Icon(
+            leading: Icon(
               GymIcons.language,
               color: lightGrey,
+              size: 16.r,
             ),
             title: Text(
               AppLocalizations.of(context)!.drawerLanguageKey,
@@ -192,27 +195,6 @@ class _LanguageListState extends State<LanguageList> {
               onTap: () {
                 context
                     .read<LanguageProvider>()
-                    .changeLanguage(const Locale('en', '')); // todo localize
-              },
-              leading: Padding(
-                padding: EdgeInsets.only(left: 37.w),
-                child: isEnglish
-                    ? const SelectedLangIcon()
-                    : const UnSelectedLangIcon(),
-              ),
-              title: Text(
-                AppLocalizations.of(context)!.drawerEnglishKey,
-                style: TextStyle(
-                    fontSize: 10.sp, fontWeight: FontWeight.w400, color: grey),
-              ),
-            ),
-          ),
-          Visibility(
-            visible: _showLanguage,
-            child: ListTile(
-              onTap: () {
-                context
-                    .read<LanguageProvider>()
                     .changeLanguage(const Locale('ar', '')); // todo localize
               },
               leading: Padding(
@@ -224,9 +206,30 @@ class _LanguageListState extends State<LanguageList> {
               title: Text(
                 AppLocalizations.of(context)!.drawerArabicKey,
                 style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: lightGrey),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: _showLanguage,
+            child: ListTile(
+              onTap: () {
+                context
+                    .read<LanguageProvider>()
+                    .changeLanguage(const Locale('en', '')); // todo localize
+              },
+              leading: Padding(
+                padding: EdgeInsets.only(left: 37.w),
+                child: isEnglish
+                    ? const SelectedLangIcon()
+                    : const UnSelectedLangIcon(),
+              ),
+              title: Text(
+                AppLocalizations.of(context)!.drawerEnglishKey,
+                style: TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.w400, color: grey),
               ),
             ),
           ),
@@ -246,6 +249,7 @@ class UnSelectedLangIcon extends StatelessWidget {
     return const Icon(
       Icons.radio_button_off_outlined,
       color: lightGrey,
+      size: 15,
     );
   }
 }
@@ -260,6 +264,7 @@ class SelectedLangIcon extends StatelessWidget {
     return const Icon(
       Icons.radio_button_checked_outlined,
       color: lightGrey,
+      size: 15,
     );
   }
 }

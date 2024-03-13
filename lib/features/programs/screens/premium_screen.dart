@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym/components/dialog/cancel_order_dialog.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
-import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/components/widgets/custom_app_bar.dart';
+import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:gym/features/programs/screens/program_pdf_screen.dart';
@@ -12,7 +14,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../components/dialog/cancel_button.dart';
+import '../../../components/dialog/order_program_dialog.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
+import '../../../components/widgets/find_coach_button.dart';
 import '../../../components/widgets/menu_item_model.dart';
 
 class PremiumScreen extends StatefulWidget {
@@ -33,11 +37,20 @@ class _PremiumScreenState extends State<PremiumScreen> {
   }
 
   Future<void> _refresh() async {
+    context.read<ProgramProvider>().getPremiumStatus(context, widget.genre);
+    context.read<ProfileProvider>().callGetStatus(context);
     context.read<ProgramProvider>().getPremiumProgramsList(
           context,
           widget.genre,
         );
+    checkStatus();
   }
+
+  int premiumStatus = 0;
+  int coachId =
+      0; // todo try to change the approach (use the value only in the button)
+  int orderId =
+      0; // todo try to change the approach (use the value only in the button)
 
   @override
   Widget build(BuildContext context) {
@@ -78,11 +91,42 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   )
                 : const LoadingIndicatorWidget(),
             Expanded(child: Container()),
-            const ButtonStatus(), //todo cases of this button is inside
+            ButtonStatus(premiumStatus, widget.genre, coachId, orderId),
           ]),
         ),
       ),
     );
+  }
+
+  void checkStatus() {
+    List statusList;
+    String premiumProgramStatus;
+    (context.read<ProfileProvider>().status.hasCoach)
+        ? {
+            coachId = context.read<ProfileProvider>().status.myCoach.id,
+            statusList = context.read<ProgramProvider>().premiumStatusList,
+            if (statusList.isNotEmpty)
+              {
+                // there is requests
+                premiumProgramStatus =
+                    context.read<ProgramProvider>().premiumStatusList[0].status,
+                orderId =
+                    context.read<ProgramProvider>().premiumStatusList[0].id,
+                if (premiumProgramStatus == 'accepted')
+                  {premiumStatus = 2}
+                else if (premiumProgramStatus == 'waiting')
+                  {premiumStatus = 3}
+              }
+            else
+              {
+                // has no requests yet
+                premiumStatus = 1,
+              }
+          }
+        : // if player doesn't have coach
+        {
+            premiumStatus = 0,
+          };
   }
 }
 
@@ -227,165 +271,122 @@ class NoPrograms extends StatelessWidget {
   }
 }
 
-class ButtonStatus extends StatefulWidget {
-  const ButtonStatus({super.key});
+class ButtonStatus extends StatelessWidget {
+  const ButtonStatus(this.buttonStatus, this.genre, this.coachId, this.orderId,
+      {super.key});
 
-  @override
-  State<ButtonStatus> createState() => _ButtonStatusState();
-}
-
-class _ButtonStatusState extends State<ButtonStatus> {
-  int status = 0;
+  final int buttonStatus;
+  final String genre;
+  final int coachId;
+  final int orderId;
 
   @override
   Widget build(BuildContext context) {
-    if (status == 0) {
-      return SizedBox(
-        width: 296.w,
-        height: 46.h,
-        child: ElevatedButton(
-            style: MyDecorations.myButtonStyle(primaryColor),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => const AskForNewProgram());
-            },
-            child: Text(
-              AppLocalizations.of(context)!.premiumAskForNewProgram,
-              style: MyDecorations.myButtonTextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
+    switch (buttonStatus) {
+      case 0: // find coach // no coach
+        {
+          return Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)!
+                    .premiumNeedPersonalCoachForPremium,
+                style: MyDecorations.premiumTextStyle,
+                textAlign: TextAlign.center,
               ),
-            )),
-      );
-    } else if (status == 1) {
-      return Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.premiumNeedPersonalCoachForPremium,
-            style: MyDecorations.premiumTextStyle,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
+              const Gap(
+                h: 12,
+              ),
+              const FindCoachButton(),
+            ],
+          );
+        }
+      case 1: // ask for first program button // has coach but no programs
+        {
+          return SizedBox(
             width: 296.w,
             height: 46.h,
             child: ElevatedButton(
-              onPressed: () {},
-              style: MyDecorations.myButtonStyle(dark),
-              child: Text(
-                AppLocalizations.of(context)!.premiumFindCoachButton,
-                style: MyDecorations.myButtonTextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    } else if (status == 2) {
-      return Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.premiumProgramRequestProcessing,
-            style: MyDecorations.programsTextStyle,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(
+                style: MyDecorations.myButtonStyle(primaryColor),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AskForNewProgramDialog(genre, coachId));
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.premiumAskForProgram,
+                  style: MyDecorations.myButtonTextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )),
+          );
+        }
+      case 2: // ask for new program button // has coach but no programs
+        {
+          return SizedBox(
             width: 296.w,
             height: 46.h,
             child: ElevatedButton(
-              onPressed: () {},
-              style: MyDecorations.myButtonStyle(dark),
-              child: Text(
-                AppLocalizations.of(context)!.premiumRevokeRequestButton,
-                style: TextStyle(
-                  color: primaryColor,
-                  fontFamily: "Saira",
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
-                  height: 1.0, // line height in terms of multiplier
+                style: MyDecorations.myButtonStyle(primaryColor),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AskForNewProgramDialog(genre, coachId));
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.premiumAskForNewProgram,
+                  style: MyDecorations.myButtonTextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )),
+          );
+        }
+      case 3: // revoke program request // has coach but program is still pending
+        {
+          return Column(
+            children: [
+              Text(
+                AppLocalizations.of(context)!.premiumProgramRequestProcessing,
+                style: MyDecorations.programsTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              const Gap(
+                h: 12,
+              ),
+              SizedBox(
+                width: 296.w,
+                height: 46.h,
+                child: ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) =>
+                            RevokeProgramRequestDialog(orderId));
+                  },
+                  style: MyDecorations.myButtonStyle(dark),
+                  child: Text(
+                    AppLocalizations.of(context)!.premiumRevokeRequestButton,
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontFamily: "Saira",
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w500,
+                      height: 1.0, // line height in terms of multiplier
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return const SizedBox.shrink();
+            ],
+          );
+        }
+      default:
+        {
+          return const SizedBox.shrink();
+        }
     }
   }
 }
 
-class AskForNewProgram extends StatefulWidget {
-  const AskForNewProgram({super.key});
-
-  @override
-  State<AskForNewProgram> createState() => _AskForNewProgramState();
-}
-
-class _AskForNewProgramState extends State<AskForNewProgram> {
-  bool? checkTraining = false;
-  bool? checkNutrition = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: black,
-      surfaceTintColor: black,
-      actions: [
-        const CancelButton(),
-        SizedBox(width: 5.w),
-        MaterialButton(
-          onPressed: () {},
-          color: primaryColor,
-          child: Text(
-            AppLocalizations.of(context)!.send,
-            style: MyDecorations.coachesTextStyle,
-          ),
-        ),
-      ],
-      content: SizedBox(
-        height: 160.h,
-        child: Column(
-          children: [
-            Text(
-              AppLocalizations.of(context)!.requestProgramType,
-              style: MyDecorations.coachesTextStyle,
-            ),
-            CheckboxListTile(
-              value: checkTraining,
-              onChanged: (newValue) {
-                setState(() {
-                  checkTraining = newValue;
-                });
-              },
-              activeColor: grey,
-              checkColor: black,
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
-                AppLocalizations.of(context)!.trainingProgram,
-                style: MyDecorations.programsTextStyle,
-              ),
-            ),
-            CheckboxListTile(
-              value: checkNutrition,
-              onChanged: (newValue) {
-                setState(() {
-                  checkNutrition = newValue;
-                });
-              },
-              activeColor: grey,
-              checkColor: black,
-              controlAffinity: ListTileControlAffinity.leading,
-              title: Text(
-                AppLocalizations.of(context)!.nutritionProgram,
-                style: MyDecorations.programsTextStyle,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

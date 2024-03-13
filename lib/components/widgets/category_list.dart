@@ -86,16 +86,11 @@ class CategoryList extends StatelessWidget {
                             context,
                             PageTransition(
                                 type: PageTransitionType.fade,
-                                child: context
-                                        .read<ProfileProvider>()
-                                        .status
-                                        .hasCoach
-                                    ? PremiumScreen(
-                                        genre: genre,
-                                      )
-                                    : PremiumScreen(
-                                        genre: genre,
-                                      )));
+                            child: PremiumScreen(
+                              genre: genre,
+                            ),
+                          ),
+                        );
                       },
                       child: Card(
                         elevation: 0,
@@ -110,9 +105,12 @@ class CategoryList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    AppLocalizations.of(context)!.premium,
-                    style: MyDecorations.programsTextStyle,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Text(
+                      AppLocalizations.of(context)!.premium,
+                      style: MyDecorations.programsTextStyle,
+                    ),
                   ),
                   // edit text to premium nutrition or sport
                 ],

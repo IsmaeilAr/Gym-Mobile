@@ -147,7 +147,7 @@ class CoachProvider extends ChangeNotifier {
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().addOrderApi(
+        Either<String, Response> results = await ApiHelper().requestCoachApi(
           coachId,
         );
         isLoadingSetCoach = false;
@@ -181,7 +181,7 @@ class CoachProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> unsetCoach(
+  Future<bool> callUnsetCoach(
     BuildContext context,
     int coachId,
   ) async {
@@ -190,7 +190,7 @@ class CoachProvider extends ChangeNotifier {
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().addOrderApi(
+        Either<String, Response> results = await ApiHelper().unsetCoachApi(
           coachId,
         );
         isLoadingSetCoach = false;
@@ -277,7 +277,7 @@ class CoachProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"][0];
+            var data = response.data["data"];
             log("data $data");
             List<dynamic> list = data;
             searchCoachList = [];

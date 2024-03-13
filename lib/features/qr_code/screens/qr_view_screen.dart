@@ -34,17 +34,17 @@ class _QRViewState extends State<QRView> {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  _torch = !_torch;
-                });
-              },
-              icon: Icon(_torch
-                  ? Icons.flashlight_off_outlined
-                  : Icons.flashlight_on_outlined))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         setState(() {
+        //           _torch = !_torch;
+        //         });
+        //       },
+        //       icon: Icon(_torch
+        //           ? Icons.flashlight_off_outlined
+        //           : Icons.flashlight_on_outlined))
+        // ],
       ),
       body: MobileScanner(
         // fit: BoxFit.contain,

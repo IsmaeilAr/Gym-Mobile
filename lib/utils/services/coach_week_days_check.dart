@@ -9,13 +9,13 @@ List<CoachTimeModel> getCoachDayList(List<CoachTimeModel> availableDays) {
 
   List<CoachTimeModel> daysList = [];
 
-  List<int> allDays = [1, 2, 3, 4, 5, 6, 7];
-
   if (availableDays.isNotEmpty) {
-    for (int day in allDays) {
-      if (allDays.contains(availableDays[day].dayId)) // if day is available
+    for (int day = 1; day <= 7; day++) {
+      if (availableDays
+          .any((element) => element.dayId == day)) // if day is available
       {
-        CoachTimeModel dayOn = availableDays[day];
+        CoachTimeModel dayOn =
+            availableDays.firstWhere((element) => element.dayId == day);
         dayOn.isAvailable = true;
         daysList.add(dayOn);
       }
@@ -24,10 +24,8 @@ List<CoachTimeModel> getCoachDayList(List<CoachTimeModel> availableDays) {
         daysList.add(dayOff(day));
       }
     }
-  }
-  // if no days set yet
-  else {
-    for (int index = 1; index < 8; index++) {
+  } else {
+    for (int index = 1; index <= 7; index++) {
       daysList.add(dayOff(index));
     }
   }

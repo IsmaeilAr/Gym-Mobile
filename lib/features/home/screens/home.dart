@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
     context.read<ProgressProvider>().getWeeklyProgressApi(
           context,
         );
-    context.read<ProfileProvider>().getStatus(
+    context.read<ProfileProvider>().callGetStatus(
           context,
         );
   }

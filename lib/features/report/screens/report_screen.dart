@@ -49,7 +49,7 @@ class ReportScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         child: TextField(
-          maxLines: 28,
+          maxLines: null,
           style: MyDecorations.coachesTextStyle,
           decoration: InputDecoration(
             suffixStyle: MyDecorations.coachesTextStyle,

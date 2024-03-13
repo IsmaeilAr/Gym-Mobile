@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/features/profile/models/user_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+import '../../features/programs/provider/program_provider.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
 import 'cancel_button.dart';
 
-class SelectCoachDialog extends StatelessWidget {
-  final UserModel coach;
-  final VoidCallback doSelectCoach;
+class AskForNewProgramDialog extends StatelessWidget {
+  const AskForNewProgramDialog(
+    this.genre,
+    this.coachId, {
+    super.key,
+  });
 
-  const SelectCoachDialog(this.doSelectCoach, {super.key, required this.coach});
+  final String genre;
+  final int coachId;
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +27,22 @@ class SelectCoachDialog extends StatelessWidget {
         SizedBox(width: 5.w),
         MaterialButton(
           onPressed: () {
-            doSelectCoach();
+            context
+                .read<ProgramProvider>()
+                .callRequestPremiumProgram(context, coachId, genre);
             Navigator.pop(context);
           },
           color: primaryColor,
           child: Text(
-            AppLocalizations.of(context)!.coachProfileSetCoach,
+            AppLocalizations.of(context)!.send,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
       ],
       content: Text(
-        "${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation} ${coach.name} ${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation2}",
+        (genre == 'sport')
+            ? AppLocalizations.of(context)!.requestProgramSport
+            : AppLocalizations.of(context)!.requestProgramFood,
         style: MyDecorations.coachesTextStyle,
       ),
     );

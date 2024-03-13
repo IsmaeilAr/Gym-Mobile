@@ -21,6 +21,7 @@
     "addInfoWaistKey": "الخصر",
     "addInfoNeckKey": "العنق",
     "addInfoContinueButtonKey": "متابعة",
+        "pleaseSelectGenderKey": "فضلاً حدد نوعك",
 
 
      "drawerReportKey": "تقرير",
@@ -124,9 +125,11 @@
                       "programsAll": "الكل",
 
 "coach": "المدرب",
- "premiumAskForNewProgram": "اطلب برنامجًا جديدًا",
+ "premiumAskForNewProgram": "اطلب برنامج جديد",
   "premiumNoTrainingPrograms": "لا توجد برامج تدريبية",
   "premiumNoSelectedTrainingProgram": "لم تحدد برنامج تدريب بعد. اطلب برنامج التدريب الخاص بك.",
+      "premiumAskForProgram": "اطلب برنامج",
+
   "premiumNoNutritionPrograms": "لا توجد برامج تغذية",
   "premiumnoSelectedNutritionProgram": "لم تحدد برنامج تغذية بعد. اطلب برنامج التغذية الخاص بك.",
   "premium": "مدفوع",
@@ -159,6 +162,7 @@
        "searchInArticles": "البحث في التقارير",
 
        "searchInUsers": "البحث في المستخدمين",
+       "searchInPrograms": "البحث في البرامج",
 
 
                "remove": "إزالة",
@@ -177,7 +181,8 @@
   "sendReportConfirmation": "هل أنت متأكد أنك تريد إرسال هذا التقرير إلى الإدارة؟",
   "setProgramConfirmation": "هل أنت متأكد أنك تريد تعيين هذا البرنامج كيومي؟",
   "deselectProgramConfirmation": "هل أنت متأكد أنك تريد إلغاء اختيار هذا البرنامج؟ لن يكون برنامجك اليومي بعد إلغاء اختياره.",
-  "requestProgramType": "حدد نوع البرنامج الذي ترغب في طلبه من مدربك:",
+"requestProgramSport": "هل أنت متأكد من رغبتك في طلب برنامج رياضي خاص من مدربك؟",
+"requestProgramFood": "هل أنت متأكد من رغبتك في طلب برنامج غذائي خاص من مدربك؟",
   "trainingProgram": "برنامج تدريب",
   "nutritionProgram": "برنامج تغذية",
   "revokeRequestConfirmation": "هل أنت متأكد أنك تريد سحب طلبك للحصول على برنامج تدريب الرئيسي؟",

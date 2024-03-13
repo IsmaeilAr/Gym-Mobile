@@ -8,7 +8,6 @@ class ProgramModel {
   final String file;
   final String imageUrl;
   final String type;
-  final TrainingCategoryModel category;
   final int coachId;
 
   ProgramModel({
@@ -17,7 +16,6 @@ class ProgramModel {
     required this.file,
     required this.imageUrl,
     required this.type,
-    required this.category,
     required this.coachId,
   });
 
@@ -28,15 +26,8 @@ class ProgramModel {
       file: json['file'] ?? '',
       imageUrl: '${ApiConstants.imageUrl}${json['imageUrl']}' ?? '',
       type: json['type'] ?? '',
-      coachId: json['coachId'] ?? 0,
-      category: TrainingCategoryModel.fromJson(json['category']),
+      coachId: json['user_id'] ?? 0,
     );
-  }
-
-  static List<ProgramModel> listFromJson(List<dynamic> jsonList) {
-    return jsonList
-        .map((json) => ProgramModel.fromJson(json))
-        .toList();
   }
 }
 

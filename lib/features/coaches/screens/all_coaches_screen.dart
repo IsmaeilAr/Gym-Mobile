@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
-import 'package:gym/components/widgets/programs_app_bar.dart';
+import 'package:gym/components/widgets/custom_app_bar.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
+import 'package:gym/features/coaches/screens/search_coaches_screen.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/profile/screens/coach_profile.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import '../../../components/widgets/back_button.dart';
 import '../../../components/widgets/coach_tile_widget.dart';
 
 
@@ -107,3 +109,45 @@ class _AllCoachesScreenState extends State<AllCoachesScreen> {
   }
 }
 
+class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final BuildContext context;
+
+  const UsersAppBar({
+    super.key,
+    required this.title,
+    required this.context,
+  });
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: black,
+      leading: const MyBackButton(),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: lightGrey,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      actions: [
+        IconButton(
+          color: lightGrey,
+          onPressed: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.fade,
+                    child: const SearchCoachesScreen()));
+          },
+          icon: const Icon(Icons.search),
+        ),
+      ],
+    );
+  }
+}

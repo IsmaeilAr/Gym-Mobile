@@ -21,6 +21,16 @@ class SessionExpiredInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
+  @override
+  void onBadReq(DioException err, ErrorInterceptorHandler handler) {
+    if (err.response?.statusCode == 400) {
+      debugPrint("400 is here");
+      showMessage(err.response?.data['data'], false);
+      doLogout(context);
+    }
+    super.onError(err, handler);
+  }
+
   doLogout(BuildContext context) {
     context
         .read<AuthProvider>()

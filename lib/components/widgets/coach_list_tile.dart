@@ -76,7 +76,8 @@ class CoachListTile extends StatelessWidget {
             PageTransition(
                 type: PageTransitionType.fade,
                 child: ChatScreen(
-                    chatModel
+                  chatModel.sid2.id,
+                  chatModel.sid2.name,
                 )
             ));
       },

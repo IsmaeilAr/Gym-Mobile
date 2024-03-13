@@ -17,9 +17,10 @@ import '../models/message_model.dart';
 import '../provider/chat_provider.dart';
 
 class ChatScreen extends StatefulWidget {
-  final ChatModel chatModel;
+  final int chatterId;
+  final String chatterName;
 
-  const ChatScreen(this.chatModel, {super.key});
+  const ChatScreen(this.chatterId, this.chatterName, {super.key});
 
   @override
   State createState() => ChatScreenState();
@@ -29,8 +30,10 @@ class ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ChatProvider>().callGetChatMessages(context, widget.chatModel.sid2.id);
-      context.read<CoachProvider>().getCoachInfo(context, widget.chatModel.sid2.id);
+      context
+          .read<ChatProvider>()
+          .callGetChatMessages(context, widget.chatterId);
+      context.read<CoachProvider>().getCoachInfo(context, widget.chatterId);
     });
     super.initState();
   }
@@ -46,7 +49,7 @@ class ChatScreenState extends State<ChatScreen> {
       createdAt: DateTime.now().toString(),
       id: 0,
       senderId: 0,
-      receiverId: widget.chatModel.sid2.id,
+      receiverId: widget.chatterId,
     );
     context.read<ChatProvider>().messageList.insert(0, message);
     scrollController.animateTo(
@@ -54,7 +57,9 @@ class ChatScreenState extends State<ChatScreen> {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,
     );
-   context.read<ChatProvider>().callSendMessage(context, widget.chatModel.sid2.id, text);
+    context
+        .read<ChatProvider>()
+        .callSendMessage(context, widget.chatterId, text);
   }
 
   @override
@@ -87,7 +92,7 @@ class ChatScreenState extends State<ChatScreen> {
               w: 10,
             ),
             Text(
-              widget.chatModel.sid2.name,
+              widget.chatterName,
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,
@@ -97,9 +102,10 @@ class ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(onPressed: (){
-            context.read<ChatProvider>().callGetChatMessages(context, widget.chatModel.sid2.id);
-
-          }, icon: Icon(Icons.refresh_outlined, size: 16.r, color: lightGrey,))
+                context
+                    .read<ChatProvider>()
+                    .callGetChatMessages(context, widget.chatterId);
+              }, icon: Icon(Icons.refresh_outlined, size: 16.r, color: lightGrey,))
         ],
       ),
       body:

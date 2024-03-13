@@ -22,7 +22,8 @@ class InitStatusModel {
               json['programType'].map((x) => MyProgram.fromJson(x)))
           : [],
       myCoach: (json['myCoach'] != null)
-          ? json['myCoach'][0]
+          // ? json['myCoach'][0]['coach']
+          ? UserModel.fromJson(json['myCoach'][0]['coach'])
           : UserModel(
               id: 0,
               name: "name",

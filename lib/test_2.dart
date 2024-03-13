@@ -1,73 +1,82 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
-class DropdownButtonExample extends StatefulWidget {
-  const DropdownButtonExample({super.key});
+class CounterWidget extends StatefulWidget {
+  final int initialValue;
+  final ValueChanged<int>? onChanged;
+
+  const CounterWidget({
+    super.key,
+    this.initialValue = 00,
+    this.onChanged,
+  });
 
   @override
-  State<StatefulWidget> createState() => _DropdownButtonExampleState();
+  State<CounterWidget> createState() => _CounterWidgetState();
 }
 
-class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  static const menuItems = <String>[
-    'One',
-    'Two',
-    'Three',
-    'Four',
-  ];
-  final List<DropdownMenuItem<String>> _dropDownMenuItems = menuItems
-      .map(
-        (String value) => DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
-  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
-      .map(
-        (String value) => PopupMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
+class _CounterWidgetState extends State<CounterWidget> {
+  late int _counter;
 
-  String _btn1SelectedVal = 'One';
-  String? _btn2SelectedVal;
-  late String _btn3SelectedVal;
+  @override
+  void initState() {
+    super.initState();
+    _counter = widget.initialValue;
+  }
+
+  void _increment() {
+    setState(() {
+      _counter++;
+      widget.onChanged?.call(_counter);
+    });
+  }
+
+  void _decrement() {
+    if (_counter > 0) {
+      setState(() {
+        _counter--;
+        widget.onChanged?.call(_counter);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.remove),
+          onPressed: _decrement,
+        ),
+        Text(
+          '$_counter',
+          style: const TextStyle(fontSize: 16),
+        ),
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: _increment,
+        ),
+      ],
+    );
+  }
+}
+
+// Example usage:
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ListTile(
-              title: DropdownButton(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
-                value: _btn2SelectedVal,
-                hint: const Text('Category'),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    setState(() => _btn2SelectedVal = newValue);
-                  }
-                },
-                items: _dropDownMenuItems,
-              ),
-            ),
-            DropdownButton(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-              // style: ,
-              value: _btn2SelectedVal,
-              hint: const Text('Category'),
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() => _btn2SelectedVal = newValue);
-                }
-              },
-              items: _dropDownMenuItems,
-            ),
-          ],
+        child: CounterWidget(
+          initialValue: 3, // Initial value of the counter
+          onChanged: (value) {
+            log('Counter value changed: $value');
+            // You can handle the value change here
+          },
         ),
       ),
     );

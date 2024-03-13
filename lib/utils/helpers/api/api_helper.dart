@@ -81,7 +81,7 @@ class ApiHelper {
             ApiConstants.logoutUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -190,7 +190,7 @@ class ApiHelper {
             ApiConstants.getPersonMetricsUrl(playerId),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -207,13 +207,13 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> addInfoApi(
-      String gender,
-      String dob,
-      double height,
-      double weight,
-      double waist,
-      double neck,
+  Future<Either<String, Response>> addMetricsApi(
+    String gender,
+    String? dob,
+    double? height,
+    double? weight,
+    double? waist,
+    double? neck,
   ) async {
     late Either<String, Response> result;
     try {
@@ -222,7 +222,7 @@ class ApiHelper {
         ApiConstants.addInfoUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -247,8 +247,7 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> editMetricsApi(
-      // String gender,
+  Future<Either<String, Response>> editMetricsApi(String gender,
       String dob,
       String height,
       String weight,
@@ -262,12 +261,12 @@ class ApiHelper {
         ApiConstants.editMetricsUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
         data: {
-          // "gender": gender,
+          "gender": gender,
           "birthDate": dob,
           "height": height,
           "weight": weight,
@@ -293,24 +292,27 @@ class ApiHelper {
     File? image,
   ) async {
     late Either<String, Response> result;
+    var formData = FormData.fromMap({
+      "name": name,
+      "phoneNumber": phoneNumber,
+      'image': (image != null)
+          ? await MultipartFile.fromFile(
+              image.path,
+            )
+          : null,
+    });
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
-      // int playerId = prefsService.getValue(Cache.userId) ?? 0;
       var response = await _clientDio.post(
         ApiConstants.editInfoUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
+                'Accept': 'application/json',
+                'Authorization': token,
           },
         ),
-        data: {
-          "name": name,
-          "phoneNumber": phoneNumber,
-          image != null ? 'image' : await MultipartFile.fromFile(image!.path):
-              null,
-        },
-      ).timeout(const Duration(seconds: 25));
+            data: formData,
+          ).timeout(const Duration(seconds: 25));
       log("## Response edit info (API handler) : Good ");
       log("## Response edit info : $response");
       result = Right(response);
@@ -336,7 +338,7 @@ class ApiHelper {
             ApiConstants.allProgramsUrl(type, categoryID),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -368,7 +370,7 @@ class ApiHelper {
             ),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -396,7 +398,7 @@ class ApiHelper {
             ApiConstants.allCategoriesUrl(type),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -424,7 +426,7 @@ class ApiHelper {
             ApiConstants.myProgramsUrl(type),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -454,7 +456,7 @@ class ApiHelper {
         ApiConstants.addProgramUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -488,12 +490,12 @@ class ApiHelper {
         ApiConstants.setProgramUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
         data: {
-          "programId": programId,
+          "program_id": programId,
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response set Program (API handler) : Good ");
@@ -515,15 +517,15 @@ class ApiHelper {
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        ApiConstants.unsetProgramUrl,
+        ApiConstants.setProgramUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
         data: {
-          "programId": programId,
+          "program_id": programId,
         },
       ).timeout(const Duration(seconds: 25));
       log("## Response unset Program (API handler) : Good ");
@@ -538,26 +540,28 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> requestProgramApi(
+  Future<Either<String, Response>> requestPremiumProgramApi(
     int coachId,
+    String genre,
   ) async {
     late Either<String, Response> result;
+    log('$genre for $coachId');
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        ApiConstants.requestProgramUrl,
+        ApiConstants.requestProgramUrl(coachId),
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
         data: {
-          "coachId": coachId,
+          "type": (genre == 'sport') ? 'sport' : 'food',
         },
       ).timeout(const Duration(seconds: 25));
-      log("## Response set Program (API handler) : Good ");
-      log("## Response set Program : $response");
+      log("## Response request premium Program (API handler) : Good ");
+      log("## Response request premium Program : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -582,7 +586,7 @@ class ApiHelper {
         ApiConstants.editProgramUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -617,7 +621,7 @@ class ApiHelper {
         ApiConstants.deleteMessageUrl(programID),
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -650,7 +654,7 @@ class ApiHelper {
         ApiConstants.assignProgramUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -717,7 +721,7 @@ class ApiHelper {
         ApiConstants.checkOutUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -748,7 +752,7 @@ class ApiHelper {
             ApiConstants.weeklyUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -776,7 +780,7 @@ class ApiHelper {
             ApiConstants.monthlyUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -804,7 +808,7 @@ class ApiHelper {
             ApiConstants.monthlyUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -833,7 +837,7 @@ class ApiHelper {
             ApiConstants.getUserListUrl(type),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -861,7 +865,7 @@ class ApiHelper {
             ApiConstants.showCoachInfoUrl(coachId),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -889,13 +893,70 @@ class ApiHelper {
             ApiConstants.showCoachTimeUrl(coachId),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
           )
           .timeout(const Duration(seconds: 50));
       log("## Response get Coach Time list : $response");
+      result = Right(response);
+      return result;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error message : $errorMessage");
+      result = Left(errorMessage);
+      return result;
+    }
+  }
+
+  Future<Either<String, Response>> requestCoachApi(
+    int coachId,
+  ) async {
+    late Either<String, Response> result;
+    try {
+      String token = prefsService.getValue(Cache.token) ?? "";
+      var response = await _clientDio.post(
+        ApiConstants.requestCoachUrl,
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': token,
+          },
+        ),
+        data: {
+          "coachId": coachId,
+        },
+      ).timeout(const Duration(seconds: 25));
+      log("## Response Request Coach (API handler) : Good ");
+      log("## Response Request Coach: $response");
+      result = Right(response);
+      return result;
+    } on DioException catch (e) {
+      final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error message : $errorMessage");
+      result = Left(errorMessage);
+      return result;
+    }
+  }
+
+  Future<Either<String, Response>> unsetCoachApi(int coachId) async {
+    late Either<String, Response> result;
+    try {
+      String token = prefsService.getValue(Cache.token) ?? "";
+
+      var response = await _clientDio
+          .get(
+            ApiConstants.unSetCoach(coachId),
+            options: Options(
+              headers: {
+                'Accept': 'application/json',
+                'Authorization': token,
+              },
+            ),
+          )
+          .timeout(const Duration(seconds: 50));
+      log("## Response unset Coach : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -918,7 +979,7 @@ class ApiHelper {
             ApiConstants.chatMessagesUrl(userId),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -946,7 +1007,7 @@ class ApiHelper {
             ApiConstants.getChatsUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -1005,7 +1066,7 @@ class ApiHelper {
         ApiConstants.deleteMessageUrl(messageID),
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1026,28 +1087,24 @@ class ApiHelper {
   }
 
   // Order
-  Future<Either<String, Response>> addOrderApi(
-      int coachId,
-      // int programId,
-      ) async {
+
+  Future<Either<String, Response>> cancelOrderApi(
+    int orderId,
+  ) async {
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
       var response = await _clientDio.post(
-        ApiConstants.orderProgramUrl,
-        options: Options(
+            ApiConstants.cancelOrderUrl(orderId),
+            options: Options(
           headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token,
+                'Accept': 'application/json',
+                'Authorization': token,
           },
         ),
-        data: {
-          "coachId": coachId,
-          // "programId": programId,
-        },
       ).timeout(const Duration(seconds: 25));
-      log("## Response add Order (API handler) : Good ");
-      log("## Response add Order : $response");
+      log("## Response cancel Order (API handler) : Good ");
+      log("## Response cancel Order : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -1058,24 +1115,23 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> getMyOrderApi() async {
-
+  Future<Either<String, Response>> getMyOrderApi(String genre) async {
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
 
       var response = await _clientDio
           .get(
-            ApiConstants.getMyOrderUrl,
+            ApiConstants.getMyOrderUrl(genre),
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
           )
           .timeout(const Duration(seconds: 50));
-      log("## Response get order : $response");
+      log("## Response get order $genre : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -1098,7 +1154,7 @@ class ApiHelper {
         ApiConstants.setRateUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1130,7 +1186,7 @@ class ApiHelper {
         ApiConstants.submitReportUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1162,7 +1218,7 @@ class ApiHelper {
             ApiConstants.getArticlesUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -1191,7 +1247,7 @@ class ApiHelper {
             ApiConstants.getCoachArticlesUrl(coachId), // todo url from backend
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),
@@ -1219,7 +1275,7 @@ class ApiHelper {
         ApiConstants.addArticleUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1250,7 +1306,7 @@ class ApiHelper {
         ApiConstants.deleteArticleUrl(articleID),
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1281,7 +1337,7 @@ class ApiHelper {
         ApiConstants.favArticleUrl(articleId),
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1314,7 +1370,7 @@ class ApiHelper {
         ApiConstants.programSearchUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1346,7 +1402,7 @@ class ApiHelper {
         ApiConstants.userSearchUrl,
         options: Options(
           headers: {
-            'Content-Type': 'application/json',
+            'Accept': 'application/json',
             'Authorization': token,
           },
         ),
@@ -1378,7 +1434,7 @@ class ApiHelper {
             ApiConstants.getNotificationsUrl,
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'Authorization': token,
               },
             ),

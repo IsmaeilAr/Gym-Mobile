@@ -9,16 +9,13 @@ import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/main_layout/main_layout.dart';
+import 'package:gym/utils/extensions/double_or_null.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../provider/profile_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const List<String> _listGender = [
-  'Male',
-  'Female',
-];
 final TextEditingController _genderController = TextEditingController();
 final TextEditingController _dobController = TextEditingController();
 
@@ -30,49 +27,52 @@ class AddInfoScreen extends StatelessWidget {
       decoration: backgroundDecoration(),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const Gap(
-                  h: 44,
-                ),
-                Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => MainLayout()),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    child: Text(
-                      AppLocalizations.of(context)!.addInfoSkipKey,
-                      style: TextStyle(
-                          color: lightGrey,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.sp),
+        body: SizedBox(
+          height: 800.h,
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Gap(
+                    h: 44,
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainLayout()),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.addInfoSkipKey,
+                        style: TextStyle(
+                            color: lightGrey,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16.sp),
+                      ),
                     ),
                   ),
-                ),
-                const Gap(
-                  h: 39,
-                ),
-                const Logo().sizer(h: 55, w: 116),
-                const Gap(
-                  h: 60,
-                ),
-                const TopText(),
-                const Gap(
-                  h: 64,
-                ),
-                const RegInfoForm(),
-                const Gap(
-                  h: 50,
-                ),
-              ],
+                  const Gap(
+                    h: 39,
+                  ),
+                  const Logo().sizer(h: 55, w: 116),
+                  const Gap(
+                    h: 60,
+                  ),
+                  const TopText(),
+                  const Gap(
+                    h: 64,
+                  ),
+                  const RegInfoForm(),
+                  const Gap(
+                    h: 50,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -116,35 +116,45 @@ class TopText extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Text(
-            AppLocalizations.of(context)!.addInfoInsertKey,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: lightGrey,
-                fontSize: 30.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Saira'),
-          ).sizer(h: 47, w: 128),
+          SizedBox(
+            width: 128.w,
+            height: 47.h,
+            child: Text(
+              AppLocalizations.of(context)!.addInfoInsertKey,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: lightGrey,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Saira'),
+            ),
+          ),
           const Gap(
             h: 12,
           ),
-          Text(
-            AppLocalizations.of(context)!.addInfoYourPersonalInfoKey,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: grey,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Saira'),
-          ).sizer(
-            w: 252,
-            h: 31,
+          SizedBox(
+            width: 220.w,
+            height: 25.h,
+            child: Text(
+              AppLocalizations.of(context)!.addInfoYourPersonalInfoKey,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: grey,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Saira'),
+            ),
           ),
         ],
       ),
     );
   }
 }
+
+const List<String> _listGender = [
+  'Male',
+  'Female',
+];
 
 class GenderDropdown extends StatefulWidget {
   const GenderDropdown({
@@ -158,15 +168,56 @@ class GenderDropdown extends StatefulWidget {
 class _GenderDropdownState extends State<GenderDropdown> {
   @override
   Widget build(BuildContext context) {
-    return CustomDropdown<String>(
-      closedFillColor: lightGrey,
-      hintText: AppLocalizations.of(context)!.addInfoSelectGenderKey,
-      items: _listGender,
-      initialItem: _listGender[0],
-      onChanged: (value) {
-        setState(() {});
-        _genderController.text = value;
-      },
+    return SizedBox(
+      width: 332.w,
+      height: 80.h,
+      child: CustomDropdown<String>(
+        closedFillColor: lightGrey,
+        expandedFillColor: lightGrey,
+        closedSuffixIcon: const Icon(
+          Icons.keyboard_arrow_down_outlined,
+          color: grey,
+        ),
+        expandedSuffixIcon: const Icon(
+          Icons.keyboard_arrow_up_outlined,
+          color: grey,
+        ),
+        hintBuilder: (context, hint) {
+          return Text(
+            hint = AppLocalizations.of(context)!.myProfileGender,
+            style: TextStyle(
+                color: grey,
+                fontFamily: 'Saira',
+                fontWeight: FontWeight.w400,
+                fontSize: 16.sp),
+          );
+        },
+        headerBuilder: (context, item) {
+          return Text(
+            item,
+            style: TextStyle(
+                color: grey,
+                fontFamily: 'Saira',
+                fontWeight: FontWeight.w400,
+                fontSize: 15.sp),
+          );
+        },
+        listItemBuilder: (context, item) {
+          return Text(
+            item,
+            style: TextStyle(
+                color: grey,
+                fontFamily: 'Saira',
+                fontWeight: FontWeight.w400,
+                fontSize: 14.sp),
+          );
+        },
+        items: _listGender,
+        onChanged: (value) {
+          setState(() {});
+          _genderController.text = value;
+        },
+      ),
     );
   }
 }
@@ -179,23 +230,38 @@ class RegInfoForm extends StatefulWidget {
 }
 
 class _RegInfoFormState extends State<RegInfoForm> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final TextEditingController _waistController = TextEditingController();
-  final TextEditingController _neckController = TextEditingController();
+  late final GlobalKey _formKey;
+
+  late final TextEditingController _heightController;
+
+  late final TextEditingController _weightController;
+  late final TextEditingController _waistController;
+
+  late final TextEditingController _neckController;
 
   String? selectedGender;
 
   @override
   void dispose() {
-    // selectedGender = null;
     _genderController.dispose();
+    _dobController.dispose();
     _heightController.dispose();
     _weightController.dispose();
     _waistController.dispose();
     _neckController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _formKey = GlobalKey<FormState>();
+      _heightController = TextEditingController();
+      _weightController = TextEditingController();
+      _waistController = TextEditingController();
+      _neckController = TextEditingController();
+    });
+    super.initState();
   }
 
   // Date picker
@@ -206,7 +272,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: const ColorScheme.dark(
               primary: Colors.black,
               // specify the color you want for the calendar
               onPrimary: Colors
@@ -248,7 +314,6 @@ class _RegInfoFormState extends State<RegInfoForm> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             const GenderDropdown(),
-            const Gap(h: 10),
             TextFormField(
               readOnly: true,
               controller: _dobController,
@@ -266,7 +331,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
               textInputAction: TextInputAction.next,
               decoration: MyDecorations.myInputDecoration2(
                 hint: AppLocalizations.of(context)!.addInfoHeightKey,
-                // suffix: "(cm)",
+                suffix: "(${AppLocalizations.of(context)!.myProfileCm})",
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
@@ -279,7 +344,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
               textInputAction: TextInputAction.next,
               decoration: MyDecorations.myInputDecoration2(
                 hint: AppLocalizations.of(context)!.addInfoWeightKey,
-                // suffix: "(kg)",
+                suffix: "(${AppLocalizations.of(context)!.myProfileKg})",
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
@@ -292,10 +357,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
               textInputAction: TextInputAction.next,
               decoration: MyDecorations.myInputDecoration2(
                 hint: AppLocalizations.of(context)!.addInfoWaistKey,
-                suffix: Text(
-                  "(cm)",
-                  style: MyDecorations.mySuffixTextStyle,
-                ),
+                suffix: "(${AppLocalizations.of(context)!.myProfileCm})",
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
@@ -308,7 +370,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
               textInputAction: TextInputAction.next,
               decoration: MyDecorations.myInputDecoration2(
                 hint: AppLocalizations.of(context)!.addInfoNeckKey,
-                // suffix: "(cm)",
+                suffix: "(${AppLocalizations.of(context)!.myProfileCm})",
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
@@ -322,9 +384,13 @@ class _RegInfoFormState extends State<RegInfoForm> {
               height: 45.h,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (_genderController.text.isNotEmpty) {
                     // submit personal info
                     doAddInfo(context);
+                  } else {
+                    showMessage(
+                        AppLocalizations.of(context)!.pleaseSelectGenderKey,
+                        false);
                   }
                 },
                 style: MyDecorations.myButtonStyle(red),
@@ -348,11 +414,11 @@ class _RegInfoFormState extends State<RegInfoForm> {
       context,
       _genderController.text,
       _dobController.text,
-      double.parse(_heightController.text),
-      double.parse(_weightController.text),
-      double.parse(_waistController.text),
-      double.parse(_neckController.text),
-    )
+          _heightController.text.parseToDoubleOrNull(),
+          _weightController.text.parseToDoubleOrNull(),
+          _waistController.text.parseToDoubleOrNull(),
+          _neckController.text.parseToDoubleOrNull(),
+        )
         .then((value) {
       if (value) {
         log("view status: $value");
