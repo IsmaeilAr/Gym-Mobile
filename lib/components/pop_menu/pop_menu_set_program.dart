@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import '../dialog/set_programs_dialog.dart';
+import '../styles/gym_icons.dart';
 
 class SetProgramsMenuItems {
   static const MenuItemModel selectProgramItem =
-      MenuItemModel(text: "Select Program", icon: Icons.close);
+      MenuItemModel(text: "Select", icon: GymIcons.select);
   static const deselectProgramItem =
-      MenuItemModel(text: 'Deselect Program', icon: Icons.star);
-
-  static List<MenuItemModel> getSetProgramMenuItems = [
-    selectProgramItem,
-    deselectProgramItem,
-  ];
+      MenuItemModel(text: 'Deselect', icon: Icons.close);
 }
 
 void onSelectSetProgram(
@@ -37,7 +33,7 @@ void onSelectSetProgram(
           builder: (context) => DeselectProgramDialog(
                 doDeSelectProgram,
                 program: program,
-              )); // todo fix
+              ));
       break;
   }
 }

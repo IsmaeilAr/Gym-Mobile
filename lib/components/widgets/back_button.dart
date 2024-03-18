@@ -14,7 +14,7 @@ class MyBackButton extends StatelessWidget {
       color: lightGrey,
       icon: Icon(
         Icons.arrow_back_ios_new,
-        size: 22.r,
+        size: 20.r,
       ),
       onPressed: () => Navigator.pop(context),
     );

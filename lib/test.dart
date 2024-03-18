@@ -8,7 +8,6 @@ import 'components/widgets/divider.dart';
 import 'components/widgets/custom_app_bar.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'components/widgets/net_image.dart';
 import 'features/profile/models/user_model.dart';
 
@@ -560,7 +559,7 @@ class ListPlayers extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         radius: 24.r,
-                        backgroundImage: assetImage(coach),
+                        backgroundImage: networkImage(coach),
                       ),
                       Positioned(
                         top: 0,

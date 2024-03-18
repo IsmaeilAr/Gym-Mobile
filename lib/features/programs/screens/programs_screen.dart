@@ -5,7 +5,7 @@ import 'package:gym/components/widgets/category_list.dart';
 import 'package:gym/components/widgets/gap.dart';
 import 'package:gym/components/widgets/list_coaches.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
-import 'package:gym/components/widgets/program_list.dart';
+import 'package:gym/components/widgets/recommended_program_list.dart';
 import 'package:gym/components/widgets/section_divider.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/coaches/screens/all_coaches_screen.dart';
@@ -67,17 +67,24 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                       fontWeight: FontWeight.w600),
                 ),
                 context.watch<ProgramProvider>().isLoadingRecommendedProgram
-                    ? const Gap(h: 191, w:328, child: LoadingIndicatorWidget()) :
-                      ProgramList(listHeight:191,listWidth:328,imgHeight:168,imgWidth:162,
-                          programList: context.watch<ProgramProvider>().recommendedProgramList), Gap(
+                    ? const Gap(h: 191, w: 328, child: LoadingIndicatorWidget())
+                    : RecommendedProgramList(
+                        listHeight: 191,
+                        listWidth: 328,
+                        imgHeight: 168,
+                        imgWidth: 162,
+                        programList: context
+                            .watch<ProgramProvider>()
+                            .recommendedProgramList),
+                Gap(
                   h: 10.h,
                 ),
                 SectionDivider(
                   text: AppLocalizations.of(context)!.programsTraining,
                 ),
                 context.watch<ProgramProvider>().isLoadingCategories
-                    ? const Gap(h: 180, w:333, child: LoadingIndicatorWidget()) :
-                      CategoryList(listHeight:180, listWidth:333, imgHeight:156, imgWidth:243,
+                    ? const Gap(h: 180, w: 333, child: LoadingIndicatorWidget())
+                    : CategoryList(
                         categoryList: context
                             .watch<ProgramProvider>()
                             .sportCategoriesList,
@@ -86,8 +93,8 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                   text: AppLocalizations.of(context)!.programsNutrition,
                 ),
                 context.watch<ProgramProvider>().isLoadingCategories
-                    ? const Gap(h: 191, w:328, child: LoadingIndicatorWidget()) :
-                  CategoryList(listHeight:180,listWidth:333,imgHeight:156,imgWidth:243,
+                    ? const Gap(h: 191, w: 328, child: LoadingIndicatorWidget())
+                    : CategoryList(
                         categoryList: context
                             .watch<ProgramProvider>()
                             .nutritionCategoriesList,

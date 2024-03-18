@@ -171,6 +171,8 @@
       "remove": "Remove",
       "select": "Select",
       "deselect": "Deselect",
+      "withStars": "with",
+      "stars": "stars",
   "coachProfilePopMenueChangeCoach": "Change coach",
   "coachProfilePopMenueUnassign": "Unassign",
   "coachProfilePopMenueRate": "Rate",

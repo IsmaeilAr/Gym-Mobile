@@ -28,7 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: const TextStyle(
-          color: Colors.white,
+          color: lightGrey,
           fontSize: 18,
           fontWeight: FontWeight.w600,
         ),
@@ -36,7 +36,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: search
           ? [
         IconButton(
-          color: Colors.white,
+                color: lightGrey,
                 onPressed: () {
                   Navigator.push(
                       context,

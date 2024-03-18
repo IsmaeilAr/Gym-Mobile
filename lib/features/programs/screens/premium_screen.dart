@@ -18,6 +18,7 @@ import '../../../components/dialog/order_program_dialog.dart';
 import '../../../components/pop_menu/pop_menu_set_program.dart';
 import '../../../components/widgets/find_coach_button.dart';
 import '../../../components/widgets/menu_item_model.dart';
+import '../widgets/program_card.dart';
 
 class PremiumScreen extends StatefulWidget {
   const PremiumScreen({super.key, required this.genre});
@@ -145,82 +146,9 @@ class ListPrograms extends StatelessWidget {
           itemCount: programModel.length,
           itemBuilder: (context, index) {
             ProgramModel program = programModel[index];
-            return GestureDetector(
-              onTap: () {
-                // go to program file
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.fade,
-                        child: PDFScreen(
-                          programName: program.name,
-                          programFileName: program.file,
-                        )));
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                        height: 156.h,
-                        width: 332.w,
-                        child: Image.network(
-                          program.imageUrl,
-                          fit: BoxFit.fill,
-                          errorBuilder: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
-                      ),
-                      Positioned(
-                          right: 0.w,
-                          top: 0.h,
-                          child: PopupMenuButton<MenuItemModel>(
-                            itemBuilder: (context) => [
-                              ...SetProgramsMenuItems.getSetProgramMenuItems
-                                  .map(buildItem),
-                            ],
-                            onSelected: (item) =>
-                                onSelectSetProgram(context, item, program, () {
-                              _selectProgram(context, program.id);
-                            }, () {
-                              _deselectProgram(context, program.id);
-                            }),
-                            color: dark,
-                            iconColor: Colors.white,
-                            icon: Icon(
-                              Icons.more_horiz_sharp,
-                              size: 20.sp,
-                            ),
-                          )),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        program.name,
-                        style: MyDecorations.programsTextStyle,
-                      ),
-                      SizedBox(
-                        width: 5.h,
-                      ),
-                      program.id ==
-                              program
-                                  .id // todo compare with my selected program
-                          ? Icon(
-                              Icons.check_box,
-                              color: grey,
-                              size: 12.sp,
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                ],
-              ),
-            );
+            bool isMyProgram = true;
+
+            return ProgramCard(program, isMyProgram);
           }),
     );
   }

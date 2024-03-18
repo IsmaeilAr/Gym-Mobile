@@ -32,14 +32,14 @@ class _PDFScreenState extends State<PDFScreen> {
       appBar: AppBar(
         backgroundColor: black,
         leading: IconButton(
-          color: Colors.white,
+          color: lightGrey,
           icon: const Icon(Icons.arrow_back_ios_new),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           widget.programName,
           style: TextStyle(
-            color: Colors.white,
+            color: lightGrey,
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -99,11 +99,11 @@ class _PDFScreenState extends State<PDFScreen> {
     );
   }
 
-  loadDocument(String fileName) async {
+  loadDocument(String file) async {
     setState(() => _isLoading = true);
     {
       document = await PDFDocument.fromURL(
-        "${ApiConstants.pdfUrl}$fileName",
+        file,
         cacheManager: CacheManager(
           Config(
             "customCacheKey",

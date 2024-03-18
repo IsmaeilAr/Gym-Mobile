@@ -60,6 +60,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
     isSelectedCoach =
         context.read<ProfileProvider>().status.myCoach.id == widget.coach.id;
     context.read<CoachProvider>().getCoachTime(context, widget.coach.id);
+    setState(() {});
   }
 
   @override
@@ -89,15 +90,21 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
             ),
           ),
           Expanded(
-            child: RefreshIndicator(
-              onRefresh: _refresh,
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  CoachInfoTab(widget.coach, isSelectedCoach),
-                  CoachArticlesList(widget.coach.id), // todo parameter
-                ],
-              ),
+            child: TabBarView(
+              controller: _tabController,
+              children: <Widget>[
+                RefreshIndicator(
+                    color: red,
+                    backgroundColor: dark,
+                    onRefresh: _refresh,
+                    child: CoachInfoTab(widget.coach, isSelectedCoach)),
+                RefreshIndicator(
+                    color: red,
+                    backgroundColor: dark,
+                    onRefresh: _refresh,
+                    child: CoachArticlesList(widget.coach.id)),
+                // todo parameter
+              ],
             ),
           ),
         ],
@@ -364,7 +371,7 @@ class CoachImage extends StatelessWidget {
         children: [
           CircleAvatar(
               radius: 90.r,
-              backgroundImage: assetImage(
+              backgroundImage: networkImage(
                 coach,
               )),
           Text(

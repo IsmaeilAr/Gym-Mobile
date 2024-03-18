@@ -168,9 +168,13 @@
                "remove": "إزالة",
                "select": "تحديد",
                "deselect": "إلغاء التحديد",
+                     "withStars": "بـ",
+      "stars": "نجوم",
+
                  "coachProfilePopMenueChangeCoach": "تغيير المدرب",
                  "coachProfilePopMenueUnassign": "إلغاء التعيين",
                  "coachProfilePopMenueRate": "تقييم",
+
                  "coachProfilePopMenueSetCoach": "تعيين المدرب",
                  "coachProfilePopMenueRevokeRequest": "سحب الطلب",
 

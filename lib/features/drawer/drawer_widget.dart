@@ -44,7 +44,7 @@ class MyDrawer extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 24.r,
-                    backgroundImage: assetImage(userProfile),
+                    backgroundImage: networkImage(userProfile),
                   ),
                   Gap(
                     w: 12.w,
@@ -195,7 +195,7 @@ class _LanguageListState extends State<LanguageList> {
               onTap: () {
                 context
                     .read<LanguageProvider>()
-                    .changeLanguage(const Locale('ar', '')); // todo localize
+                    .changeLanguage(const Locale('ar', ''));
               },
               leading: Padding(
                 padding: EdgeInsets.only(left: 37.w),
@@ -208,7 +208,7 @@ class _LanguageListState extends State<LanguageList> {
                 style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    color: lightGrey),
+                    color: !isEnglish ? grey : lightGrey),
               ),
             ),
           ),
@@ -229,7 +229,9 @@ class _LanguageListState extends State<LanguageList> {
               title: Text(
                 AppLocalizations.of(context)!.drawerEnglishKey,
                 style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w400, color: grey),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: isEnglish ? grey : lightGrey),
               ),
             ),
           ),
@@ -263,7 +265,7 @@ class SelectedLangIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Icon(
       Icons.radio_button_checked_outlined,
-      color: lightGrey,
+      color: grey,
       size: 15,
     );
   }

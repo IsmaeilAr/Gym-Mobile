@@ -85,7 +85,7 @@ class ChatScreenState extends State<ChatScreen> {
               },
               child: CircleAvatar(
                 radius: 18.r,
-                backgroundImage: assetImage(coach),
+                backgroundImage: networkImage(coach),
               ),
             ),
             const Gap(

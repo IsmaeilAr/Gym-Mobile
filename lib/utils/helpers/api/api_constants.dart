@@ -27,7 +27,7 @@ class ApiConstants {
   static const String setRateUrl = "${baseUrl}setRate";
   static const String submitReportUrl = "${baseUrl}report";
   static const String programSearchUrl = "${baseUrl}programSearch";
-  static const String setProgramUrl = "${baseUrl}setProgram";
+  static const String setProgramUrl = "${baseUrl}selectProgram";
   static const String userSearchUrl = "${baseUrl}userSearch";
   static const String getArticlesUrl = "${baseUrl}allArticle";
   static const String addArticleUrl = "${baseUrl}addArticle";

@@ -145,7 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                                 ? CircleAvatar(
                               radius: 90.r,
                                     backgroundImage:
-                                        assetImage(widget.profileInfo),
+                                        networkImage(widget.profileInfo),
                                   )
                                 : CircleAvatar(
                                     radius: 90.r,

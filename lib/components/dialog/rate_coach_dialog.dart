@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'cancel_button.dart';
 
 class RateStarsCoachDialog extends StatefulWidget {
@@ -86,6 +85,7 @@ class RateCoachDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var local = AppLocalizations.of(context)!;
     return AlertDialog(
       backgroundColor: black,
       surfaceTintColor: black,
@@ -101,13 +101,13 @@ class RateCoachDialog extends StatelessWidget {
           },
           color: primaryColor,
           child: Text(
-            AppLocalizations.of(context)!.coachProfilePopMenueRate,
+            local.coachProfilePopMenueRate,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
       ],
       content: Text(
-        "Rate ${coach.name} with ${coach.rate} stars?",
+        "${local.coachProfilePopMenueRate} ${coach.name} ${local.withStars} ${coach.rate} ${local.stars}?",
         style: MyDecorations.coachesTextStyle,
       ),
     );

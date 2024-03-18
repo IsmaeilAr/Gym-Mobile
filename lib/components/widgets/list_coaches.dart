@@ -42,7 +42,7 @@ class ListCoaches extends StatelessWidget {
                     padding: const EdgeInsets.all(6.0),
                     child: CircleAvatar(
                       radius: 24.r,
-                      backgroundImage: assetImage(coach),
+                      backgroundImage: networkImage(coach),
                     ),
 
                   ),

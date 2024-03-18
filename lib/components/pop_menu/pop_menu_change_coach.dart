@@ -100,17 +100,16 @@ class UnAssignCoachDialog extends StatelessWidget {
           onPressed: () {},
           color: primaryColor,
           child: Text(
-            "Unassign",
+            AppLocalizations.of(context)!.coachProfilePopMenueUnassign,
             style: MyDecorations.coachesTextStyle,
           ),
         ),
       ],
       content: Text(
-        "Are you sure you want to unassign your current coach?",
+        AppLocalizations.of(context)!.unassignCoachConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );
   }
 }
 
-// Define a dialog for rating coach

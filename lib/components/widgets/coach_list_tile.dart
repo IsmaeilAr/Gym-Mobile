@@ -21,7 +21,7 @@ class CoachListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CircleAvatar(
-            backgroundImage: assetImage(coach),
+            backgroundImage: networkImage(coach),
             maxRadius: 24.r,
           ),
         ],

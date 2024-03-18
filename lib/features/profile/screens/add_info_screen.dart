@@ -254,13 +254,11 @@ class _RegInfoFormState extends State<RegInfoForm> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _formKey = GlobalKey<FormState>();
-      _heightController = TextEditingController();
-      _weightController = TextEditingController();
-      _waistController = TextEditingController();
-      _neckController = TextEditingController();
-    });
+    _formKey = GlobalKey<FormState>();
+    _heightController = TextEditingController();
+    _weightController = TextEditingController();
+    _waistController = TextEditingController();
+    _neckController = TextEditingController();
     super.initState();
   }
 

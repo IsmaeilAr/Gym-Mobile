@@ -23,7 +23,7 @@ class ProgramModel {
     return ProgramModel(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
-      file: json['file'] ?? '',
+      file: '${ApiConstants.pdfUrl}${json['file']}' ?? '',
       imageUrl: '${ApiConstants.imageUrl}${json['imageUrl']}' ?? '',
       type: json['type'] ?? '',
       coachId: json['user_id'] ?? 0,

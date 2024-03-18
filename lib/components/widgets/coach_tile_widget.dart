@@ -20,7 +20,7 @@ class CoachTileWidget extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 28.r,
-              backgroundImage: assetImage(coach),
+              backgroundImage: networkImage(coach),
             ),
             SizedBox(
               width: 10.w,
@@ -37,7 +37,7 @@ class CoachTileWidget extends StatelessWidget {
                     isMyCoach
                         ? Icon(
                             Icons.check_box,
-                            color: Colors.white,
+                            color: lightGrey,
                             size: 12.sp,
                           )
                         : const SizedBox.shrink(),

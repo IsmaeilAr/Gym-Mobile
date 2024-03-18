@@ -11,17 +11,14 @@ import '../styles/decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CategoryList extends StatelessWidget {
-  final double listHeight, listWidth, imgHeight, imgWidth;
   final List<TrainingCategoryModel> categoryList;
   final String genre;
+  final double listHeight = 180,
+      listWidth = 333,
+      imgHeight = 156,
+      imgWidth = 243;
 
-  const CategoryList(this.genre,
-      {super.key,
-      required this.listHeight,
-      required this.listWidth,
-      required this.imgHeight,
-      required this.imgWidth,
-      required this.categoryList});
+  const CategoryList(this.genre, {super.key, required this.categoryList});
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +80,9 @@ class CategoryList extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            PageTransition(
-                                type: PageTransitionType.fade,
+                          context,
+                          PageTransition(
+                            type: PageTransitionType.fade,
                             child: PremiumScreen(
                               genre: genre,
                             ),
@@ -116,9 +113,7 @@ class CategoryList extends StatelessWidget {
                 ],
               );
             }
-          }
-      ),
+          }),
     );
   }
 }
-

@@ -75,7 +75,7 @@ class _MyProfileState extends State<MyProfile> {
                             Center(
                               child: CircleAvatar(
                                 radius: 90.r,
-                                backgroundImage: assetImage(profileInfo),
+                                backgroundImage: networkImage(profileInfo),
                               ),
                             ),
                             SizedBox(
@@ -181,9 +181,7 @@ class _MyProfileState extends State<MyProfile> {
                       ],
                     ),
                     context
-                            .watch<ProfileProvider>()
-                            .status
-                            .hasCoach // todo critical: get coach data from coachId when backend gives coachID
+                            .watch<ProfileProvider>().status.hasCoach
                         ? MyCoachWidget(myCoach)
                         : const NoCoachScreen(),
                   ],

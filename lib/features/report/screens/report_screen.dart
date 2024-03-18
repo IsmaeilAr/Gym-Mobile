@@ -21,21 +21,21 @@ class ReportScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: black,
         leading: IconButton(
-          color: Colors.white,
+          color: lightGrey,
           icon: Icon(Icons.arrow_back_ios_new,size: 24.sp,),
           onPressed: () => Navigator.pop(context), // todo UX: exit confirmation dialog
         ),
         title: Text(
           AppLocalizations.of(context)!.reportScreenTitle,
           style: TextStyle(
-            color: Colors.white,
+            color: lightGrey,
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
         actions: [
           IconButton(
-            color: Colors.white,
+            color: lightGrey,
             icon: Icon(Icons.send,size: 18.sp,),
             onPressed: () {
               context.read<ReportProvider>().callSubmitReportApi(

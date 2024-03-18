@@ -39,6 +39,14 @@ class ProgressProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String? _weeklyProgressError;
+
+  String? get weeklyProgressError => _weeklyProgressError;
+
+  set weeklyProgressError(String? value) {
+    _weeklyProgressError = value;
+  }
+
   List<int> doneDaysList = [];
 
   bool _isLoadingProgramProgress = false;
@@ -108,6 +116,7 @@ class ProgressProvider extends ChangeNotifier {
         isLoadingWeeklyProgress = false;
         results.fold((l) {
           isLoadingWeeklyProgress = false;
+          weeklyProgressError = l; // Set the error message
           showMessage(l, false);
         }, (r) {
           Response response = r;
@@ -120,16 +129,21 @@ class ProgressProvider extends ChangeNotifier {
             isLoadingWeeklyProgress = false;
           } else {
             isLoadingWeeklyProgress = false;
+            weeklyProgressError =
+                "Error: ${response.data}"; // Set the error message
             log("## ${response.data}");
           }
         });
       } on Exception catch (e) {
+        weeklyProgressError = "Exception: $e"; // Set the error message
         log("Exception get weekly progress : $e");
         showMessage("$e", false);
         isLoadingWeeklyProgress = false;
       }
     } else {
-      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      weeklyProgressError =
+          AppLocalizations.of(context)!.noInternet; // Set the error message
+      showMessage(weeklyProgressError!, false);
       isLoadingWeeklyProgress = false;
     }
     notifyListeners();

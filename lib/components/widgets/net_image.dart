@@ -1,6 +1,8 @@
 import'package:flutter/material.dart';
 
-ImageProvider assetImage(coach) {
+import 'cached_image_widget.dart';
+
+ImageProvider networkImage(coach) {
   ImageProvider image;
 
   (coach.images.isNotEmpty)
@@ -12,15 +14,17 @@ ImageProvider assetImage(coach) {
   return image;
 }
 
-Image imageAsset(coach) {
-  Image image;
+CachedImageWidget cachedImage(coach) {
+  CachedImageWidget image;
 
-  (coach.images.isNotEmpty)
-      ? image = Image.network(
-          coach.images[0].image,
+  image = (coach.images.isNotEmpty)
+      ? CachedImageWidget(
+          imageUrl: coach.images[0].image,
+          boxFit: BoxFit.fill,
         )
-      : image = Image.asset(
-          'assets/images/profile.png',
+      : const CachedImageWidget(
+          imageUrl: 'assets/images/profile.png',
+          boxFit: BoxFit.fill,
         );
 
   return image;

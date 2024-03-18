@@ -375,7 +375,6 @@ class ProgramProvider extends ChangeNotifier {
   Future<void> callSetProgram(BuildContext context, int programId) async {
     isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
-
     if (isDeviceConnected) {
       try {
         Either<String, Response> results =
