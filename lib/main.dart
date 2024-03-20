@@ -81,12 +81,14 @@ class _MyAppState extends State<MyApp> {
           fontFamily: 'Saira',
           useMaterial3: true,
         ),
+
         home: SplashScreen(
           channel: IOWebSocketChannel.connect(
             "ws://echo.websocket.org",
           ),
         ),
-        // home: DownloadPdfTest(),
+
+        // home: const MyHomePage(title: 'Download Test',),
       ),
     );
   }

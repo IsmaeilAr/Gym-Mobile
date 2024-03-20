@@ -41,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          type: PageTransitionType.fade,
+                          type: PageTransitionType.rightToLeftWithFade,
                           child: const SearchProgramScreen()));
                 },
                 icon: const Icon(Icons.search),

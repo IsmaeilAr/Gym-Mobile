@@ -36,6 +36,7 @@ class _TrainingWithoutCoachesState extends State<TrainingWithoutCoachesScreen> {
     context
         .read<ProgramProvider>()
         .getProgramsList(context, widget.category.type, widget.category.id);
+    context.read<ProfileProvider>().callGetStatus(context);
   }
 
   @override

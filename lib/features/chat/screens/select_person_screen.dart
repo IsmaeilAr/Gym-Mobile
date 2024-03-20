@@ -49,7 +49,7 @@ class _SelectPersonScreenState extends State<SelectPersonScreen> {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade,
+                      type: PageTransitionType.rightToLeftWithFade,
                       child: const SearchCoachesScreen()));
             },
             icon: GymIcons.search,

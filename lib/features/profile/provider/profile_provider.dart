@@ -109,8 +109,8 @@ class ProfileProvider extends ChangeNotifier {
 
   InitStatusModel _status = InitStatusModel(
       hasCoach: false,
-      hasProgram: false,
-      myProgramList: [],
+      myNutritionProgram: [],
+      myTrainingProgram: [],
       myCoach: UserModel(
           id: 0,
           name: "name",
@@ -311,7 +311,7 @@ class ProfileProvider extends ChangeNotifier {
       String waist,
       String neck,
       ) async {
-    isLoading = true;
+    isLoadingEditMetrics = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
     if (isDeviceConnected) {
@@ -324,20 +324,20 @@ class ProfileProvider extends ChangeNotifier {
           waist,
           neck,
         );
-        isLoading = false;
+        isLoadingEditMetrics = false;
         await results.fold((l) {
-          isLoading = false;
-           showMessage(l, false);
+          isLoadingEditMetrics = false;
+          showMessage(l, false);
           repoStatus = false;
         }, (r) async {
           Response response = r;
           if (response.statusCode == 200) {
             var data = response.data["data"];
             log("## $data");
-            isLoading = false;
+            isLoadingEditMetrics = false;
             repoStatus = true;
           } else {
-            isLoading = false;
+            isLoadingEditMetrics = false;
             log("## ${response.statusCode}");
             log("## ${response.data}");
           }
@@ -345,12 +345,12 @@ class ProfileProvider extends ChangeNotifier {
         return repoStatus;
       } on Exception catch (e) {
          showMessage("$e", false);
-        isLoading = false;
+        isLoadingEditMetrics = false;
         return false;
       }
     } else {
       showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoading = false;
+      isLoadingEditMetrics = false;
       return false;
     }
   }

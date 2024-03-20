@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
@@ -16,6 +18,16 @@ class ProgramsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int trainingId = 0;
+    int nutritionId = 0;
+    if (context.read<ProfileProvider>().status.myTrainingProgram.isNotEmpty) {
+      trainingId =
+          context.read<ProfileProvider>().status.myTrainingProgram[0].id;
+    }
+    if (context.read<ProfileProvider>().status.myNutritionProgram.isNotEmpty) {
+      nutritionId =
+          context.read<ProfileProvider>().status.myNutritionProgram[0].id;
+    }
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 8.h,
@@ -35,7 +47,6 @@ class ProgramsList extends StatelessWidget {
                           .length,
               itemBuilder: (context, index) {
                 ProgramModel program;
-                // bool isMyProgram = context.read<ProfileProvider>().status.myProgramList.nutrition.id
                 bool isMyProgram = false;
                 (isWithCoach)
                     ? {
@@ -54,6 +65,11 @@ class ProgramsList extends StatelessWidget {
                                 .watch<ProgramProvider>()
                                 .nutritionProgramList[index]
                           };
+
+                if (program.id == trainingId || program.id == nutritionId) {
+                  isMyProgram = true;
+                }
+                // isMyProgram = true;
                 return ProgramCard(program, isMyProgram);
               },
             ),

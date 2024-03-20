@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/check_in_success.dart';
 import 'package:gym/components/widgets/gym_traffic.dart';
+import 'package:gym/features/authentication/models/init_status_model.dart';
 import 'package:gym/features/home/provider/home_provider.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/progress/provider/progress_provider.dart';
@@ -49,6 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    InitStatusModel status = context.watch<ProfileProvider>().status;
     return RefreshIndicator(
         color: red,
         backgroundColor: dark,
@@ -77,13 +79,18 @@ class _HomePageState extends State<HomePage> {
                     padding: EdgeInsets.symmetric(vertical: 12.h),
                     child: myDivider(),
                   ),
-                  context.watch<ProfileProvider>().status.hasProgram
+                  status.myTrainingProgram.isNotEmpty
                       ?
                       // daily card
-                      const DailyProgramCard()
+                      DailyProgramCard(status.myTrainingProgram[0])
                       :
                       // no training program screen
                       const NoDailyPrograms(),
+                  if (status.myTrainingProgram.isNotEmpty)
+                    (status.myNutritionProgram.isNotEmpty)
+                        ? DailyProgramCard(status.myNutritionProgram[0])
+                        : const FindProgramButton(),
+
                   // weekly progress
                   Text(
                     AppLocalizations.of(context)!.weeklyProgress,
@@ -101,6 +108,8 @@ class _HomePageState extends State<HomePage> {
 
   void openQRScan() {
     Navigator.push(context,
-        PageTransition(type: PageTransitionType.fade, child: const QRView()));
+        PageTransition(
+            type: PageTransitionType.rightToLeftWithFade,
+            child: const QRView()));
   }
 }

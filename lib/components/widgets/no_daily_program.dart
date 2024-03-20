@@ -43,23 +43,32 @@ class _NoDailyProgramsState extends State<NoDailyPrograms> {
             const Gap(
               h: 24,
             ),
-            SizedBox(
-              width: 296.w,
-              height: 46.h,
-              child: ElevatedButton(
-                onPressed: () {
-                  context.read<MainLayoutProvider>().selectedIndex =
-                      1; // "1" is the index of programs screen
-                },
-                style: MyDecorations.myButtonStyle(dark),
-                child: Text(
-                  AppLocalizations.of(context)!.homeNoDailyProgramsButton,
-                  style: MyDecorations.myButtonTextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
+            const FindProgramButton(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class FindProgramButton extends StatelessWidget {
+  const FindProgramButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 296.w,
+      height: 46.h,
+      child: ElevatedButton(
+        onPressed: () {
+          context.read<MainLayoutProvider>().selectedIndex =
+              1; // "1" is the index of programs screen
+        },
+        style: MyDecorations.myButtonStyle(dark),
+        child: Text(
+          AppLocalizations.of(context)!.homeNoDailyProgramsButton,
+          style: MyDecorations.myButtonTextStyle(
+              fontSize: 14, fontWeight: FontWeight.w500),
         ),
       ),
     );

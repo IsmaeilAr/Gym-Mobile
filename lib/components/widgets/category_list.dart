@@ -37,7 +37,7 @@ class CategoryList extends StatelessWidget {
                   Navigator.push(
                       context,
                       PageTransition(
-                          type: PageTransitionType.fade,
+                          type: PageTransitionType.rightToLeftWithFade,
                           child: context.read<ProfileProvider>().status.hasCoach
                               ? TrainingWithCoachesScreen(category)
                               : TrainingWithoutCoachesScreen(category)));
@@ -82,7 +82,7 @@ class CategoryList extends StatelessWidget {
                         Navigator.push(
                           context,
                           PageTransition(
-                            type: PageTransitionType.fade,
+                            type: PageTransitionType.rightToLeftWithFade,
                             child: PremiumScreen(
                               genre: genre,
                             ),

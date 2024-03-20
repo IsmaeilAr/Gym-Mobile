@@ -145,7 +145,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.fade,
+                    type: PageTransitionType.rightToLeftWithFade,
                     child: const NotificationsScreen(
                     )
                 ));
@@ -157,7 +157,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.fade,
+                    type: PageTransitionType.rightToLeftWithFade,
                     child: const ArticlesScreens(
                     )
                 ));
@@ -169,7 +169,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.fade,
+                    type: PageTransitionType.rightToLeftWithFade,
                     child: const ChatListScreen(
                     )
                 ));

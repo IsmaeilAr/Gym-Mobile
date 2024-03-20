@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
+import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import '../../features/coaches/screens/all_coaches_screen.dart';
 import '../dialog/cancel_button.dart';
 import '../dialog/rate_coach_dialog.dart';
 import '../styles/colors.dart';
@@ -66,7 +70,15 @@ class ChangeCoachDialog extends StatelessWidget {
         const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+                context,
+                PageTransition(
+                  type: PageTransitionType.rightToLeftWithFade,
+                  child: const AllCoachesScreen(),
+                ));
+          },
           color: primaryColor,
           child: Text(
             AppLocalizations.of(context)!.change,
@@ -97,7 +109,10 @@ class UnAssignCoachDialog extends StatelessWidget {
         const CancelButton(),
         SizedBox(width: 5.w),
         MaterialButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<CoachProvider>().callUnsetCoach(context, coach.id);
+            Navigator.pop(context);
+          },
           color: primaryColor,
           child: Text(
             AppLocalizations.of(context)!.coachProfilePopMenueUnassign,

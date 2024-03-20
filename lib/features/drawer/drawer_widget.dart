@@ -93,7 +93,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.push(
                   context,
                   PageTransition(
-                      type: PageTransitionType.fade,
+                      type: PageTransitionType.rightToLeftWithFade,
                       child: ReportScreen(
                       )));
             },

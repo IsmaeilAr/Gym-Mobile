@@ -14,18 +14,16 @@ import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/components/widgets/menu_item_model.dart';
 import 'package:gym/features/articles/screens/coach_articles_screen.dart';
-import 'package:gym/features/chat/models/chat_model.dart';
 import 'package:gym/features/chat/screens/chat_screen.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import '../../../components/dialog/cancel_button.dart';
 import '../../../components/dialog/set_coach_dialog.dart';
 
-int popupMenuCase = 2; // 1_ChangeCoach  2_SetCoach  3_RevokeRequest
+int popupMenuCase = 2; // 1_ChangeCoach  2_SetCoach  3_RevokeRequest // todo
 
 class CoachProfileScreen extends StatefulWidget {
   final UserModel coach;
@@ -114,7 +112,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
           Navigator.push(
               context,
               PageTransition(
-                  type: PageTransitionType.fade,
+                  type: PageTransitionType.rightToLeftWithFade,
                   child: ChatScreen(widget.coach.id, widget.coach.name)));
         },
         backgroundColor: dark,
@@ -278,7 +276,7 @@ class CoachesProfileAppBar extends StatelessWidget
       backgroundColor: black,
       leading: const MyBackButton(),
       title: Text(
-        AppLocalizations.of(context)!.coachProfileCoaches,
+        AppLocalizations.of(context)!.mainLayoutAppBarProfileScreenName,
         style: TextStyle(
           color: lightGrey,
           fontSize: 18.sp,

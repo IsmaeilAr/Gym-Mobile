@@ -1,6 +1,6 @@
 class ApiConstants {
-  // static const String serverUrl = "http://91.144.20.117:7770/";        // public
-  static const String serverUrl = "http://192.168.2.138:808/"; // local
+  static const String serverUrl = "http://91.144.20.117:7770/"; // public
+  // static const String serverUrl = "http://192.168.2.138:808/"; // local
   static const String baseUrl = "${serverUrl}api/";
   static const String imageUrl = "${serverUrl}uploads/images/";
   static const String pdfUrl = "${serverUrl}uploads/programs/";

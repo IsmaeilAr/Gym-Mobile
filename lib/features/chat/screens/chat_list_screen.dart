@@ -114,8 +114,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.fade,
-                    child: const SelectPersonScreen()
+                      type: PageTransitionType.rightToLeftWithFade,
+                      child: const SelectPersonScreen()
                 ));
           },
             child: Icon(Icons.add, color: lightGrey, size: 18.sp,)

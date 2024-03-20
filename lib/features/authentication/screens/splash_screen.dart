@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
       context,
       PageTransition(
-        type: PageTransitionType.fade,
+        type: PageTransitionType.rightToLeftWithFade,
         child: MainLayout(),
       ),
     );
@@ -74,7 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushReplacement(
       context,
       PageTransition(
-        type: PageTransitionType.fade,
+        type: PageTransitionType.rightToLeftWithFade,
         child: const LoginScreen(),
       ),
     );

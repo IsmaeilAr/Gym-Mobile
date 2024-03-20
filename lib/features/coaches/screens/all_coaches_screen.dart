@@ -64,7 +64,8 @@ class _AllCoachesScreenState extends State<AllCoachesScreen> {
                             Navigator.push(
                                 context,
                                 PageTransition(
-                                    type: PageTransitionType.fade,
+                                    type:
+                                        PageTransitionType.rightToLeftWithFade,
                                     child: CoachProfileScreen(coach)));
                           },
                           child: Container(
@@ -142,7 +143,7 @@ class UsersAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.push(
                 context,
                 PageTransition(
-                    type: PageTransitionType.fade,
+                    type: PageTransitionType.rightToLeftWithFade,
                     child: const SearchCoachesScreen()));
           },
           icon: const Icon(Icons.search),

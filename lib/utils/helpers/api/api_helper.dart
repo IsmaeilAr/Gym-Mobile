@@ -171,6 +171,7 @@ class ApiHelper {
       return result;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error getProfileInfo");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -201,6 +202,7 @@ class ApiHelper {
       return result;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error getPersonMetricsApi");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -241,6 +243,7 @@ class ApiHelper {
       return result;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error addMetricsApi");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -295,7 +298,7 @@ class ApiHelper {
     var formData = FormData.fromMap({
       "name": name,
       "phoneNumber": phoneNumber,
-      'image': (image != null)
+      'image[0]': (image != null)
           ? await MultipartFile.fromFile(
               image.path,
             )
@@ -312,13 +315,15 @@ class ApiHelper {
           },
         ),
             data: formData,
-          ).timeout(const Duration(seconds: 25));
+          )
+          .timeout(const Duration(seconds: 60));
       log("## Response edit info (API handler) : Good ");
       log("## Response edit info : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error editInfoApi");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -876,6 +881,7 @@ class ApiHelper {
       return result;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).toString();
+      log("## error get Coach Info");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -913,6 +919,7 @@ class ApiHelper {
   Future<Either<String, Response>> requestCoachApi(
     int coachId,
   ) async {
+    debugPrint('$coachId');
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";

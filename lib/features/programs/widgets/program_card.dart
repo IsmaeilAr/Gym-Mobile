@@ -36,7 +36,7 @@ class ProgramCard extends StatelessWidget {
         Navigator.push(
             context,
             PageTransition(
-                type: PageTransitionType.fade,
+                type: PageTransitionType.rightToLeftWithFade,
                 child: PDFScreen(
                   programName: program.name,
                   programFileName: program.file,
@@ -78,7 +78,8 @@ class ProgramCard extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      DownloadButton(program.name,
+                      if (Platform.isAndroid)
+                        DownloadButton(program.name,
                           'https://css4.pub/2015/icelandic/dictionary.pdf'),
                       // DownloadButton(program.name, program.file),
                       PopupMenuButton<MenuItemModel>(
@@ -220,6 +221,7 @@ class _DownloadButtonState extends State<DownloadButton> {
 
   void downloadPDF(String name, String file) {
     debugPrint('downloading: $name  from $file');
+
     FileDownloader.downloadFile(
         notificationType: NotificationType.all,
         url: file,

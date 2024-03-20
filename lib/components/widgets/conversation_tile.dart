@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/widgets/net_image.dart';
@@ -24,7 +25,7 @@ class _ConversationTileState extends State<ConversationTile> {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: AssetImage("assets/images/profile.png"),
+        backgroundImage: networkImage(widget.chatModel.sid2),
         // backgroundImage: assetImage(widget.chatModel),
         maxRadius: 24.r,
       ),
@@ -44,7 +45,7 @@ class _ConversationTileState extends State<ConversationTile> {
         Navigator.push(
             context,
             PageTransition(
-                type: PageTransitionType.fade,
+                type: PageTransitionType.rightToLeftWithFade,
                 child: ChatScreen(
                   widget.chatModel.sid2.id,
                   widget.chatModel.sid2.name,

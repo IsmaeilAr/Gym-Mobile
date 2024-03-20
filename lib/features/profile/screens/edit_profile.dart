@@ -298,13 +298,6 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           color: lightGrey,
           onPressed: () {
-            context.read<ProfileProvider>().callEditInfo(
-                  context,
-                  nameController.text,
-                  phoneController.text,
-                  _currentImage,
-                );
-
             context.read<ProfileProvider>().callEditMetrics(
                   context,
                   genderKeeper.text,
@@ -313,6 +306,12 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
                   weightController.text,
                   waistController.text,
                   neckController.text,
+                );
+            context.read<ProfileProvider>().callEditInfo(
+                  context,
+                  nameController.text,
+                  phoneController.text,
+                  _currentImage,
                 );
             context.read<ProfileProvider>().getProfileInfo(context);
             context.read<ProfileProvider>().getPersonalMetrics(context);

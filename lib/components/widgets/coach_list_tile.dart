@@ -71,10 +71,10 @@ class CoachListTile extends StatelessWidget {
               receiverId: 3,
               createdAt: "1997"),
         );
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             PageTransition(
-                type: PageTransitionType.fade,
+                type: PageTransitionType.rightToLeftWithFade,
                 child: ChatScreen(
                   chatModel.sid2.id,
                   chatModel.sid2.name,

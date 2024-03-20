@@ -80,7 +80,7 @@ class ChatScreenState extends State<ChatScreen> {
                 Navigator.push(
                     context,
                     PageTransition(
-                        type: PageTransitionType.fade,
+                        type: PageTransitionType.rightToLeftWithFade,
                         child: CoachProfileScreen(coach)));
               },
               child: CircleAvatar(

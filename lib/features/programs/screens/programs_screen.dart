@@ -114,7 +114,7 @@ class _ProgramsScreenState extends State<ProgramsScreen> {
                         Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.fade,
+                                type: PageTransitionType.rightToLeftWithFade,
                                 child: const AllCoachesScreen(
                                 )));
                       },

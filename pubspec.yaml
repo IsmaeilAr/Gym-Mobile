@@ -40,7 +40,7 @@ dependencies:
   web_socket_channel: ^2.4.0
   easy_pdf_viewer: ^1.0.7
   flutter_file_downloader: ^1.2.1
-#  arabic_font: ^0.0.9
+  al_downloader: ^1.8.4
 
 
 

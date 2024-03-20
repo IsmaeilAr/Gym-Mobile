@@ -40,7 +40,7 @@ class RecommendedProgramList extends StatelessWidget {
                 Navigator.push(
                     context,
                     PageTransition(
-                        type: PageTransitionType.fade,
+                        type: PageTransitionType.rightToLeftWithFade,
                         child: PDFScreen(
                           programName: program.name,
                           programFileName: program.file,

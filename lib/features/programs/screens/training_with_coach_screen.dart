@@ -30,6 +30,7 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
               widget.category.type,
               context.read<ProfileProvider>().status.myCoach.id,
             ));
+    context.read<ProfileProvider>().callGetStatus(context);
   }
 
   @override
