@@ -65,11 +65,10 @@ class PayCashButton extends StatelessWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       backgroundColor: dark,
-                      content: Expanded(
-                          child: Text(
+                      content: Text(
                         AppLocalizations.of(context)!.myProfileSnackBarMessage,
                         style: MyDecorations.profileLight500TextStyle,
-                      )),
+                      ),
                     ),
                   );
                 },

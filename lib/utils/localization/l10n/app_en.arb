@@ -149,8 +149,8 @@
        "coachProfilePhone": "Phone number",
        "coachProfileBio": "Bio",
        "coachProfileAvailability": "Availability",
-       "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach to",
-       "coachProfileChangeCoachConfirmation2": "as your new coach?",
+       "changeCoachConfirmation": "Are you sure you want to change your current coach to",
+       "changeCoachConfirmation2": "as your new coach?",
        "coachProfileCoaches": "Coaches",
        "coachProfileSelected": "Selected",
        "coachProfileSetCoach": "Set coach",
@@ -181,7 +181,7 @@
 
 
   "stopTimerConfirmation":"Are you sure you want to stop the timer and end the session? You'll need to scan the QR again to resume. Pausing allows you to continue without restarting.",
-  "changeCoachConfirmation": "Are you sure you want to change your current coach to Maya as your new coach?",
+  "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach ?",
   "unassignCoachConfirmation": "Are you sure you want to unassign your current coach?",
 "sendReportConfirmation": "Are you sure you want to send this report to the admin?",
 "setProgramConfirmation": "Are you sure you want to set this program as your daily one?",

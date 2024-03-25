@@ -41,7 +41,7 @@ dependencies:
   easy_pdf_viewer: ^1.0.7
   flutter_file_downloader: ^1.2.1
   al_downloader: ^1.8.4
-
+  url_launcher: ^6.2.5
 
 
 dev_dependencies:
@@ -53,7 +53,7 @@ dev_dependencies:
 
 
 flutter:
-  generate: true # Add this line
+  generate: true
   uses-material-design: true
 
   assets:

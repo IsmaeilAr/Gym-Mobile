@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/features/authentication/screens/login_screen.dart';
 import 'package:gym/features/main_layout/main_layout.dart';
+import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/utils/helpers/api/api_helper.dart';
 import 'package:gym/utils/helpers/cache.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -68,6 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: MainLayout(),
       ),
     );
+    context.read<ProfileProvider>().getProfileInfo(context);
   }
 
   void navigateToLoginPage() {

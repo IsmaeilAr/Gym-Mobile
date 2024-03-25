@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/features/main_layout/main_layout.dart';
 import 'package:gym/features/main_layout/main_layout_provider.dart';
 import 'package:provider/provider.dart';
 import '../styles/colors.dart';
@@ -8,16 +7,13 @@ import '../styles/decorations.dart';
 import 'gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NoDailyPrograms extends StatefulWidget {
-  const NoDailyPrograms({
+class NoDailyPrograms extends StatelessWidget {
+  const NoDailyPrograms(
+    this.isTraining, {
     super.key,
   });
 
-  @override
-  State<NoDailyPrograms> createState() => _NoDailyProgramsState();
-}
-
-class _NoDailyProgramsState extends State<NoDailyPrograms> {
+  final bool isTraining;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -43,7 +39,7 @@ class _NoDailyProgramsState extends State<NoDailyPrograms> {
             const Gap(
               h: 24,
             ),
-            const FindProgramButton(),
+            FindProgramButton(isTraining),
           ],
         ),
       ),
@@ -52,8 +48,9 @@ class _NoDailyProgramsState extends State<NoDailyPrograms> {
 }
 
 class FindProgramButton extends StatelessWidget {
-  const FindProgramButton({super.key});
+  const FindProgramButton(this.isTraining, {super.key});
 
+  final bool isTraining;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -66,7 +63,9 @@ class FindProgramButton extends StatelessWidget {
         },
         style: MyDecorations.myButtonStyle(dark),
         child: Text(
-          AppLocalizations.of(context)!.homeNoDailyProgramsButton,
+          isTraining
+              ? AppLocalizations.of(context)!.homeNoDailyProgramsButton
+              : AppLocalizations.of(context)!.homeNoDailyNutritionButton,
           style: MyDecorations.myButtonTextStyle(
               fontSize: 14, fontWeight: FontWeight.w500),
         ),

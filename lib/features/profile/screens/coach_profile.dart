@@ -12,7 +12,7 @@ import 'package:gym/components/widgets/back_button.dart';
 import 'package:gym/components/widgets/coach_availability.dart';
 import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/net_image.dart';
-import 'package:gym/components/widgets/menu_item_model.dart';
+import 'package:gym/components/pop_menu/menu_item_model.dart';
 import 'package:gym/features/articles/screens/coach_articles_screen.dart';
 import 'package:gym/features/chat/screens/chat_screen.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
@@ -20,10 +20,9 @@ import 'package:gym/features/profile/models/user_model.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../../../components/dialog/cancel_button.dart';
 import '../../../components/dialog/set_coach_dialog.dart';
 
-int popupMenuCase = 2; // 1_ChangeCoach  2_SetCoach  3_RevokeRequest // todo
+// 1_ChangeCoach  2_SetCoach  3_RevokeRequest // todo
 
 class CoachProfileScreen extends StatefulWidget {
   final UserModel coach;
@@ -38,6 +37,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
     with TickerProviderStateMixin {
   late final TabController _tabController;
   bool isSelectedCoach = false;
+  int currentCase = 2;
 
   @override
   void initState() {
@@ -55,8 +55,15 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
   }
 
   Future<void> _refresh() async {
-    isSelectedCoach =
-        context.read<ProfileProvider>().status.myCoach.id == widget.coach.id;
+    if (context.read<ProfileProvider>().status.hasCoach) {
+      if (context.read<ProfileProvider>().status.myCoach!.id ==
+          widget.coach.id) {
+        isSelectedCoach = true;
+      }
+      currentCase = isSelectedCoach ? 1 : 2;
+    }
+    if (!context.read<ProfileProvider>().status.hasCoach && isSelectedCoach)
+      currentCase = 3;
     context.read<CoachProvider>().getCoachTime(context, widget.coach.id);
     setState(() {});
   }
@@ -65,7 +72,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CoachesProfileAppBar(
-        popupMenuCase: 1,
+        popupMenuCase: currentCase,
         onSelectedSetCoachFun: (context, getSetMenuItems) {},
         onSelectedRevokeRequestFun: (context, getRevokeMenuItems) {},
         onSelectedChangeCoachFun: (context, getChangeMenuItems) {},
@@ -212,44 +219,6 @@ class InfoWithIconWidget extends StatelessWidget {
   }
 }
 
-class ChangeCoach extends StatefulWidget {
-  final String name;
-  final int coachId;
-
-  const ChangeCoach({super.key, required this.name, required this.coachId});
-
-  @override
-  State<ChangeCoach> createState() => _ChangeCoachState();
-}
-
-class _ChangeCoachState extends State<ChangeCoach> {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: black,
-      surfaceTintColor: black,
-      actions: [
-        const CancelButton(),
-        SizedBox(width: 5.w),
-        MaterialButton(
-          onPressed: () {
-            context.read<CoachProvider>().setCoach(context, widget.coachId);
-          },
-          color: primaryColor,
-          child: Text(
-            AppLocalizations.of(context)!.change,
-            style: MyDecorations.coachesTextStyle,
-          ),
-        ),
-      ],
-      content: Text(
-        "${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation} ${widget.name} ${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation2}",
-        style: MyDecorations.coachesTextStyle,
-      ),
-    );
-  }
-}
-
 class CoachesProfileAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   @override
@@ -291,10 +260,10 @@ class CoachesProfileAppBar extends StatelessWidget
 }
 
 class CustomPopupMenuButton extends StatelessWidget {
-  final int popupMenuCases;
+  final int popupMenuCase;
   final UserModel coach;
 
-  const CustomPopupMenuButton(this.popupMenuCases, this.coach, {super.key});
+  const CustomPopupMenuButton(this.popupMenuCase, this.coach, {super.key});
 
   @override
   Widget build(BuildContext context) {

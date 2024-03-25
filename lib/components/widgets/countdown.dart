@@ -46,7 +46,6 @@ class _CountdownWidgetState extends State<CountdownWidget>
     );
 
     controller.addListener(() {
-      observant();
       if (controller.isAnimating) {
         setState(() {
           progress = controller.value;
@@ -57,6 +56,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
           isCounting = false;
         });
       }
+      observant();
     });
   }
 

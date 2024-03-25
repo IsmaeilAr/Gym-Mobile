@@ -28,7 +28,7 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
         .then((value) => context.read<ProgramProvider>().getMyCoachPrograms(
               context,
               widget.category.type,
-              context.read<ProfileProvider>().status.myCoach.id,
+              context.read<ProfileProvider>().status.myCoach!.id,
             ));
     context.read<ProfileProvider>().callGetStatus(context);
   }

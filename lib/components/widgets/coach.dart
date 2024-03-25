@@ -12,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../features/profile/screens/coach_profile.dart';
 import '../pop_menu/pop_menu_change_coach.dart';
 import 'find_coach_button.dart';
-import 'menu_item_model.dart';
+import '../pop_menu/menu_item_model.dart';
 import 'net_image.dart';
 
 class NoCoachScreen extends StatelessWidget {
@@ -25,7 +25,6 @@ class NoCoachScreen extends StatelessWidget {
         Row(
           children: [
             CircleAvatar(
-              // backgroundImage: AssetImage( "assets/images/profile1.png",),
               backgroundColor: grey,
               child: Icon(
                 Icons.person,

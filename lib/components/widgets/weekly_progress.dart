@@ -19,7 +19,7 @@ class WeeklyProgressWidget extends StatelessWidget {
       child: context.watch<ProgressProvider>().isLoadingWeeklyProgress
           ? const LoadingIndicatorWidget()
           : ListView.separated(
-              itemCount: 7,
+              itemCount: context.watch<ProgressProvider>().doneDaysList.length,
               scrollDirection: Axis.horizontal,
         separatorBuilder: (BuildContext context, int index) {
           return Gap(w: 20.w);

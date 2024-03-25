@@ -3,7 +3,7 @@ import '../../programs/model/program_model.dart';
 
 class InitStatusModel {
   final bool hasCoach;
-  final UserModel myCoach;
+  final UserModel? myCoach;
   final List<ProgramModel> myTrainingProgram;
   final List<ProgramModel> myNutritionProgram;
 
@@ -15,10 +15,12 @@ class InitStatusModel {
   });
 
   factory InitStatusModel.fromJson(Map<String, dynamic> json) {
-    final List<UserModel> coachList = List<UserModel>.from(
-      json['myCoach']
+    final List<UserModel> coachList = (json['hasCoach'] == 'true')
+        ? List<UserModel>.from(
+            json['myCoach']
           .map((coachJson) => UserModel.fromJson(coachJson['coach'])),
-    );
+          )
+        : [];
 
     final List<ProgramModel> trainingProgramList =
         (json['sportProgram'] != null)
@@ -34,7 +36,7 @@ class InitStatusModel {
 
     return InitStatusModel(
       hasCoach: json['hasCoach'] == 'true',
-      myCoach: coachList[0],
+      myCoach: coachList.isNotEmpty ? coachList.first : null,
       myTrainingProgram: trainingProgramList,
       myNutritionProgram: nutritionProgramList,
     );

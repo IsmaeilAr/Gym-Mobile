@@ -6,8 +6,8 @@ import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:gym/features/authentication/screens/login_screen.dart';
 import 'package:gym/features/main_layout/main_layout_provider.dart';
+import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/report/screens/report_screen.dart';
-import 'package:gym/utils/helpers/cache.dart';
 import 'package:gym/utils/localization/language_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +22,10 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferencesService prefsService = SharedPreferencesService.instance;
-    UserModel userProfile = context.watch<AuthProvider>().playerModel;
-    String userName = prefsService.getValue(Cache.userName) ?? "";
-    String userPhone = prefsService.getValue(Cache.userPhone) ?? "";
+    UserModel userProfile = context.watch<ProfileProvider>().profileInfo;
+    // SharedPreferencesService prefsService = SharedPreferencesService.instance;
+    // String userName = prefsService.getValue(Cache.userName) ?? "";
+    // String userPhone = prefsService.getValue(Cache.userPhone) ?? "";
     // String userImage = prefsService.getValue(Cache.userImage) ?? "";
 
     return Drawer(
@@ -54,7 +54,7 @@ class MyDrawer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        userName,
+                        userProfile.name,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14.sp,
@@ -62,7 +62,7 @@ class MyDrawer extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        userPhone,
+                        userProfile.phoneNumber,
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 12.sp,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gym/components/widgets/menu_item_model.dart';
+import 'package:gym/components/pop_menu/menu_item_model.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import '../dialog/set_programs_dialog.dart';
 import '../styles/gym_icons.dart';

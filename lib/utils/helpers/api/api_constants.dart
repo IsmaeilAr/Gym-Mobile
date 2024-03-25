@@ -1,6 +1,6 @@
 class ApiConstants {
-  static const String serverUrl = "http://91.144.20.117:7770/"; // public
-  // static const String serverUrl = "http://192.168.2.138:808/"; // local
+  // static const String serverUrl = "http://91.144.20.117:7770/"; // public
+  static const String serverUrl = "http://192.168.2.138:808/"; // local
   static const String baseUrl = "${serverUrl}api/";
   static const String imageUrl = "${serverUrl}uploads/images/";
   static const String pdfUrl = "${serverUrl}uploads/programs/";
@@ -13,9 +13,6 @@ class ApiConstants {
   static const String addInfoUrl = "${baseUrl}addInfo";
   static const String editInfoUrl = "${baseUrl}updateUserInfo";
   static const String editMetricsUrl = "${baseUrl}updateInfo";
-  static const String addProgramUrl = "${baseUrl}store";
-  static const String editProgramUrl = "${baseUrl}store"; // todo fix Url
-  static const String assignProgramUrl = "${baseUrl}store"; // todo fix Url
   static const String getChatsUrl = "${baseUrl}listChat";
   static const String checkInUrl = "${baseUrl}storeUserTime";
   static const String storeTimeUrl = "${baseUrl}storeTime";

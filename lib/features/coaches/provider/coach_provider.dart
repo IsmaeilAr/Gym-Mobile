@@ -15,14 +15,7 @@ import '../../../utils/services/coach_week_days_check.dart';
 class CoachProvider extends ChangeNotifier {
   bool isDeviceConnected = false;
 
-  bool _isLoadingGetUsers = false;
-
-  bool get isLoadingGetUsers => _isLoadingGetUsers;
-
-  set isLoadingGetUsers(bool value) {
-    _isLoadingGetUsers = value;
-    notifyListeners();
-  }
+  bool isLoadingGetUsers = false;
 
   List<UserModel> _coachList = [];
 
@@ -238,12 +231,9 @@ class CoachProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            List<dynamic> data = response.data["data"];
             log("data $data");
-            List<dynamic> list = data;
-            type == "Coach" ?
-            coachList = list.map((e) => UserModel.fromJson(e)).toList():
-            playerList = list.map((e) => UserModel.fromJson(e)).toList();
+            coachList = data.map((e) => UserModel.fromJson(e)).toList();
             isLoadingGetUsers = false;
           } else {
             isLoadingGetUsers = false;
@@ -251,7 +241,7 @@ class CoachProvider extends ChangeNotifier {
           }
         });
       } on Exception catch (e) {
-        log("Exception get $type programs : $e");
+        log("Exception get $type list : $e");
         showMessage("$e", false);
         isLoadingGetUsers = false;
       }
@@ -373,8 +363,8 @@ class CoachProvider extends ChangeNotifier {
           }
         });
       } on Exception catch (e) {
-        log("Exception get profile info : $e");
-         showMessage("$e", false);
+        log("Exception get coaches : $e");
+        showMessage("$e", false);
         isLoadingCoachInfo = false;
       }
     } else {

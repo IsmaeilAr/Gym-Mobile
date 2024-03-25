@@ -10,6 +10,8 @@ class ProgramModel {
   final String type;
   final int coachId;
 
+  // final String categoryType;
+
   ProgramModel({
     required this.id,
     required this.name,
@@ -17,6 +19,7 @@ class ProgramModel {
     required this.imageUrl,
     required this.type,
     required this.coachId,
+    // required this.categoryType,
   });
 
   factory ProgramModel.fromJson(Map<String, dynamic> json) {
@@ -27,6 +30,7 @@ class ProgramModel {
       imageUrl: '${ApiConstants.imageUrl}${json['imageUrl']}' ?? '',
       type: json['type'] ?? '',
       coachId: json['user_id'] ?? 0,
+      // categoryType: json['category']['type'] ?? '',
     );
   }
 }

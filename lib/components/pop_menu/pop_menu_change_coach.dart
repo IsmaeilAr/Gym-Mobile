@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/menu_item_model.dart';
+import 'package:gym/components/pop_menu/menu_item_model.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
 import 'package:page_transition/page_transition.dart';
@@ -87,7 +87,7 @@ class ChangeCoachDialog extends StatelessWidget {
         ),
       ],
       content: Text(
-        "${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation} ${coach.name} ${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation2}",
+        AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );
@@ -127,4 +127,3 @@ class UnAssignCoachDialog extends StatelessWidget {
     );
   }
 }
-

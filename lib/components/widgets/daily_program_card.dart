@@ -11,13 +11,16 @@ class DailyProgramCard extends StatelessWidget {
   const DailyProgramCard(
     this.program, {
     super.key,
+    required this.isSport,
   });
 
   final ProgramModel program;
+  final bool isSport;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // todo handle open file types
         Navigator.push(
             context,
             PageTransition(
@@ -34,15 +37,19 @@ class DailyProgramCard extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12.sp),
             image: DecorationImage(
+                fit: BoxFit.fill,
+                colorFilter:
+                    ColorFilter.mode(black.withOpacity(0.3), BlendMode.darken),
                 image: NetworkImage(
-              program.imageUrl,
-            ))),
+                  'https://s3-eu-west-1.amazonaws.com/blog.omniconvert.com-media/blog/wp-content/uploads/2019/10/21150245/sample-size-definition.png',
+                  // program.imageUrl,
+                ))),
         child: Align(
           alignment: AlignmentDirectional.bottomStart,
           child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
               child: Text(
-                program.type == 'sport'
+                isSport
                     ? AppLocalizations.of(context)!.homeDailyProgramCardTitle
                     : AppLocalizations.of(context)!.homeDailyNutritionCardTitle,
                 style: TextStyle(

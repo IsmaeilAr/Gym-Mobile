@@ -16,8 +16,6 @@ import 'package:provider/provider.dart';
 import '../provider/profile_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-final TextEditingController _genderController = TextEditingController();
-final TextEditingController _dobController = TextEditingController();
 
 class AddInfoScreen extends StatelessWidget {
   const AddInfoScreen({super.key});
@@ -47,12 +45,26 @@ class AddInfoScreen extends StatelessWidget {
                           (Route<dynamic> route) => false,
                         );
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.addInfoSkipKey,
-                        style: TextStyle(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.addInfoSkipKey,
+                            style: TextStyle(
+                                color: lightGrey,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.sp),
+                          ),
+                          Gap(
+                            w: 5.w,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_outlined,
                             color: lightGrey,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp),
+                            size: 18.r,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -151,16 +163,18 @@ class TopText extends StatelessWidget {
   }
 }
 
-const List<String> _listGender = [
-  'Male',
-  'Female',
-];
+// const List<String> _listGender = [
+//   'Male',
+//   'Female',
+// ];
 
 class GenderDropdown extends StatefulWidget {
   const GenderDropdown({
     super.key,
+    required this.controller,
   });
 
+  final TextEditingController controller;
   @override
   State<GenderDropdown> createState() => _GenderDropdownState();
 }
@@ -212,10 +226,13 @@ class _GenderDropdownState extends State<GenderDropdown> {
                 fontSize: 14.sp),
           );
         },
-        items: _listGender,
+        items: [
+          AppLocalizations.of(context)!.addInfogenderMale,
+          AppLocalizations.of(context)!.addInfogenderFemale,
+        ],
         onChanged: (value) {
           setState(() {});
-          _genderController.text = value;
+          widget.controller.text = value;
         },
       ),
     );
@@ -231,13 +248,12 @@ class RegInfoForm extends StatefulWidget {
 
 class _RegInfoFormState extends State<RegInfoForm> {
   late final GlobalKey _formKey;
-
+  late final TextEditingController _genderController;
   late final TextEditingController _heightController;
-
   late final TextEditingController _weightController;
   late final TextEditingController _waistController;
-
   late final TextEditingController _neckController;
+  late final TextEditingController _dobController;
 
   String? selectedGender;
 
@@ -255,6 +271,8 @@ class _RegInfoFormState extends State<RegInfoForm> {
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
+    _genderController = TextEditingController();
+    _dobController = TextEditingController();
     _heightController = TextEditingController();
     _weightController = TextEditingController();
     _waistController = TextEditingController();
@@ -311,7 +329,9 @@ class _RegInfoFormState extends State<RegInfoForm> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            const GenderDropdown(),
+            GenderDropdown(
+              controller: _genderController,
+            ),
             TextFormField(
               readOnly: true,
               controller: _dobController,

@@ -1,23 +1,19 @@
 import 'dart:io';
-import 'dart:math';
-
+import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/widgets/cached_image_widget.dart';
-import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import '../../../components/pop_menu/pop_menu_set_program.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../../../components/styles/gym_icons.dart';
-import '../../../components/widgets/menu_item_model.dart';
-import '../../../components/widgets/net_image.dart';
+import '../../../components/pop_menu/menu_item_model.dart';
 import '../model/program_model.dart';
 import '../provider/program_provider.dart';
 import '../screens/program_pdf_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProgramCard extends StatelessWidget {
   const ProgramCard(
@@ -31,16 +27,23 @@ class ProgramCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // bool isPDF = (p.extension(program.file.toLowerCase()) == '.pdf');
+    bool isPDF = (program.file.toLowerCase().endsWith('.pdf'));
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
+        debugPrint(isPDF.toString());
+        (isPDF)
+            ? Navigator.push(
+                context,
             PageTransition(
                 type: PageTransitionType.rightToLeftWithFade,
                 child: PDFScreen(
                   programName: program.name,
                   programFileName: program.file,
-                )));
+                    )))
+            : () {
+                openFileUrl(program.file);
+              };
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,6 +155,14 @@ class ProgramCard extends StatelessWidget {
   void _deselectProgram(BuildContext context, int programId) {
     context.read<ProgramProvider>().callUnSetProgram(context, programId);
     // todo onRefresh
+  }
+
+  Future<void> openFileUrl(String fileUrl) async {
+    if (await canLaunchUrl(Uri.parse(fileUrl))) {
+      await launchUrl(Uri.parse(fileUrl));
+    } else {
+      throw 'Could not launch $fileUrl';
+    }
   }
 }
 

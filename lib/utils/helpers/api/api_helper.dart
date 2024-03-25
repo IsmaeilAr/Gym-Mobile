@@ -282,7 +282,8 @@ class ApiHelper {
       result = Right(response);
       return result;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      // final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = e.response?.data['data'];
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -322,8 +323,9 @@ class ApiHelper {
       result = Right(response);
       return result;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      // final errorMessage = DioExceptions.fromDioError(e).toString();
       log("## error editInfoApi");
+      final errorMessage = e.response?.data['data'];
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;
@@ -448,42 +450,6 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> addProgramApi(
-      String name,
-      String type,
-      int categoryId,
-      String file,
-      ) async {
-    late Either<String, Response> result;
-    try {
-      String token = prefsService.getValue(Cache.token) ?? "";
-      var response = await _clientDio.post(
-        ApiConstants.addProgramUrl,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token,
-          },
-        ),
-        data: {
-          "name": name,
-          "type": type,
-          "categoryId": categoryId,
-          'file': await MultipartFile.fromFile("empFace.path", filename: "empCode"),
-
-        },
-      ).timeout(const Duration(seconds: 25));
-      log("## Response edit Program (API handler) : Good ");
-      log("## Response edit Program : $response");
-      result = Right(response);
-      return result;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
-      log("## error message : $errorMessage");
-      result = Left(errorMessage);
-      return result;
-    }
-  }
 
   Future<Either<String, Response>> setProgramApi(
       int programId,
@@ -567,112 +533,6 @@ class ApiHelper {
       ).timeout(const Duration(seconds: 25));
       log("## Response request premium Program (API handler) : Good ");
       log("## Response request premium Program : $response");
-      result = Right(response);
-      return result;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
-      log("## error message : $errorMessage");
-      result = Left(errorMessage);
-      return result;
-    }
-  }
-
-  Future<Either<String, Response>> editProgramApi(
-      int id,
-      String name,
-      String type,
-      int categoryId,
-      String file,
-      ) async {
-    late Either<String, Response> result;
-    try {
-      String token = prefsService.getValue(Cache.token) ?? "";
-      var response = await _clientDio.put(
-        ApiConstants.editProgramUrl,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token,
-          },
-        ),
-        data: {
-          "id": id,
-          "name": name,
-          "type": type,
-          "categoryId": categoryId,
-          'file': await MultipartFile.fromFile("empFace.path", filename: "empCode"),
-
-        },
-      ).timeout(const Duration(seconds: 25));
-      log("## Response editProgram (API handler) : Good ");
-      log("## Response editProgram : $response");
-      result = Right(response);
-      return result;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
-      log("## error message : $errorMessage");
-      result = Left(errorMessage);
-      return result;
-    }
-  }
-
-  Future<Either<String, Response>> deleteProgramApi(
-      int programID,
-      ) async {
-    late Either<String, Response> result;
-    try {
-      String token = prefsService.getValue(Cache.token) ?? "";
-      var response = await _clientDio.post(
-        ApiConstants.deleteMessageUrl(programID),
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token,
-          },
-        ),
-        data: {
-          "program_Id": programID,
-        },
-      ).timeout(const Duration(seconds: 25));
-      log("## Response delete program (API handler) : Good ");
-      log("## Response delete program : $response");
-      result = Right(response);
-      return result;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
-      log("## error message : $errorMessage");
-      result = Left(errorMessage);
-      return result;
-    }
-  }
-
-  Future<Either<String, Response>> assignProgramApi(
-      int playerId0,
-      int playerId1,
-      int days,
-      String startDate,
-      ) async {
-    late Either<String, Response> result;
-    try {
-      String token = prefsService.getValue(Cache.token) ?? "";
-      var response = await _clientDio.post(
-        ApiConstants.assignProgramUrl,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token,
-          },
-        ),
-        data: {
-          "playerid[0]": playerId0,
-          "playerid[1]": playerId1,
-          "days": days,
-          "startDate": startDate
-
-        },
-      ).timeout(const Duration(seconds: 25));
-      log("## Response edit Program (API handler) : Good ");
-      log("## Response edit Program : $response");
       result = Right(response);
       return result;
     } on DioException catch (e) {
@@ -940,7 +800,8 @@ class ApiHelper {
       result = Right(response);
       return result;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      // final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = e.response?.data['data'];
       log("## error message : $errorMessage");
       result = Left(errorMessage);
       return result;

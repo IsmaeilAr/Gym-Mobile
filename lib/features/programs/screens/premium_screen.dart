@@ -9,15 +9,10 @@ import 'package:gym/components/widgets/custom_app_bar.dart';
 import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:gym/features/programs/model/program_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
-import 'package:gym/features/programs/screens/program_pdf_screen.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../../components/dialog/cancel_button.dart';
 import '../../../components/dialog/order_program_dialog.dart';
-import '../../../components/pop_menu/pop_menu_set_program.dart';
 import '../../../components/widgets/find_coach_button.dart';
-import '../../../components/widgets/menu_item_model.dart';
 import '../widgets/program_card.dart';
 
 class PremiumScreen extends StatefulWidget {
@@ -104,7 +99,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
     String premiumProgramStatus;
     (context.read<ProfileProvider>().status.hasCoach)
         ? {
-            coachId = context.read<ProfileProvider>().status.myCoach.id,
+            coachId = context.read<ProfileProvider>().status.myCoach!.id,
             statusList = context.read<ProgramProvider>().premiumStatusList,
             if (statusList.isNotEmpty)
               {
@@ -153,15 +148,6 @@ class ListPrograms extends StatelessWidget {
     );
   }
 
-  void _selectProgram(BuildContext context, int programId) {
-    context.read<ProgramProvider>().callSetProgram(context, programId);
-    // todo onRefresh
-  }
-
-  void _deselectProgram(BuildContext context, int programId) {
-    context.read<ProgramProvider>().callUnSetProgram(context, programId);
-    // todo onRefresh
-  }
 }
 
 class NoPrograms extends StatelessWidget {

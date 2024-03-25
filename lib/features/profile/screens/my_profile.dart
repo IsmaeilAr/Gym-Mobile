@@ -39,8 +39,10 @@ class _MyProfileState extends State<MyProfile> {
   Future<void> _refresh() async {
     context.read<ProfileProvider>().getProfileInfo(context);
     context.read<ProfileProvider>().getPersonalMetrics(context);
-    context.read<CoachProvider>().getCoachInfo(
-        context, context.read<ProfileProvider>().status.myCoach.id);
+    if (context.read<ProfileProvider>().status.hasCoach) {
+      context.read<CoachProvider>().getCoachInfo(
+          context, context.read<ProfileProvider>().status.myCoach!.id);
+    }
   }
 
   @override

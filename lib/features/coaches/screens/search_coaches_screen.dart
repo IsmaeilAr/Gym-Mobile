@@ -37,7 +37,7 @@ class SearchCoachesScreen extends StatelessWidget {
                       bool isMyCoach = false;
                       if (context.read<ProfileProvider>().status.hasCoach) {
                         isMyCoach = coaches[index].id ==
-                            context.read<ProfileProvider>().status.myCoach.id;
+                            context.read<ProfileProvider>().status.myCoach!.id;
                       }
                       return Container(
                           height: 90.h,

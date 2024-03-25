@@ -55,9 +55,9 @@ class _HomePageState extends State<HomePage> {
         color: red,
         backgroundColor: dark,
         onRefresh: _refresh,
-        child: !context.watch<ProfileProvider>().isLoadingStatus &&
+        child: (!context.watch<ProfileProvider>().isLoadingStatus &&
                 !context.watch<HomeProvider>().isLoadingActivePlayers &&
-                !context.watch<ProgressProvider>().isLoadingWeeklyProgress
+                !context.watch<ProgressProvider>().isLoadingWeeklyProgress)
             ? Container(
                 padding: EdgeInsets.all(14.w),
                 child: ListView(children: [
@@ -82,14 +82,20 @@ class _HomePageState extends State<HomePage> {
                   status.myTrainingProgram.isNotEmpty
                       ?
                       // daily card
-                      DailyProgramCard(status.myTrainingProgram[0])
+                      DailyProgramCard(status.myTrainingProgram[0],
+                          isSport: true)
                       :
                       // no training program screen
-                      const NoDailyPrograms(),
+                      const NoDailyPrograms(true),
                   if (status.myTrainingProgram.isNotEmpty)
                     (status.myNutritionProgram.isNotEmpty)
-                        ? DailyProgramCard(status.myNutritionProgram[0])
-                        : const FindProgramButton(),
+                        ? DailyProgramCard(status.myNutritionProgram[0],
+                            isSport: false)
+                        : SizedBox(
+                            // no nutrition program screen
+                            height: 168.h,
+                            child:
+                                const Center(child: FindProgramButton(false))),
 
                   // weekly progress
                   Text(

@@ -19,7 +19,7 @@ class CoachAvailabilityWidget extends StatelessWidget {
       child: ListView.separated(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: 7,
+        itemCount: context.watch<CoachProvider>().coachTimesList.length,
         scrollDirection: Axis.vertical,
         separatorBuilder: (BuildContext context, int index) {
           return const Gap(h: 12);

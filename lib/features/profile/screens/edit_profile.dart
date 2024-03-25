@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/net_image.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
 import 'package:gym/features/profile/models/user_model.dart';
@@ -12,7 +13,6 @@ import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
 import '../../../components/widgets/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../components/widgets/snack_bar.dart';
 
 TextEditingController nameController = TextEditingController();
@@ -295,7 +295,9 @@ class EditAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       actions: [
-        IconButton(
+        context.read<ProfileProvider>().isLoadingEditInfo
+            ? const LoadingIndicatorWidget()
+            : IconButton(
           color: lightGrey,
           onPressed: () {
             context.read<ProfileProvider>().callEditMetrics(

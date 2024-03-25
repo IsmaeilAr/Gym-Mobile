@@ -33,7 +33,7 @@ class SelectCoachDialog extends StatelessWidget {
         ),
       ],
       content: Text(
-        "${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation} ${coach.name} ${AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation2}",
+        "${AppLocalizations.of(context)!.changeCoachConfirmation} ${coach.name} ${AppLocalizations.of(context)!.changeCoachConfirmation2}",
         style: MyDecorations.coachesTextStyle,
       ),
     );

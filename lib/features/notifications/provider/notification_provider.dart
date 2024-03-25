@@ -45,7 +45,7 @@ class NotificationProvider extends ChangeNotifier {
           if (response.statusCode == 200) {
             var data = response.data;
             log("data $data");
-            List<dynamic> list = data;
+            List<dynamic> list = data['data'];
             notificationList = list.map((e) => NotificationModel.fromJson(e)).toList();
             isLoadingNotifications = false;
           } else {

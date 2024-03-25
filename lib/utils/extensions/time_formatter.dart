@@ -24,7 +24,7 @@ extension TimestampFormatter on DateTime {
       return '$hour:$minute';
     } else {
       // If not today, display only the date
-      return '$year-$month-$day';
+      return '$year/$month/$day';
     }
   }
 }
