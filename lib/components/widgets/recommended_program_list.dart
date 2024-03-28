@@ -4,6 +4,7 @@ import 'package:gym/components/pop_menu/menu_item_model.dart';
 import 'package:gym/features/programs/provider/program_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import '../../features/profile/provider/profile_provider.dart';
 import '../../features/programs/model/program_model.dart';
 import '../../features/programs/screens/program_pdf_screen.dart';
 import '../../features/programs/widgets/program_card.dart';
@@ -27,6 +28,16 @@ class RecommendedProgramList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int trainingId = 0;
+    int nutritionId = 0;
+    if (context.read<ProfileProvider>().status.myTrainingProgram.isNotEmpty) {
+      trainingId =
+          context.read<ProfileProvider>().status.myTrainingProgram[0].id;
+    }
+    if (context.read<ProfileProvider>().status.myNutritionProgram.isNotEmpty) {
+      nutritionId =
+          context.read<ProfileProvider>().status.myNutritionProgram[0].id;
+    }
     return SizedBox(
       height: listHeight.h,
       width: listWidth.w,
