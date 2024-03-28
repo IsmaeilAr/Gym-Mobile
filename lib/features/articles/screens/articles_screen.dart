@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/gym_icons.dart';
-import 'package:gym/components/widgets/articles_list.dart';
+import 'package:gym/features/articles/widgets/articles_list.dart';
 import 'package:gym/features/articles/models/articles_model.dart';
 import 'package:gym/features/articles/provider/article_provider.dart';
 import 'package:provider/provider.dart';

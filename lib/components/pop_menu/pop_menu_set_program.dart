@@ -4,13 +4,6 @@ import 'package:gym/features/programs/model/program_model.dart';
 import '../dialog/set_programs_dialog.dart';
 import '../styles/gym_icons.dart';
 
-class SetProgramsMenuItems {
-  static const MenuItemModel selectProgramItem =
-      MenuItemModel(text: "Select", icon: GymIcons.select);
-  static const deselectProgramItem =
-      MenuItemModel(text: 'Deselect', icon: Icons.close);
-}
-
 void onSelectSetProgram(
     BuildContext context,
     MenuItemModel item,
@@ -18,7 +11,7 @@ void onSelectSetProgram(
     VoidCallback doSelectProgram,
     VoidCallback doDeSelectProgram) {
   switch (item) {
-    case SetProgramsMenuItems.selectProgramItem:
+    case GymIcons.select:
       showDialog(
           context: context,
           builder: (context) => SelectProgramDialog(
@@ -27,7 +20,7 @@ void onSelectSetProgram(
               ));
       break;
 
-    case SetProgramsMenuItems.deselectProgramItem:
+    case Icons.close:
       showDialog(
           context: context,
           builder: (context) => DeselectProgramDialog(

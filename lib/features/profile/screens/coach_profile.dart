@@ -21,8 +21,7 @@ import 'package:gym/features/profile/provider/profile_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../../components/dialog/set_coach_dialog.dart';
-
-// 1_ChangeCoach  2_SetCoach  3_RevokeRequest // todo
+import '../../articles/provider/article_provider.dart';
 
 class CoachProfileScreen extends StatefulWidget {
   final UserModel coach;
@@ -62,9 +61,13 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
       }
       currentCase = isSelectedCoach ? 1 : 2;
     }
-    if (!context.read<ProfileProvider>().status.hasCoach && isSelectedCoach)
+    if (!context.read<ProfileProvider>().status.hasCoach && isSelectedCoach) {
       currentCase = 3;
+    }
     context.read<CoachProvider>().getCoachTime(context, widget.coach.id);
+    context
+        .read<ArticleProvider>()
+        .callGetCoachArticles(context, widget.coach.id);
     setState(() {});
   }
 
@@ -107,8 +110,7 @@ class _CoachProfileScreenState extends State<CoachProfileScreen>
                     color: red,
                     backgroundColor: dark,
                     onRefresh: _refresh,
-                    child: CoachArticlesList(widget.coach.id)),
-                // todo parameter
+                    child: const CoachArticlesList()),
               ],
             ),
           ),
@@ -271,7 +273,17 @@ class CustomPopupMenuButton extends StatelessWidget {
       case 1:
         return PopupMenuButton<MenuItemModel>(
           itemBuilder: (context) => [
-            ...ChangeCoachMenuItems.getChangeMenuItems.map(buildItem),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!
+                    .coachProfilePopMenueChangeCoach,
+                icon: Icons.create)),
+            buildItem(MenuItemModel(
+                text:
+                    AppLocalizations.of(context)!.coachProfilePopMenueUnassign,
+                icon: Icons.close)),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!.coachProfilePopMenueRate,
+                icon: Icons.star)),
           ],
           onSelected: (item) => onSelectedChangeCoach(
             context,
@@ -285,7 +297,13 @@ class CustomPopupMenuButton extends StatelessWidget {
       case 2:
         return PopupMenuButton<MenuItemModel>(
           itemBuilder: (context) => [
-            ...SetCoachMenuItems.getSetMenuItems.map(buildItem),
+            buildItem(MenuItemModel(
+                text:
+                    AppLocalizations.of(context)!.coachProfilePopMenueSetCoach,
+                icon: Icons.check_box_outlined)),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!.coachProfilePopMenueRate,
+                icon: Icons.star)),
           ],
           onSelected: (item) => onSelectedSetCoach(context, item, coach, () {
             _doSelectCoach(context, coach.id);
@@ -299,7 +317,13 @@ class CustomPopupMenuButton extends StatelessWidget {
       case 3:
         return PopupMenuButton<MenuItemModel>(
           itemBuilder: (context) => [
-            ...RevokeRequestMenuItems.getRevokeMenuItems.map(buildItem),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!
+                    .coachProfilePopMenueRevokeRequest,
+                icon: Icons.close)),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!.coachProfilePopMenueRate,
+                icon: Icons.star)),
           ],
           onSelected: (item) => onSelectedRevokeRequest(context, item, coach),
           color: black,

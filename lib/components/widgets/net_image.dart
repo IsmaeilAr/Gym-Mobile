@@ -5,9 +5,9 @@ import 'cached_image_widget.dart';
 ImageProvider networkImage(coach) {
   ImageProvider image;
 
-  (coach.images.isNotEmpty)
+  (coach.profileImages.isNotEmpty)
       ? image = NetworkImage(
-          coach.images[0].image,
+          coach.profileImages[0].image,
         )
       : image = const AssetImage('assets/images/profile.png');
 
@@ -17,9 +17,9 @@ ImageProvider networkImage(coach) {
 CachedImageWidget cachedImage(coach) {
   CachedImageWidget image;
 
-  image = (coach.images.isNotEmpty)
+  image = (coach.profileImages.isNotEmpty)
       ? CachedImageWidget(
-          imageUrl: coach.images[0].image,
+          imageUrl: coach.profileImages[0].image,
           boxFit: BoxFit.fill,
         )
       : const CachedImageWidget(

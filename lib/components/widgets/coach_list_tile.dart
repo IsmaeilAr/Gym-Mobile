@@ -63,7 +63,7 @@ class CoachListTile extends StatelessWidget {
               expiration: DateTime(1997),
               finance: 10000,
               isPaid: true,
-              images: []),
+              profileImages: []),
           latestMessage: LatestMessage(
               id: 1,
               content: "content",

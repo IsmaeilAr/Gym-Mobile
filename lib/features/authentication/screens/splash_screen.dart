@@ -27,15 +27,16 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    super.initState();
     initData();
     ApiHelper.setupInterceptors(context);
+    super.initState();
   }
 
   void initData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString(Cache.token) ?? "";
     bool isAuth = prefs.getBool(Cache.isAuth) ?? false;
+    // todo isFirst login then give it to login maybe ??
     if (isAuth && token.isNotEmpty) {
       // Check if the token is expired
       bool isTokenExpired = isExpired(token);
@@ -78,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       PageTransition(
         type: PageTransitionType.rightToLeftWithFade,
-        child: const LoginScreen(),
+        child: LoginScreen(),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:path/path.dart' as p;
+
+// import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:flutter_file_downloader/flutter_file_downloader.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,7 @@ import '../model/program_model.dart';
 import '../provider/program_provider.dart';
 import '../screens/program_pdf_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProgramCard extends StatelessWidget {
   const ProgramCard(
@@ -89,10 +91,12 @@ class ProgramCard extends StatelessWidget {
                         itemBuilder: (context) {
                           List<MenuItemModel> nowItems = [];
                           !isSelected
-                              ? nowItems
-                                  .add(SetProgramsMenuItems.selectProgramItem)
-                              : nowItems.add(
-                                  SetProgramsMenuItems.deselectProgramItem);
+                              ? nowItems.add(MenuItemModel(
+                                  text: AppLocalizations.of(context)!.select,
+                                  icon: GymIcons.select))
+                              : nowItems.add(MenuItemModel(
+                                  text: AppLocalizations.of(context)!.deselect,
+                                  icon: Icons.close));
                           return [
                             ...nowItems.map(buildItem),
                           ];

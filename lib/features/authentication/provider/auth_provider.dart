@@ -33,7 +33,7 @@ class AuthProvider extends ChangeNotifier {
       expiration: DateTime(2000),
       finance: 10000,
       isPaid: false,
-      images: []);
+      profileImages: []);
 
   UserModel get playerModel => _playerModel;
 
@@ -44,54 +44,113 @@ class AuthProvider extends ChangeNotifier {
 
   SharedPreferencesService prefsService = SharedPreferencesService.instance;
 
-  Future<bool> callLoginApi(
-    BuildContext context,
-    String phone,
-    String password,
-  ) async {
+  // Future<bool> callLoginApi(
+  //   BuildContext context,
+  //   String phone,
+  //   String password,
+  // ) async {
+  //   isLoading = true;
+  //   isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  //   bool repoStatus = false;
+  //   // isWrongCredentials = false;
+  //   if (isDeviceConnected) {
+  //     try {
+  //       Either<String, Response> results = await ApiHelper().loginApi(
+  //         phone,
+  //         password,
+  //       );
+  //       isLoading = false;
+  //       await results.fold((l) {
+  //         isLoading = false;
+  //         repoStatus = false;
+  //       }, (r) async {
+  //         Response response = r;
+  //         if (response.statusCode == 200) {
+  //           var data = response.data["data"];
+  //           // String user = response.data["data"]["data"]["user"].toString();
+  //           var userData = response.data["data"]["data"]["user"];
+  //           log(data.toString());
+  //           String uToken = "Bearer ${data["data"]['token']}";
+  //           playerModel = UserModel.fromJson(userData);
+  //           await prefsService.setValue(Cache.token, uToken);
+  //           await prefsService.setValue(Cache.isAuth, true);
+  //           await prefsService.setValue(Cache.userId, playerModel.id);
+  //           await prefsService.setValue(Cache.userName, playerModel.name);
+  //           await prefsService.setValue(Cache.userPhone, phone);
+  //           await prefsService.setValue(Cache.userPassword, password);
+  //           // if (playerModel.images != null) {
+  //           //   await prefsService.setValue(Cache.userImage, playerModel.images[0].image); }
+  //           // await prefsService.setValue(Cache.user, user);
+  //           await prefsService.setValue(Cache.firstOpen, false);
+  //           // await prefs.setBool(Constants.isIphone, true);
+  //           isLoading = false;
+  //           repoStatus = true;
+  //           log("login success $repoStatus");
+  //         }
+  //         else if(response.statusCode == 401){
+  //           // isWrongCredentials = true;
+  //         }
+  //         else {
+  //           isLoading = false;
+  //           return false;
+  //         }
+  //       });
+  //       return repoStatus;
+  //     } on Exception catch (e) {
+  //       log("Exception : $e");
+  //       isLoading = false;
+  //       return false;
+  //     }
+  //   } else {
+  //     showMessage(AppLocalizations.of(context)!.noInternet, false);
+  //     isLoading = false;
+  //     return false;
+  //   }
+  // }
+
+  Future<bool> callLogin(
+      BuildContext context, String phone, String password) async {
     isLoading = true;
     isDeviceConnected = await InternetConnectionChecker().hasConnection;
     bool repoStatus = false;
+
     if (isDeviceConnected) {
       try {
-        Either<String, Response> results = await ApiHelper().loginApi(
-          phone,
-          password,
-        );
+        Either<String, Response> results =
+            await ApiHelper().loginApi(phone, password);
         isLoading = false;
-        await results.fold((l) {
-          isLoading = false;
-          repoStatus = false;
-        }, (r) async {
-          Response response = r;
-          if (response.statusCode == 200) {
-            var data = response.data["data"];
-            String user = response.data["data"]["data"]["user"].toString();
-            var userData = response.data["data"]["data"]["user"];
-            log(data.toString());
-            // log(user);
-            String uToken = "Bearer ${data["data"]['token']}";
-            // UserModel userModel = UserModel.fromJson(userData);
-            playerModel = UserModel.fromJson(userData);
-            await prefsService.setValue(Cache.token, uToken);
-            await prefsService.setValue(Cache.isAuth, true);
-            await prefsService.setValue(Cache.userId, playerModel.id);
-            await prefsService.setValue(Cache.userName, playerModel.name);
-            await prefsService.setValue(Cache.userPhone, phone);
-            await prefsService.setValue(Cache.userPassword, password);
-            // if (playerModel.images != null) {
-            //   await prefsService.setValue(Cache.userImage, playerModel.images[0].image); }
-            await prefsService.setValue(Cache.user, user);
-            // await prefs.setBool(Constants.firstOpen, true);
-            // await prefs.setBool(Constants.isIphone, true);
+        await results.fold(
+          (l) {
             isLoading = false;
-            repoStatus = true;
-            log("login success $repoStatus");
-          } else {
-            isLoading = false;
-            return false;
-          }
-        });
+            repoStatus = false;
+          },
+          (r) async {
+            Response response = r;
+            if (response.statusCode == 200) {
+              var data = response.data["data"];
+              var userData = response.data["data"]["data"]["user"];
+              log(data.toString());
+              String uToken = "Bearer ${data["data"]['token']}";
+              playerModel = UserModel.fromJson(userData);
+              await prefsService.setValue(Cache.token, uToken);
+              await prefsService.setValue(Cache.isAuth, true);
+              await prefsService.setValue(Cache.userId, playerModel.id);
+              await prefsService.setValue(Cache.userName, playerModel.name);
+              await prefsService.setValue(Cache.userPhone, phone);
+              await prefsService.setValue(Cache.userPassword, password);
+              await prefsService.setValue(Cache.firstOpen, false);
+              isLoading = false;
+              repoStatus = true;
+              log("login success $repoStatus");
+            } else if (response.statusCode == 401) {
+              showMessage(AppLocalizations.of(context)!.loginWrongCred, false);
+              return false;
+            } else {
+              isLoading = false;
+              return false;
+            }
+          },
+        );
         return repoStatus;
       } on Exception catch (e) {
         log("Exception : $e");

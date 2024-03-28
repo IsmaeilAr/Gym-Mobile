@@ -7,7 +7,8 @@
   "loginEnterMobileNumberKey": "Please enter your mobile number",
   "loginEnterPasswordKey": "Please enter your password",
   "loginButtonKey": "Login",
-
+    "loginWrongCred": "phone number or password is wrong!",
+    "loginWrongPass": "Wrong password!",
 
    "addInfoSkipKey": "Skip",
     "addInfoInsertKey": "Insert",
@@ -115,6 +116,7 @@
         "editProfileNeckLabel": "Neck (cm):",
 
     "chats": "Chats",
+    "message": "Message",
     "searchChats": "Search in chats",
     "coaches": "Coaches",
     "notifications": "Notifications",
@@ -179,7 +181,7 @@
   "coachProfilePopMenueSetCoach": "Set coach",
   "coachProfilePopMenueRevokeRequest": "Revoke request",
 
-
+    "scanYourGymQR":"Scan your Gym QR",
   "stopTimerConfirmation":"Are you sure you want to stop the timer and end the session? You'll need to scan the QR again to resume. Pausing allows you to continue without restarting.",
   "coachProfileChangeCoachConfirmation": "Are you sure you want to change your current coach ?",
   "unassignCoachConfirmation": "Are you sure you want to unassign your current coach?",
@@ -196,6 +198,8 @@
 "selectPerson": "Select person",
 
   "cancel": "Cancel",
+    "ok": "Ok",
+    "notSet": "not set",
   "stop": "Stop",
   "change": "Change",
   "unassign": "Unassign",

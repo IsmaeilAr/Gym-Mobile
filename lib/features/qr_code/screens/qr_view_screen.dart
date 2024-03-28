@@ -4,7 +4,7 @@ import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/widgets/icon_button.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../home/provider/home_provider.dart';
 
 bool _torch = false;
@@ -23,7 +23,7 @@ class _QRViewState extends State<QRView> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Scan your Gym QR',
+          AppLocalizations.of(context)!.scanYourGymQR,
           style: TextStyle(
               color: lightGrey, fontSize: 20.sp, fontWeight: FontWeight.w700),
         ),
@@ -55,10 +55,10 @@ class _QRViewState extends State<QRView> {
         ),
         onDetect: (capture) {
           // send gym id to back end and start the counter
-          final List<Barcode> barcodes = capture.barcodes;
-          for (final barcode in barcodes) {
-            debugPrint('Barcode found! ${barcode.rawValue}');
-          }
+          // final List<Barcode> barcodes = capture.barcodes;
+          // for (final barcode in barcodes) {
+          //   debugPrint('Barcode found! ${barcode.rawValue}');
+          // }
           // context.read<HomeProvider>().callCheckInApi();
           context.read<HomeProvider>().onCheckIn();
           Navigator.pop(context);

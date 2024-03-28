@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/components/pop_menu/menu_item_model.dart';
 import 'package:gym/features/coaches/provider/coach_provider.dart';
 import 'package:gym/features/profile/models/user_model.dart';
+import 'package:gym/utils/localization/language_provider.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../features/coaches/screens/all_coaches_screen.dart';
@@ -11,40 +12,23 @@ import '../dialog/rate_coach_dialog.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-// Define a class to manage the menu items
-class ChangeCoachMenuItems {
-  static const itemChangeCoach =
-      MenuItemModel(text: 'Change coach', icon: Icons.create);
-  static const itemUnAssign =
-      MenuItemModel(text: 'Unassign', icon: Icons.close);
-  static const itemRate = MenuItemModel(text: 'Rate', icon: Icons.star);
-
-  // Define a list of all menu items
-  static const List<MenuItemModel> getChangeMenuItems = [
-    itemChangeCoach,
-    itemUnAssign,
-    itemRate,
-  ];
-}
-
 // Function to handle the selection of menu items
 void onSelectedChangeCoach(
     BuildContext context, MenuItemModel item, UserModel coach) {
-  switch (item) {
-    case ChangeCoachMenuItems.itemChangeCoach:
+  switch (item.icon) {
+    case Icons.create:
       showDialog(
         context: context,
         builder: (context) => ChangeCoachDialog(coach: coach),
       );
       break;
-    case ChangeCoachMenuItems.itemUnAssign:
+    case Icons.close:
       showDialog(
         context: context,
         builder: (context) => UnAssignCoachDialog(coach: coach),
       );
       break;
-    case ChangeCoachMenuItems.itemRate:
+    case Icons.star:
       showDialog(
         context: context,
         builder: (context) => RateStarsCoachDialog(
@@ -87,7 +71,7 @@ class ChangeCoachDialog extends StatelessWidget {
         ),
       ],
       content: Text(
-        AppLocalizations.of(context)!.coachProfileChangeCoachConfirmation,
+        AppLocalizations.of(context)!.changeCoachConfirmation,
         style: MyDecorations.coachesTextStyle,
       ),
     );

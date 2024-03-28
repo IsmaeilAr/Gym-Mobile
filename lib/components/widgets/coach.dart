@@ -83,7 +83,17 @@ class MyCoachWidget extends StatelessWidget {
         ),
         PopupMenuButton<MenuItemModel>(
           itemBuilder: (context) => [
-            ...ChangeCoachMenuItems.getChangeMenuItems.map(buildItem),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!
+                    .coachProfilePopMenueChangeCoach,
+                icon: Icons.create)),
+            buildItem(MenuItemModel(
+                text:
+                    AppLocalizations.of(context)!.coachProfilePopMenueUnassign,
+                icon: Icons.close)),
+            buildItem(MenuItemModel(
+                text: AppLocalizations.of(context)!.coachProfilePopMenueRate,
+                icon: Icons.star)),
           ],
           onSelected: (item) => onSelectedChangeCoach(
             context,

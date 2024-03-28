@@ -53,7 +53,10 @@ class _TrainingWithCoachesScreenState extends State<TrainingWithCoachesScreen>
 
   @override
   Widget build(BuildContext context) {
-    String title = "${widget.category.type}/${widget.category.name}";
+    String type = (widget.category.type == 'sport')
+        ? AppLocalizations.of(context)!.programsTraining
+        : AppLocalizations.of(context)!.programsNutrition;
+    String title = "$type/${widget.category.name}";
     return Scaffold(
       appBar: CustomAppBar(title: title, context: context, search: true),
       body: Column(

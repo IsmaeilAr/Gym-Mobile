@@ -199,6 +199,50 @@ class ProgramProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> getRecommendedProgramsList(
+    BuildContext context,
+  ) async {
+    isLoadingPrograms = true;
+    isDeviceConnected = await InternetConnectionChecker().hasConnection;
+
+    if (isDeviceConnected) {
+      try {
+        Either<String, Response> results = await ApiHelper().getMyProgramsApi(
+          'Recommended',
+        );
+        isLoadingPrograms = false;
+        results.fold((l) {
+          isLoadingPrograms = false;
+          showMessage(l, false);
+        }, (r) {
+          Response response = r;
+          if (response.statusCode == 200) {
+            var data = response.data["data"];
+            log("data $data");
+            List<dynamic> list = data;
+
+            recommendedProgramList = [];
+            recommendedProgramList =
+                list.map((e) => ProgramModel.fromJson(e)).toList();
+
+            isLoadingPrograms = false;
+          } else {
+            isLoadingPrograms = false;
+            log("## ${response.data}");
+          }
+        });
+      } on Exception catch (e) {
+        log("Exception get recommended programs : $e");
+        showMessage("$e", false);
+        isLoadingPrograms = false;
+      }
+    } else {
+      showMessage(AppLocalizations.of(context)!.noInternet, false);
+      isLoadingPrograms = false;
+    }
+    notifyListeners();
+  }
+
   Future<void> callSearchProgram(
       BuildContext context, String programName) async {
     searchedPrograms = [];

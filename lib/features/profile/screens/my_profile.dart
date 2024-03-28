@@ -81,7 +81,7 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                             ),
                             SizedBox(
-                              width: 67.w,
+                              width: 70.w,
                               height: 35.h,
                               child: MaterialButton(
                                   color: dark,
@@ -274,7 +274,7 @@ class AddInfoWidget extends StatelessWidget {
                         expiration: DateTime.now(),
                         finance: 0,
                         isPaid: false,
-                        images: [],
+                        profileImages: [],
                       ),
                       personalMetrics: PlayerMetricsModel(
                         id: 0,

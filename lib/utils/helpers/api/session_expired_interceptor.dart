@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/features/authentication/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../../../features/authentication/screens/login_screen.dart';
 
 class SessionExpiredInterceptor extends Interceptor {
@@ -21,15 +20,15 @@ class SessionExpiredInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
-  @override
-  void onBadReq(DioException err, ErrorInterceptorHandler handler) {
-    if (err.response?.statusCode == 400) {
-      debugPrint("400 is here");
-      showMessage(err.response?.data['data'], false);
-      doLogout(context);
-    }
-    super.onError(err, handler);
-  }
+  // @override
+  // void onBadReq(DioException err, ErrorInterceptorHandler handler) {
+  //   if (err.response?.statusCode == 400) {
+  //     debugPrint("400 is here");
+  //     showMessage(err.response?.data['data'], false);
+  //     doLogout(context);
+  //   }
+  //   super.onError(err, handler);
+  // }
 
   doLogout(BuildContext context) {
     context
@@ -37,7 +36,7 @@ class SessionExpiredInterceptor extends Interceptor {
         .callLogoutApi(context)
         .then((value) => Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              MaterialPageRoute(builder: (context) => LoginScreen()),
               (Route<dynamic> route) => false,
             ));
   }

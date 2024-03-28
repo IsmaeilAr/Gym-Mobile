@@ -8,21 +8,11 @@ import '../styles/colors.dart';
 import '../styles/decorations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RevokeRequestMenuItems {
-  static const MenuItemModel itemChangeCoach =
-      MenuItemModel(text: "Revoke request", icon: Icons.close);
-  static const itemRate = MenuItemModel(text: 'Rate', icon: Icons.star);
-
-  static List<MenuItemModel> getRevokeMenuItems = [
-    itemChangeCoach,
-    itemRate,
-  ];
-}
 
 void onSelectedRevokeRequest(
     BuildContext context, MenuItemModel item, UserModel coach) {
   switch (item) {
-    case RevokeRequestMenuItems.itemChangeCoach:
+    case Icons.close:
       showDialog(
           context: context,
           builder: (context) => RevokeRequest(
@@ -30,7 +20,7 @@ void onSelectedRevokeRequest(
               ));
       break;
 
-    case RevokeRequestMenuItems.itemRate:
+    case Icons.star:
       showDialog(
           context: context,
           builder: (context) => RateStarsCoachDialog(

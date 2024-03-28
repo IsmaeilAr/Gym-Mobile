@@ -16,81 +16,102 @@ import 'package:provider/provider.dart';
 import '../provider/profile_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class AddInfoScreen extends StatelessWidget {
-  const AddInfoScreen({super.key});
+  AddInfoScreen({super.key});
+
+  bool isClear = false;
+  DateTime? _lastPressedAt;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundDecoration(),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SizedBox(
-          height: 800.h,
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  const Gap(
-                    h: 44,
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional.topEnd,
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainLayout()),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!.addInfoSkipKey,
-                            style: TextStyle(
-                                color: lightGrey,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16.sp),
-                          ),
-                          Gap(
-                            w: 5.w,
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: lightGrey,
-                            size: 18.r,
-                          ),
-                        ],
+    return PopScope(
+      canPop: isClear,
+      onPopInvoked: (didPop) {
+        _onPop();
+      },
+      child: Container(
+        decoration: backgroundDecoration(),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SizedBox(
+            height: 800.h,
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    const Gap(
+                      h: 44,
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional.topEnd,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainLayout()),
+                            (Route<dynamic> route) => false,
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.addInfoSkipKey,
+                              style: TextStyle(
+                                  color: lightGrey,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16.sp),
+                            ),
+                            Gap(
+                              w: 5.w,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: lightGrey,
+                              size: 18.r,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(
-                    h: 39,
-                  ),
-                  const Logo().sizer(h: 55, w: 116),
-                  const Gap(
-                    h: 60,
-                  ),
-                  const TopText(),
-                  const Gap(
-                    h: 64,
-                  ),
-                  const RegInfoForm(),
-                  const Gap(
-                    h: 50,
-                  ),
-                ],
+                    const Gap(
+                      h: 39,
+                    ),
+                    const Logo().sizer(h: 55, w: 116),
+                    const Gap(
+                      h: 60,
+                    ),
+                    const TopText(),
+                    const Gap(
+                      h: 64,
+                    ),
+                    const RegInfoForm(),
+                    const Gap(
+                      h: 50,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
+          // persistentFooterButtons:
         ),
-        // persistentFooterButtons:
       ),
     );
+  }
+
+  Future<void> _onPop() async {
+    DateTime now = DateTime.now();
+    if (_lastPressedAt == null ||
+        now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+      _lastPressedAt = now;
+      showMessage('press again to exit', true);
+      isClear = false;
+    }
+    isClear = true;
   }
 }
 
@@ -203,7 +224,7 @@ class _GenderDropdownState extends State<GenderDropdown> {
                 color: grey,
                 fontFamily: 'Saira',
                 fontWeight: FontWeight.w400,
-                fontSize: 16.sp),
+                fontSize: 15.sp),
           );
         },
         headerBuilder: (context, item) {
@@ -338,7 +359,7 @@ class _RegInfoFormState extends State<RegInfoForm> {
               decoration: MyDecorations.myInputDecoration2(
                 hint: AppLocalizations.of(context)!.addInfoBirthdateKey,
               ),
-              onTap: (){
+              onTap: () {
                 _selectDate(context);
               },
             ),
@@ -426,12 +447,13 @@ class _RegInfoFormState extends State<RegInfoForm> {
   }
 
   void doAddInfo(BuildContext context) {
+    String englishGender = ensureEnglish(_genderController.text);
     context
         .read<ProfileProvider>()
         .callAddInfoApi(
-      context,
-      _genderController.text,
-      _dobController.text,
+          context,
+          englishGender,
+          _dobController.text,
           _heightController.text.parseToDoubleOrNull(),
           _weightController.text.parseToDoubleOrNull(),
           _waistController.text.parseToDoubleOrNull(),
@@ -448,5 +470,17 @@ class _RegInfoFormState extends State<RegInfoForm> {
         dispose();
       }
     });
+  }
+
+  String ensureEnglish(String text) {
+    String thisGender;
+    if (text == 'male' || text == 'female') {
+      thisGender = text;
+    } else if (text == 'أنثى') {
+      thisGender = 'female';
+    } else {
+      thisGender = 'male';
+    }
+    return thisGender;
   }
 }

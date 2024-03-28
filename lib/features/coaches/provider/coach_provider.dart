@@ -82,7 +82,7 @@ class CoachProvider extends ChangeNotifier {
     expiration: DateTime(2023, 12, 31),
     finance: 1000000,
     isPaid: true,
-    images: [
+    profileImages: [
       ImageModel(id: 1, image: "image1.jpg"),
     ],
   );
@@ -290,49 +290,49 @@ class CoachProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<UserModel>> getCoachesList(
-      BuildContext context, String type) async {
-    isLoadingGetUsers = true;
-    isDeviceConnected = await InternetConnectionChecker().hasConnection;
-
-    if (isDeviceConnected) {
-      try {
-        Either<String, Response> results =
-            await ApiHelper().getUserListApi(type);
-        isLoadingGetUsers = false;
-        return results.fold<List<UserModel>>(
-          (l) {
-            isLoadingGetUsers = false;
-            showMessage(l, false);
-            return []; // Return an empty list in case of failure
-          },
-          (r) {
-            Response response = r;
-            if (response.statusCode == 200) {
-              var data = response.data["data"];
-              log("data $data");
-              List<dynamic> list = data;
-              isLoadingGetUsers = false;
-              return list.map((e) => UserModel.fromJson(e)).toList();
-            } else {
-              isLoadingGetUsers = false;
-              log("## ${response.data}");
-              return []; // Return an empty list in case of failure
-            }
-          },
-        );
-      } catch (e) {
-        log("Exception get $type programs : $e");
-        showMessage("$e", false);
-        isLoadingGetUsers = false;
-        return []; // Return an empty list in case of exception
-      }
-    } else {
-      showMessage(AppLocalizations.of(context)!.noInternet, false);
-      isLoadingGetUsers = false;
-      return []; // Return an empty list when there's no internet connection
-    }
-  }
+  // Future<List<UserModel>> getCoachesList(
+  //     BuildContext context, String type) async {
+  //   isLoadingGetUsers = true;
+  //   isDeviceConnected = await InternetConnectionChecker().hasConnection;
+  //
+  //   if (isDeviceConnected) {
+  //     try {
+  //       Either<String, Response> results =
+  //           await ApiHelper().getUserListApi(type);
+  //       isLoadingGetUsers = false;
+  //       return results.fold<List<UserModel>>(
+  //         (l) {
+  //           isLoadingGetUsers = false;
+  //           showMessage(l, false);
+  //           return []; // Return an empty list in case of failure
+  //         },
+  //         (r) {
+  //           Response response = r;
+  //           if (response.statusCode == 200) {
+  //             var data = response.data["data"];
+  //             log("data $data");
+  //             List<dynamic> list = data;
+  //             isLoadingGetUsers = false;
+  //             return list.map((e) => UserModel.fromJson(e)).toList();
+  //           } else {
+  //             isLoadingGetUsers = false;
+  //             log("## ${response.data}");
+  //             return []; // Return an empty list in case of failure
+  //           }
+  //         },
+  //       );
+  //     } catch (e) {
+  //       log("Exception get $type programs : $e");
+  //       showMessage("$e", false);
+  //       isLoadingGetUsers = false;
+  //       return []; // Return an empty list in case of exception
+  //     }
+  //   } else {
+  //     showMessage(AppLocalizations.of(context)!.noInternet, false);
+  //     isLoadingGetUsers = false;
+  //     return []; // Return an empty list when there's no internet connection
+  //   }
+  // }
 
   Future<void> getCoachInfo(BuildContext context, int coachId) async {
     isLoadingCoachInfo = true;
@@ -393,6 +393,7 @@ class CoachProvider extends ChangeNotifier {
             // List<dynamic> list = data;
             // List<String> namedDaysList = list.map((item) => item.toString()).toList();
             // doneDaysList = getNumericCheckList(namedDaysList);
+
             List<dynamic> list = data;
             List<CoachTimeModel> activeDaysList =
                 list.map((e) => CoachTimeModel.fromJson(e)).toList();

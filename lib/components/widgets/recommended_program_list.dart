@@ -10,7 +10,8 @@ import '../../features/programs/widgets/program_card.dart';
 import '../pop_menu/pop_menu_set_program.dart';
 import '../styles/colors.dart';
 import '../styles/decorations.dart';
-import 'net_image.dart';
+import '../styles/gym_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecommendedProgramList extends StatelessWidget {
   final double listHeight, listWidth, imgHeight, imgWidth;
@@ -34,7 +35,10 @@ class RecommendedProgramList extends StatelessWidget {
           itemCount: programList.length,
           itemBuilder: (context, index) {
             ProgramModel program = programList[index];
-            bool isSelected = true;
+            bool isSelected = false; // todo
+            if (program.id == trainingId || program.id == nutritionId) {
+              isSelected = true;
+            }
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -80,11 +84,15 @@ class RecommendedProgramList extends StatelessWidget {
                               PopupMenuButton<MenuItemModel>(
                                 itemBuilder: (context) {
                                   List<MenuItemModel> nowItems = [];
-                                  isSelected
-                                      ? nowItems.add(SetProgramsMenuItems
-                                          .selectProgramItem)
-                                      : nowItems.add(SetProgramsMenuItems
-                                          .deselectProgramItem);
+                                  !isSelected // todo
+                                      ? nowItems.add(MenuItemModel(
+                                          text: AppLocalizations.of(context)!
+                                              .select,
+                                          icon: GymIcons.select))
+                                      : nowItems.add(MenuItemModel(
+                                          text: AppLocalizations.of(context)!
+                                              .deselect,
+                                          icon: Icons.close));
                                   return [
                                     ...nowItems.map(buildItem),
                                   ];

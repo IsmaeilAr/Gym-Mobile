@@ -173,14 +173,15 @@ class ArticleProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"];
+            List<dynamic> data = response.data["data"];
             log("data $data");
-            List<dynamic> list = data;
-            coachArticleList = list.map((e) => ArticleModel.fromJson(e)).toList();
-            favouriteArticleList = list
-                .map((e) => ArticleModel.fromJson(e))
-                .where((article) => article.isFavorite == true)
-                .toList();
+            // List<dynamic> list = data;
+            coachArticleList =
+                data.map((e) => ArticleModel.fromJson(e)).toList();
+            // favouriteArticleList = list
+            //     .map((e) => ArticleModel.fromJson(e))
+            //     .where((article) => article.isFavorite == true)
+            //     .toList();
 
             isLoadingCoachArticles = false;
           } else {

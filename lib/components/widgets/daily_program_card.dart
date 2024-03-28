@@ -41,8 +41,7 @@ class DailyProgramCard extends StatelessWidget {
                 colorFilter:
                     ColorFilter.mode(black.withOpacity(0.3), BlendMode.darken),
                 image: NetworkImage(
-                  'https://s3-eu-west-1.amazonaws.com/blog.omniconvert.com-media/blog/wp-content/uploads/2019/10/21150245/sample-size-definition.png',
-                  // program.imageUrl,
+                  program.imageUrl,
                 ))),
         child: Align(
           alignment: AlignmentDirectional.bottomStart,

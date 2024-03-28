@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gym/features/profile/models/player_metrics_model.dart';
 import '../../../components/styles/colors.dart';
 import '../../../components/styles/decorations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PlayerMetricsWidget extends StatefulWidget {
   final PlayerMetricsModel playerMetrics;
@@ -27,7 +28,7 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Body fat: ${widget.playerMetrics.bfp} %",
+              "${AppLocalizations.of(context)!.myProfileBodyFat}${widget.playerMetrics.bfp} %",
               style: MyDecorations.profileLight500TextStyle,
             ),
             GestureDetector(
@@ -40,7 +41,7 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
                   ? Row(
                       children: [
                         Text(
-                          "show less",
+                          AppLocalizations.of(context)!.myProfileShowLess,
                           style: MyDecorations.programsTextStyle,
                         ),
                         Icon(
@@ -53,7 +54,7 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
                   : Row(
                       children: [
                         Text(
-                          "show details",
+                          AppLocalizations.of(context)!.myProfileShowDetails,
                           style: MyDecorations.programsTextStyle,
                         ),
                         Icon(
@@ -73,11 +74,13 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Gender: ",
+                    AppLocalizations.of(context)!.myProfileGender,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
-                    widget.playerMetrics.gender,
+                    (widget.playerMetrics.gender == 'male')
+                        ? AppLocalizations.of(context)!.addInfogenderMale
+                        : AppLocalizations.of(context)!.addInfogenderFemale,
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
                 ],
@@ -85,12 +88,12 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Age: ",
+                    AppLocalizations.of(context)!.myProfileAge,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
                     (widget.playerMetrics.age == 0)
-                        ? "not set"
+                        ? AppLocalizations.of(context)!.notSet
                         : widget.playerMetrics.age.toString(),
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
@@ -99,13 +102,13 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Height: ",
+                    AppLocalizations.of(context)!.myProfileHeight,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
                     (widget.playerMetrics.height == 0)
-                        ? "not set"
-                        : "${widget.playerMetrics.height} cm",
+                        ? AppLocalizations.of(context)!.notSet
+                        : '${widget.playerMetrics.height} ${AppLocalizations.of(context)!.myProfileCm}',
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
                 ],
@@ -113,13 +116,13 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Weight: ",
+                    AppLocalizations.of(context)!.myProfileWeight,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
                     (widget.playerMetrics.weight == 0)
-                        ? "not set"
-                        : "${widget.playerMetrics.weight} kg",
+                        ? AppLocalizations.of(context)!.notSet
+                        : "${widget.playerMetrics.weight} ${AppLocalizations.of(context)!.myProfileKg}",
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
                 ],
@@ -127,13 +130,13 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Waist: ",
+                    AppLocalizations.of(context)!.myProfileWaist,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
                     (widget.playerMetrics.waistMeasurement == 0)
-                        ? "not set"
-                        : "${widget.playerMetrics.waistMeasurement} cm",
+                        ? AppLocalizations.of(context)!.notSet
+                        : "${widget.playerMetrics.waistMeasurement} ${AppLocalizations.of(context)!.myProfileCm}",
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
                 ],
@@ -141,13 +144,13 @@ class _PlayerMetricsWidgetState extends State<PlayerMetricsWidget> {
               Row(
                 children: [
                   Text(
-                    "Neck: ",
+                    AppLocalizations.of(context)!.myProfileNeck,
                     style: MyDecorations.profileLight500TextStyle,
                   ),
                   Text(
                     (widget.playerMetrics.neck == 0)
-                        ? "not set"
-                        : "${widget.playerMetrics.neck} cm",
+                        ? AppLocalizations.of(context)!.notSet
+                        : "${widget.playerMetrics.neck} ${AppLocalizations.of(context)!.myProfileCm}",
                     style: MyDecorations.profileGrey400TextStyle,
                   ),
                 ],

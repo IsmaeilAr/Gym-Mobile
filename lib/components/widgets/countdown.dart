@@ -33,18 +33,16 @@ class _CountdownWidgetState extends State<CountdownWidget>
   void observant() {
     if (countText == '0:00:00') {
       context.read<HomeProvider>().callCheckOutApi(context);
-      context.read<HomeProvider>().isCheckIn = false;
+      context.read<HomeProvider>().onCheckOut();
     }
   }
 
   @override
   void initState() {
-    super.initState();
     controller = AnimationController(
       vsync: this,
       duration: const Duration(minutes: 45),
     );
-
     controller.addListener(() {
       if (controller.isAnimating) {
         setState(() {
@@ -58,6 +56,8 @@ class _CountdownWidgetState extends State<CountdownWidget>
       }
       observant();
     });
+
+    super.initState();
   }
 
   @override
@@ -86,7 +86,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
                   child: CircularProgressIndicator(
                     backgroundColor: dark,
                     value: progress,
-                    color: lightGrey,
+                    color: isCounting ? lightGrey : grey,
                     strokeWidth: 15.r,
                     strokeCap: StrokeCap.round,
                   ),
@@ -99,8 +99,8 @@ class _CountdownWidgetState extends State<CountdownWidget>
                         builder: (context) => SizedBox(
                           height: 300,
                           child: CupertinoTimerPicker(
-                            // todo change style
                             initialTimerDuration: controller.duration!,
+                            // backgroundColor: lightGrey,
                             onTimerDurationChanged: (time) {
                               setState(() {
                                 controller.duration = time;
@@ -119,7 +119,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Saira',
-                        color: lightGrey,
+                        color: isCounting ? lightGrey : grey,
                       ),
                     ),
                   ),
@@ -132,13 +132,11 @@ class _CountdownWidgetState extends State<CountdownWidget>
             Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // stop button
                 GestureDetector(
                   onTap: () {
-                    controller.reset();
-                    setState(() {
-                      isCounting = false;
-                    });
-                    observant();
+                    context.read<HomeProvider>().callCheckOutApi(context);
+                    context.read<HomeProvider>().onCheckOut();
                   },
                   child: const RoundButton(
                     icon: Icons.stop,
@@ -148,6 +146,7 @@ class _CountdownWidgetState extends State<CountdownWidget>
                 const Gap(
                   h: 24,
                 ),
+                // pause/play button
                 GestureDetector(
                   onTap: () {
                     if (controller.isAnimating) {

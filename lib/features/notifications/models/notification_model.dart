@@ -1,30 +1,28 @@
-import 'package:gym/utils/extensions/time_formatter.dart';
 
 class NotificationModel {
   final int id;
+  final String type;
   final String title;
-  final String message;
-  final String imgUrl;
-  final String timestamp;
-  final bool isUrgent;
+  final String content;
+  final DateTime date;
+  final DateTime createdAt;
 
-  NotificationModel({
-    required this.id,
-    required this.title,
-    required this.message,
-    required this.imgUrl,
-    required this.timestamp,
-    required this.isUrgent,
-  });
+  NotificationModel(
+      {required this.id,
+      required this.type,
+      required this.title,
+      required this.content,
+      required this.date,
+      required this.createdAt});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
       id: json['id'],
-      title: json['title'],
-      message: json['message'],
-      imgUrl: json['imgUrl'],
-      timestamp: DateTime.parse(json['timestamp']).currentFormatted(),
-      isUrgent: json['isUrgent'] == 'isUrgent', // todo backend add
+      type: json['type'] ?? "",
+      title: json['title'] ?? "",
+      content: json['contect'] ?? "",
+      date: DateTime.parse(json['date']),
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gym/components/styles/colors.dart';
-import 'package:gym/components/widgets/icon_button.dart';
-import 'package:gym/components/widgets/loading_indicator.dart';
-import 'package:gym/components/widgets/notification_list_tile.dart';
-import 'package:gym/features/notifications/models/notification_model.dart';
-import 'package:gym/features/notifications/provider/notification_provider.dart';
+import 'package:gym/components/widgets/back_button.dart';
 import 'package:provider/provider.dart';
+import '../../../components/styles/colors.dart';
+import '../../../components/widgets/icon_button.dart';
+import '../../../components/widgets/loading_indicator.dart';
+import '../models/notification_model.dart';
+import '../provider/notification_provider.dart';
+import '../widgets/notification_list_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsScreen extends StatefulWidget {
@@ -34,20 +35,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: black,
-        leading: BarIconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icons.arrow_back_ios_outlined,
-        ),
+        leading: const MyBackButton(),
         title: Text(
           AppLocalizations.of(context)!.notifications,
           style: TextStyle(
               fontSize: 20.sp, fontWeight: FontWeight.w600, color: lightGrey),
         ),
       ),
-      body:
-      RefreshIndicator(
+      body: RefreshIndicator(
         color: red,
         backgroundColor: dark,
         onRefresh: _refresh,

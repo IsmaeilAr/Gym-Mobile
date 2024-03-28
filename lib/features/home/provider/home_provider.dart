@@ -177,11 +177,7 @@ class HomeProvider extends ChangeNotifier {
     bool repoStatus = false;
     if (isDeviceConnected) {
       try {
-        var time = DateTime.now().toString();
-        String content = time;
-        Either<String, Response> results = await ApiHelper().checkOutApi(
-          content,
-        );
+        Either<String, Response> results = await ApiHelper().checkOutApi();
         isLoadingCheckIn = false;
         await results.fold((l) {
           isLoadingCheckIn = false;
@@ -213,4 +209,9 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+  void onCheckOut() {
+    showCheckInSuccess = false;
+    isCheckIn = false;
+    notifyListeners();
+  }
 }

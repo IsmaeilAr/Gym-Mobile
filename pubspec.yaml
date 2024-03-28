@@ -42,7 +42,7 @@ dependencies:
   flutter_file_downloader: ^1.2.1
   al_downloader: ^1.8.4
   url_launcher: ^6.2.5
-
+  dio_smart_retry: ^6.0.0
 
 dev_dependencies:
   flutter_test:

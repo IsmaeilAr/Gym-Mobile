@@ -33,7 +33,7 @@ class ScanButton extends StatelessWidget {
                   )),
                   Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 125.w, vertical: 12.h), // UI size 133
+                          horizontal: 133.w, vertical: 12.h), // UI size 133
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -42,12 +42,17 @@ class ScanButton extends StatelessWidget {
                             width: 60.w,
                             height: 60.w,
                           ),
-                          Text(
-                            AppLocalizations.of(context)!.homeScanQR,
-                            style: TextStyle(
-                                color: lightGrey,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600),
+                          SizedBox(
+                            width: 80.w,
+                            child: Center(
+                              child: Text(
+                                AppLocalizations.of(context)!.homeScanQR,
+                                style: TextStyle(
+                                    color: lightGrey,
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
                           )
                         ],
                       )),

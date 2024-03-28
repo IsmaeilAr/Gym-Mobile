@@ -11,7 +11,7 @@ class UserModel {
   DateTime expiration;
   double finance;
   bool isPaid;
-  List<ImageModel> images;
+  List<ImageModel> profileImages;
 
   UserModel({
     required this.id,
@@ -24,7 +24,7 @@ class UserModel {
     required this.expiration,
     required this.finance,
     required this.isPaid,
-    required this.images,
+    required this.profileImages,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -38,11 +38,9 @@ class UserModel {
     expiration: DateTime.parse(json["expiration"]),
     finance: (json["finance"] ?? 0).toDouble(),
     isPaid: json["is_paid"] == "paid", // Parse string "paid" to boolean
-
-        images: (json["image"] != null && json["image"] != [])
-            ? List<ImageModel>.from(
-                json["image"].map((x) => ImageModel.fromJson(x)))
-            : [],
+        profileImages: json["profile_image"] != null
+            ? [ImageModel.fromJson(json["profile_image"])]
+            : [], // Handle the case when profile_image is null
       );
 }
 

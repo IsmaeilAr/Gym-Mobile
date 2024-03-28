@@ -12,9 +12,9 @@ import 'package:gym/features/profile/screens/coach_profile.dart';
 import 'package:gym/utils/extensions/time_formatter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../models/chat_model.dart';
 import '../models/message_model.dart';
 import '../provider/chat_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
   final int chatterId;
@@ -156,10 +156,10 @@ class TextComposerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+      margin: EdgeInsetsDirectional.symmetric(horizontal: 14.w, vertical: 12.h),
       width: 332.w,
       height: 42.h,
-      padding: EdgeInsets.only(left: 12.w),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 12.w),
       decoration: BoxDecoration(
         color: lightGrey,
         borderRadius: BorderRadius.circular(21.r),
@@ -172,7 +172,7 @@ class TextComposerWidget extends StatelessWidget {
               // onSubmitted: handleSubmitted,
               cursorColor: red,
               decoration: InputDecoration.collapsed(
-                hintText: 'Message',
+                hintText: AppLocalizations.of(context)!.message,
                 hintStyle: TextStyle(
                   color: grey,
                   fontSize: 14.sp,
@@ -181,8 +181,9 @@ class TextComposerWidget extends StatelessWidget {
               ),
             ),
           ),
-          context.watch<ChatProvider>().isLoadingSendMsg ?
-          IconButton(
+          (context.watch<ChatProvider>().isLoadingSendMsg ||
+                  textController.text.isEmpty)
+              ? IconButton(
             icon: Icon(Icons.send, color: grey, size: 18.w),
             onPressed: () {
             },

@@ -127,7 +127,7 @@ doLogout(BuildContext context) {
       .callLogoutApi(context)
       .then((value) => Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            MaterialPageRoute(builder: (context) => LoginScreen()),
             (Route<dynamic> route) => false,
           ));
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_smart_retry/dio_smart_retry.dart';
 import 'package:flutter/material.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/utils/helpers/api/session_expired_interceptor.dart';
@@ -31,9 +32,21 @@ class ApiHelper {
   static Dio get clientDio => _clientDio;
 
   static void setupInterceptors(BuildContext context) {
-    _clientDio.interceptors.add(
+    _clientDio.interceptors.addAll([
       SessionExpiredInterceptor(context),
-    );
+      RetryInterceptor(
+        dio: clientDio,
+        logPrint: print, // specify log function (optional)
+        retries: 2, // retry count (optional)
+        retryDelays: const [
+          // set delays between retries (optional)
+          Duration(seconds: 1), // wait 1 sec before the first retry
+          Duration(seconds: 2), // wait 2 sec before the second retry
+          Duration(seconds: 3), // wait 3 sec before the third retry
+          Duration(seconds: 4), // wait 4 sec before the fourth retry
+        ],
+      ),
+    ]);
   }
 
 //###################################################################################################//
@@ -229,7 +242,7 @@ class ApiHelper {
           },
         ),
         data: {
-          "gender": gender,
+          "gender": gender.toString(),
           "birthDate": dob,
           "height": height,
           "weight": weight,
@@ -242,7 +255,8 @@ class ApiHelper {
       result = Right(response);
       return result;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).toString();
+      // final errorMessage = DioExceptions.fromDioError(e).toString();
+      final errorMessage = e.response?.data['data'];
       log("## error addMetricsApi");
       log("## error message : $errorMessage");
       result = Left(errorMessage);
@@ -250,8 +264,9 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> editMetricsApi(String gender,
-      String dob,
+  Future<Either<String, Response>> editMetricsApi(
+    String gender,
+    String dob,
       String height,
       String weight,
       String waist,
@@ -576,9 +591,7 @@ class ApiHelper {
     }
   }
 
-  Future<Either<String, Response>> checkOutApi( // todo check with backend
-      String endTime,
-      ) async {
+  Future<Either<String, Response>> checkOutApi() async {
     late Either<String, Response> result;
     try {
       String token = prefsService.getValue(Cache.token) ?? "";
@@ -590,9 +603,6 @@ class ApiHelper {
             'Authorization': token,
           },
         ),
-        data: {
-          "endTime": endTime,
-        },
       ).timeout(const Duration(seconds: 25));
       log("## Response checkOut (API handler) : Good ");
       log("## Response checkOut : $response");
@@ -1318,6 +1328,5 @@ class ApiHelper {
       return result;
     }
   }
-
 
 }

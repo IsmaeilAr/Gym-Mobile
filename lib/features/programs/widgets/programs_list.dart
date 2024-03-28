@@ -65,7 +65,6 @@ class ProgramsList extends StatelessWidget {
                                 .watch<ProgramProvider>()
                                 .nutritionProgramList[index]
                           };
-
                 if (program.id == trainingId || program.id == nutritionId) {
                   isMyProgram = true;
                 }

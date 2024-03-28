@@ -39,13 +39,13 @@ class NotificationProvider extends ChangeNotifier {
         isLoadingNotifications = false;
         results.fold((l) {
           isLoadingNotifications = false;
-           showMessage(l, false);
+          showMessage(l, false);
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data;
+            var data = response.data["data"];
             log("data $data");
-            List<dynamic> list = data['data'];
+            List<dynamic> list = data;
             notificationList = list.map((e) => NotificationModel.fromJson(e)).toList();
             isLoadingNotifications = false;
           } else {
@@ -55,7 +55,7 @@ class NotificationProvider extends ChangeNotifier {
         });
       } on Exception catch (e) {
         log("Exception get Notifications : $e");
-         showMessage("$e", false);
+        showMessage("$e", false);
         isLoadingNotifications = false;
       }
     } else {
@@ -64,6 +64,5 @@ class NotificationProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 
 }

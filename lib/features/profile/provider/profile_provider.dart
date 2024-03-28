@@ -61,7 +61,7 @@ class ProfileProvider extends ChangeNotifier {
     expiration: DateTime.now(),
     finance: 0,
     isPaid: false,
-    images: [],
+    profileImages: [],
   );
 
   UserModel get profileInfo => _profileInfo;
@@ -122,7 +122,7 @@ class ProfileProvider extends ChangeNotifier {
           expiration: DateTime(2000),
           finance: 100000,
           isPaid: false,
-          images: []));
+          profileImages: []));
 
   InitStatusModel get status => _status;
 
@@ -239,9 +239,8 @@ class ProfileProvider extends ChangeNotifier {
         }, (r) {
           Response response = r;
           if (response.statusCode == 200) {
-            var data = response.data["data"][0];
+            var data = response.data["data"];
             log("data $data");
-            // List<dynamic> list = data;
             profileInfo = UserModel.fromJson(data);
             isLoadingProfileInfo = false;
           } else {

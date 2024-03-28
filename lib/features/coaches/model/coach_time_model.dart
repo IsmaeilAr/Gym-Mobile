@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CoachTimeModel {
@@ -13,16 +14,27 @@ class CoachTimeModel {
     required this.isAvailable,
   });
 
-  static String extractTime(String dateTimeString) {
+  static String extractTime(
+    String dateTimeString,
+  ) {
+    // todo localize
+    String instantLocale =
+        WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     final DateTime dateTime = DateTime.parse(dateTimeString);
-    final formattedTime = DateFormat('h:mm a').format(dateTime);
+    final formattedTime = DateFormat('h:mm a', instantLocale).format(dateTime);
     return formattedTime;
   }
 
-  factory CoachTimeModel.fromJson(Map<String, dynamic> json) {
+  factory CoachTimeModel.fromJson(
+    Map<String, dynamic> json,
+  ) {
     return CoachTimeModel(
-      startTime: extractTime(json['startTime']),
-      endTime: extractTime(json['endTime']),
+      startTime: extractTime(
+        json['startTime'],
+      ),
+      endTime: extractTime(
+        json['endTime'],
+      ),
       dayId: json['dayId'],
       isAvailable: false,
     );

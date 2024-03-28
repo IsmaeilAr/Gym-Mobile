@@ -46,14 +46,11 @@ void main() async {
   ], child: const MyApp()));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+  // final navigatorKey = GlobalKey<NavigatorState>();
 
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final languageProvider = context.watch<LanguageProvider>();
@@ -63,7 +60,8 @@ class _MyAppState extends State<MyApp> {
       splitScreenMode: false,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Gym',
+        // navigatorKey: navigatorKey,
+        title: 'Gym Player',
         locale: languageProvider.appLocale,
         supportedLocales: const [
           Locale('en', ''),

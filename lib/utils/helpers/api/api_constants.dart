@@ -63,7 +63,7 @@ class ApiConstants {
     String type,
   ) {
     return "${baseUrl}getPrograms?type=$type";
-    return "${baseUrl}getPrograms?categoryId=1&programType=private&type=$type";
+    // return "${baseUrl}getPrograms?categoryId=1&programType=private&type=$type";
   }
 
   static String allCategoriesUrl(

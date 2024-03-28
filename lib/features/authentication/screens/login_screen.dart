@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gym/components/styles/colors.dart';
 import 'package:gym/components/styles/decorations.dart';
 import 'package:gym/components/widgets/gap.dart';
+import 'package:gym/components/widgets/loading_indicator.dart';
 import 'package:gym/components/widgets/snack_bar.dart';
 import 'package:gym/utils/extensions/sizer.dart';
 import 'package:page_transition/page_transition.dart';
@@ -14,46 +14,66 @@ import '../provider/auth_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+
+  bool isClear = false;
+  DateTime? _lastPressedAt;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: backgroundDecoration(),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  const Gap(
-                    h: 108,
-                  ),
-                  const Logo().sizer(h: 55, w: 116),
-                  const Gap(
-                    h: 60,
-                  ),
-                  const WelcomeText(),
-                  const Gap(
-                    h: 64,
-                  ),
-                  const LoginForm(),
-                  const Gap(
-                    h: 50,
-                  ),
-                ],
+    return PopScope(
+      canPop: isClear,
+      onPopInvoked: (didPop) {
+        _onPop();
+      },
+      child: Container(
+        decoration: backgroundDecoration(),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    const Gap(
+                      h: 108,
+                    ),
+                    const Logo().sizer(h: 55, w: 116),
+                    const Gap(
+                      h: 60,
+                    ),
+                    const WelcomeText(),
+                    const Gap(
+                      h: 64,
+                    ),
+                    const LoginForm(),
+                    const Gap(
+                      h: 50,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
+          // persistentFooterButtons:
         ),
-        // persistentFooterButtons:
       ),
     );
+  }
+
+  Future<void> _onPop() async {
+    DateTime now = DateTime.now();
+    if (_lastPressedAt == null ||
+        now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+      _lastPressedAt = now;
+      showMessage('press again to exit', true);
+      isClear = false;
+    }
+    isClear = true;
   }
 }
 
@@ -87,28 +107,25 @@ class WelcomeText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Text(
-            AppLocalizations.of(context)!.loginWelcomeKey,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: lightGrey, fontSize: 30.sp),
-          ).sizer(h: 47, w: 128),
-          const Gap(
-            h: 12,
-          ),
-          Text(
-            AppLocalizations.of(context)!.loginEnterNumberAndPasswordKey,
-            textAlign: TextAlign.center,
-            style: TextStyle(color: grey, fontSize: 16.sp),
-          ).sizer(
-            w: 252,
-            h: 31,
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(
+          AppLocalizations.of(context)!.loginWelcomeKey,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: lightGrey, fontSize: 30.sp),
+        ).sizer(h: 47, w: 140),
+        const Gap(
+          h: 12,
+        ),
+        Text(
+          AppLocalizations.of(context)!.loginEnterNumberAndPasswordKey,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: grey, fontSize: 16.sp),
+        ).sizer(
+          w: 260,
+          h: 31,
+        ),
+      ],
     );
   }
 }
@@ -148,52 +165,58 @@ class _LoginFormState extends State<LoginForm> {
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: MyDecorations.myInputDecoration(
-                  hint: AppLocalizations.of(context)!.loginMobileNumberKey,
-                  icon: Icon(
-                    Icons.phone,
-                    size: 20.sp,
-                    color: iconColor,
-                  )),
+                hint: AppLocalizations.of(context)!.loginMobileNumberKey,
+                icon: Icon(
+                  Icons.phone,
+                  size: 20.sp,
+                  color: iconColor,
+                ),
+              ),
               textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return AppLocalizations.of(context)!
                       .loginEnterMobileNumberKey;
+                } else if (value.length < 10) {
+                  return 'phone number is short';
                 }
                 return null;
               },
-            ), // .sizer(h: 42, w: 332),
+            ),
             const Gap(h: 10),
             TextFormField(
               controller: _passwordController,
               obscureText: obscured,
               textInputAction: TextInputAction.go,
               decoration: MyDecorations.myInputDecoration(
-                  hint: AppLocalizations.of(context)!.loginPasswordKey,
-                  icon: Icon(
-                    Icons.lock,
-                    size: 20.sp,
-                    color: iconColor,
-                  ),
-                  suffix: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscured = !obscured;
-                        });
-                      },
-                      icon: Icon(
-                        obscured
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20.sp,
-                        color: iconColor,
-                      ))),
+                hint: AppLocalizations.of(context)!.loginPasswordKey,
+                icon: Icon(
+                  Icons.lock,
+                  size: 20.sp,
+                  color: iconColor,
+                ),
+                suffix: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        obscured = !obscured;
+                      });
+                    },
+                    icon: Icon(
+                      obscured
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      size: 20.sp,
+                      color: iconColor,
+                    )),
+              ),
               onFieldSubmitted: (_) => {
                 if (_formKey.currentState!.validate()) {doLogin(context)}
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return AppLocalizations.of(context)!.loginEnterPasswordKey;
+                } else if (value.length < 8) {
+                  return 'password must be 8 characters at least';
                 }
                 return null;
               },
@@ -204,16 +227,26 @@ class _LoginFormState extends State<LoginForm> {
               height: 45.h,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (!context.read<AuthProvider>().isLoading &&
+                      _formKey.currentState!.validate()) {
                     doLogin(context);
                   }
                 },
                 style: MyDecorations.myButtonStyle(red),
-                child: Text(
-                  AppLocalizations.of(context)!.loginButtonKey,
+                child: !context.watch<AuthProvider>().isLoading
+                    ? Text(
+                        AppLocalizations.of(context)!.loginButtonKey,
                   style: MyDecorations.myButtonTextStyle(
                       fontWeight: FontWeight.w600, fontSize: 16.sp),
-                ),
+                      )
+                    : SizedBox(
+                        height: 20.w,
+                        width: 20.w,
+                        child: const CircularProgressIndicator.adaptive(
+                          strokeWidth: 1,
+                          valueColor: AlwaysStoppedAnimation<Color>(lightGrey),
+                        ),
+                      ),
               ),
             ),
           ],
@@ -225,24 +258,18 @@ class _LoginFormState extends State<LoginForm> {
   void doLogin(BuildContext context) {
     context
         .read<AuthProvider>()
-        .callLoginApi(
+        .callLogin(
           context,
           _phoneController.text,
           _passwordController.text,
         )
         .then((value) {
       if (value) {
-        log("view status: $value");
         Navigator.pushReplacement(
             context,
             PageTransition(
                 type: PageTransitionType.rightToLeftWithFade,
-                child: const AddInfoScreen()));
-      } else {
-        // _passwordController.clear();
-        _formKey.currentState!.validate();
-        showMessage(
-            "phonenumber or password are not correct", false); // todo localize
+                child: AddInfoScreen()));
       }
     });
   }

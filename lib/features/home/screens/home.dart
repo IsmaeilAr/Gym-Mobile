@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     InitStatusModel status = context.watch<ProfileProvider>().status;
+    bool isChecked = context.watch<HomeProvider>().isCheckIn;
     return RefreshIndicator(
         color: red,
         backgroundColor: dark,
@@ -65,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                     height: 228.h,
                     child: context.watch<HomeProvider>().showCheckInSuccess
                         ? const CheckInSuccess()
-                        : context.watch<HomeProvider>().isCheckIn
+                        : isChecked
                             ? const CountdownWidget()
                             : Column(
                                 children: [

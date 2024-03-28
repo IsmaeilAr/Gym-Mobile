@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 extension TimeFormattingExtension on String {
   String formatTimestamp() {
+    // todo localize
     try {
       DateTime dateTime = DateTime.parse(this);
       return DateFormat.jm().format(dateTime);

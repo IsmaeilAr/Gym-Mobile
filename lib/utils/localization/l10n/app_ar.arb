@@ -7,7 +7,8 @@
   "loginEnterMobileNumberKey": "الرجاء إدخال رقم الجوال",
   "loginEnterPasswordKey": "الرجاء إدخال كلمة المرور",
   "loginButtonKey": "تسجيل الدخول",
-
+    "loginWrongCred": "رقم الهاتف أو كلمة المرور خاطئة",
+    "loginWrongPass": "كلمة السر خاطئة !",
 
     "addInfoSkipKey": "تخطي",
     "addInfoInsertKey": "أدخل",
@@ -61,7 +62,7 @@
   "homeGymTrafficPeopleInGym": "حوالي",
   "homeGymTrafficPeopleInGym2": "شخص في النادي الرياضي الآن",
   "homeGymTrafficBusyGymMessage": "النادي مزدحم الآن. قد يكون الانتظار هو الخيار الأفضل لتمرين مريح أكثر!",
-  "homeGymTrafficNotFullGymMessage": "النادي ليس مزدحماً. الوقت مثالي للانضمام وحجز على مكانك!",
+  "homeGymTrafficNotFullGymMessage": "النادي ليس مزدحماً. الوقت مثالي للانضمام واحجز مكانك!",
 
    "homeScanQR": "امسح QR ",
 
@@ -90,7 +91,7 @@
 
       "myProfileBodyFat": "الدهون في الجسم: ",
       "myProfileShowLess": "اظهر أقل",
-      "myProfileShowDetails": "اظهر التفاصيل",
+      "myProfileShowDetails": "إظهار التفاصيل",
       "myProfileGender": "الجنس:  ",
       "myProfileAge": "العمر: ",
       "myProfileHeight": "الطول: ",
@@ -120,9 +121,10 @@
                      "programsRecommended": "موصى به",
                      "programsTraining": "تدريب",
                      "programsNutrition": "تغذية",
-                     "programsSeeAll": "اظهر الكل",
+                     "programsSeeAll": "إظهار الكل",
                       "programsMyCoach": "مدربي",
                       "programsAll": "الكل",
+    "message": "الرسالة",
 
 "coach": "المدرب",
  "premiumAskForNewProgram": "اطلب برنامج جديد",
@@ -178,9 +180,9 @@
                  "coachProfilePopMenueSetCoach": "تعيين المدرب",
                  "coachProfilePopMenueRevokeRequest": "سحب الطلب",
 
-
+    "scanYourGymQR":"امسح رمز QR الخاص بالنادي",
   "stopTimerConfirmation": "هل أنت متأكد أنك تريد إيقاف المؤقت وإنهاء الجلسة؟ ستحتاج إلى مسح الرمز الاستجابة السريعة مرة أخرى للاستئناف. يسمح التوقف المؤقت بالاستمرار دون إعادة التشغيل.",
-  "changeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي إلى مايا كمدرب جديد؟",
+  "changeCoachConfirmation": "هل أنت متأكد أنك تريد تغيير مدربك الحالي ؟",
   "unassignCoachConfirmation": "هل أنت متأكد أنك تريد إلغاء تعيين مدربك الحالي؟",
   "sendReportConfirmation": "هل أنت متأكد أنك تريد إرسال هذا التقرير إلى الإدارة؟",
   "setProgramConfirmation": "هل أنت متأكد أنك تريد تعيين هذا البرنامج كيومي؟",
@@ -196,6 +198,8 @@
 "selectPerson": "تحديد شخص",
 
   "cancel": "إلغاء",
+  "ok": "حسناً",
+  "notSet": "لم يتم التعيين",
   "stop": "إيقاف",
   "change": "تغيير",
   "unassign": "إلغاء التعيين",

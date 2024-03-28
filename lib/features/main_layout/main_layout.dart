@@ -108,10 +108,8 @@ class MainLayout extends StatelessWidget {
       _lastPressedAt = now;
       showMessage('press again to exit', true);
       isClear = false;
-      // return false;
     }
     isClear = true;
-    // return true;
   }
 }
 
